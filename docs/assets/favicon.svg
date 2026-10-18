@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <defs>
+    <linearGradient id="favSolder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Solder Mask Substrate -->
+  <rect x="1.5" y="1.5" width="29" height="29" rx="6.5" fill="url(#favSolder)" stroke="#10b981" stroke-width="1.5"/>
+
+  <!-- 2. 45° Routed Gold Traces -->
+  <g stroke="url(#favGold)" stroke-width="2.2" stroke-linecap="round">
+    <line x1="7.5" y1="7.5" x2="10.5" y2="10.5"/>
+    <line x1="24.5" y1="7.5" x2="21.5" y2="10.5"/>
+    <line x1="7.5" y1="24.5" x2="10.5" y2="21.5"/>
+    <line x1="24.5" y1="24.5" x2="21.5" y2="21.5"/>
+  </g>
+
+  <!-- 3. Plated Through-Hole Vias (Annular ring + Drill hole) -->
+  <g>
+    <!-- Via Outer Gold Rings -->
+    <g fill="url(#favGold)">
+      <circle cx="5.5" cy="5.5" r="2.8"/>
+      <circle cx="26.5" cy="5.5" r="2.8"/>
+      <circle cx="5.5" cy="26.5" r="2.8"/>
+      <circle cx="26.5" cy="26.5" r="2.8"/>
+    </g>
+    <!-- Via Dark Drill Holes -->
+    <g fill="#0b1117">
+      <circle cx="5.5" cy="5.5" r="1.2"/>
+      <circle cx="26.5" cy="5.5" r="1.2"/>
+      <circle cx="5.5" cy="26.5" r="1.2"/>
+      <circle cx="26.5" cy="26.5" r="1.2"/>
+    </g>
+  </g>
+
+  <!-- 4. Center IC Chip Package -->
+  <rect x="9" y="9" width="14" height="14" rx="3" fill="#0b1117" stroke="url(#favGold)" stroke-width="1.2"/>
+
+  <!-- 5. Gold Thermal Core / Die -->
+  <rect x="12" y="12" width="8" height="8" rx="1.5" fill="url(#favGold)"/>
+
+  <!-- 6. Pin 1 Index Dot -->
+  <circle cx="10.8" cy="10.8" r="0.75" fill="#ffffff"/>
+</svg>

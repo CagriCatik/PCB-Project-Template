@@ -31,21 +31,21 @@ resolve them either, so they are reported.
 
 ```mermaid
 flowchart TD
-    START(["scripts/kit verify"]) --> PRE_CHECK{"Integritätsprüfung"}
-    PRE_CHECK -->|"Lock-Datei (~*.lck)"| ABORT_LCK["Abbruch (Exit 14): Editor geöffnet"]
-    PRE_CHECK -->|"Dateien intakt"| SNAPSHOT["Quell-Hashes erfassen"]
+    START(["scripts/kit verify &lt;project&gt;"]) --> PRE_CHECK{"Integrity Check"}
+    PRE_CHECK -->|"Lock file detected (~*.lck)"| ABORT_LCK["Abort (Exit 14): Editor open"]
+    PRE_CHECK -->|"Files clean"| SNAPSHOT["Capture pre-run source hashes"]
 
-    SNAPSHOT --> G_NATIVE["1. KiCad Native Gates (kicad-cli)<br/>• erc (Schaltplan-Prüfung)<br/>• drc (Designregeln & Unconnected)<br/>• schematic_parity (Netzlisten)"]
-    G_NATIVE --> G_PORT["2. Bibliotheken & Portabilität<br/>• library_references (Existenz in Tabellen)<br/>• portability (${KIPRJMOD}, keine absoluten Pfade)<br/>• footprint_assignment & pin_pad_mapping"]
-    G_PORT --> G_META["3. Metadaten & Freigabeprüfung<br/>• component_metadata (Hersteller, MPN, Datenblatt)<br/>• models_3d (Vorhandensein von STEP-Dateien)<br/>• bom (Approved Parts) · firmware · thermal"]
+    SNAPSHOT --> G_NATIVE["1. Native KiCad Gates (kicad-cli)<br/>• erc (Electrical Rules Check)<br/>• drc (Design Rules &amp; Unconnected)<br/>• schematic_parity (Netlist parity)"]
+    G_NATIVE --> G_PORT["2. Libraries &amp; Portability<br/>• library_references (Symbols &amp; Footprints)<br/>• portability (${KIPRJMOD}, no absolute paths)<br/>• footprint_assignment &amp; pin_pad_mapping"]
+    G_PORT --> G_META["3. Metadata &amp; Approvals<br/>• component_metadata (Manufacturer, MPN, Datasheet)<br/>• models_3d (Resolving STEP models)<br/>• bom (Approved Parts) · firmware · thermal"]
 
-    G_META --> EVAL{"Gate-Auswertung (qa/verification.json)"}
+    G_META --> EVAL{"Gate Evaluation (qa/verification.json)"}
 
-    EVAL -->|"Required FAIL"| RES_FAIL["Quality Gate: FAIL<br/>GO-Export blockiert"]
-    EVAL -->|"Nur Advisory FAIL"| RES_WARN["Quality Gate: PASS (mit Hinweisen)<br/>DRAFT-Export möglich"]
-    EVAL -->|"Alle PASS"| RES_PASS["Quality Gate: PASS<br/>Berechtigt für GO-Freigabe"]
+    EVAL -->|"Required FAIL"| RES_FAIL["Quality Gate: FAIL<br/>GO release blocked"]
+    EVAL -->|"Advisory FAIL only"| RES_WARN["Quality Gate: PASS (with warnings)<br/>DRAFT export allowed"]
+    EVAL -->|"All PASS"| RES_PASS["Quality Gate: PASS<br/>Eligible for GO release"]
 
-    RES_FAIL --> REPORT["Report-Ablage:<br/>qa/generated/verification/"]
+    RES_FAIL --> REPORT["Write Reports:<br/>qa/generated/verification/"]
     RES_WARN --> REPORT
     RES_PASS --> REPORT
 ```

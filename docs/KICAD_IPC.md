@@ -22,25 +22,25 @@ graph TD
         PREF["kicad_common.json<br/>api.enable_server"]
         SERVER["KiCad API Server Thread"]
         SOCKET["Unix Domain Socket<br/>/tmp/kicad/api.sock"]
-        DOCS["Offenes Board &amp; Schaltplan<br/>(Lagen, Footprints, Netze)"]
+        DOCS["Open Board &amp; Schematic<br/>(Layers, Footprints, Nets)"]
     end
 
     subgraph KitIPC ["PCB-Project-Template IPC Layer"]
-        PROBE["tools/kicad/ipc.py<br/>Isolierter Subprocess-Probe (Budgetiert)"]
+        PROBE["tools/kicad/ipc.py<br/>Isolated subprocess probe (budgeted)"]
         SESSION["tools/kicad/ipc_client.py<br/>IpcSession (kicad-python 0.8.0)"]
     end
 
-    subgraph CLIFallback ["Headless KiCad Integration (Standard)"]
-        KICAD_CLI["kicad-cli binary<br/>ERC, DRC, Exporte (100% unabhängig von IPC)"]
+    subgraph CLIFallback ["Headless KiCad CLI Integration (Default)"]
+        KICAD_CLI["kicad-cli binary<br/>ERC, DRC, exports (100% independent of IPC)"]
     end
 
     PREF -->|true| SERVER
     SERVER --> SOCKET
     SERVER --- DOCS
 
-    PROBE -->|Erkennt Status &amp; PID| SOCKET
-    SOCKET -->|Verbindung hergestellt| SESSION
-    SESSION -->|Read-Only Abfrage| DOCS
+    PROBE -->|Detects status &amp; PID| SOCKET
+    SOCKET -->|Connection established| SESSION
+    SESSION -->|Read-only queries| DOCS
 ```
 
 ## Diagnosis on this machine (2026-10-18)

@@ -59,27 +59,27 @@ the part. With `theta_jb_c_per_w` the report adds
 
 ```mermaid
 flowchart TD
-    subgraph Inputs ["1. Analyse-Eingaben"]
-        PCB[".kicad_pcb Layout<br/>Outline, Lagen, Vias, Pads"]
-        PWR["power_sources.csv<br/>Verlustleistung pro Bauteil (W)"]
-        CFG["thermal.json<br/>Umgebung T_amb, Konvektion h, Gitterweite"]
+    subgraph Inputs ["1. Simulation Inputs"]
+        PCB[".kicad_pcb Layout<br/>Board outline, copper layers, vias, pads"]
+        PWR["power_sources.csv<br/>Component dissipation (W) &amp; θJB"]
+        CFG["thermal.json<br/>Ambient T_amb, convection h, grid size"]
     end
 
-    subgraph Geometry ["2. Geometrie & Rasterung (geometry.py)"]
-        RAST["2x2 Supersampled Rasterizer<br/>Kupferanteile & Schichtdicke"]
-        VIAS["Via-Kopplung & thermische Leitfähigkeit"]
+    subgraph Geometry ["2. Geometry &amp; Rasterization (geometry.py)"]
+        RAST["2x2 Supersampled Rasterizer<br/>Layer copper fractions &amp; thickness"]
+        VIAS["Via thermal conductance model"]
     end
 
     subgraph Solver ["3. 2.5D Finite-Volume Solver (solver.py)"]
         DISC["Discretization: div(S grad T) - h(T - T_amb) + q = 0"]
-        SPARSE["SciPy Sparse Matrix Solve<br/>Top- & Bottom-Kupferknoten"]
-        BALANCE{"Energiebilanz intakt?<br/>P_out = P_in ± 1e-6"}
+        SPARSE["SciPy Sparse Matrix Solve<br/>Top &amp; bottom copper nodes"]
+        BALANCE{"Energy balance closed?<br/>P_out = P_in ± 1e-6"}
     end
 
-    subgraph OutputSection ["4. Generierte Ergebnisse"]
+    subgraph OutputSection ["4. Generated Results"]
         HEATMAPS["PNG Heatmaps<br/>temperature_top.png / bottom.png"]
-        HTML_REP["Interaktiver HTML-Report<br/>thermal_report.html"]
-        CSV_DATA["CSV-Daten<br/>component_temperatures.csv, hotspots.csv"]
+        HTML_REP["Interactive HTML Report<br/>thermal_report.html"]
+        CSV_DATA["CSV Datasets<br/>component_temperatures.csv, hotspots.csv"]
     end
 
     PCB --> RAST
@@ -90,10 +90,10 @@ flowchart TD
     VIAS --> DISC
     DISC --> SPARSE
     SPARSE --> BALANCE
-    BALANCE -->|Ja| HEATMAPS
-    BALANCE -->|Ja| HTML_REP
-    BALANCE -->|Ja| CSV_DATA
-    BALANCE -->|Nein| FAIL["Abbruch (Exit 20)<br/>Energiebilanz verletzt"]
+    BALANCE -->|Yes| HEATMAPS
+    BALANCE -->|Yes| HTML_REP
+    BALANCE -->|Yes| CSV_DATA
+    BALANCE -->|No| FAIL["Abort (Exit 20)<br/>Energy balance violated"]
 ```
 
 ## Outputs (`<project>/qa/generated/thermal/<run>/`, ignored by Git)

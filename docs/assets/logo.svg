@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
+  <defs>
+    <!-- Solder mask substrate gradient -->
+    <linearGradient id="solderMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="60%" stop-color="#043a2c"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+
+    <!-- Board edge bevel -->
+    <linearGradient id="boardEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#059669" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#064e3b" stop-opacity="0.8"/>
+    </linearGradient>
+
+    <!-- ENIG Gold Metallic Gradient -->
+    <linearGradient id="enigGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="35%" stop-color="#fbbf24"/>
+      <stop offset="70%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+
+    <!-- Copper Trace Gradient -->
+    <linearGradient id="copperTrace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+
+    <!-- Chip Package Surface -->
+    <linearGradient id="chipBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0b1017"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. PCB FR-4 Substrate Base -->
+  <rect x="4" y="4" width="120" height="120" rx="24" fill="url(#solderMask)" stroke="url(#boardEdge)" stroke-width="2"/>
+
+  <!-- 2. Silkscreen Fiducials & Corner Markers -->
+  <g opacity="0.55" stroke="#ffffff" stroke-width="1.2">
+    <!-- Top-Left Fiducial -->
+    <circle cx="18" cy="18" r="4" fill="none"/>
+    <line x1="12" y1="18" x2="24" y2="18"/>
+    <line x1="18" y1="12" x2="18" y2="24"/>
+
+    <!-- Top-Right Fiducial -->
+    <circle cx="110" cy="18" r="4" fill="none"/>
+    <line x1="104" y1="18" x2="116" y2="18"/>
+    <line x1="110" y1="12" x2="110" y2="24"/>
+
+    <!-- Bottom-Left Fiducial -->
+    <circle cx="18" cy="110" r="4" fill="none"/>
+    <line x1="12" y1="110" x2="24" y2="110"/>
+    <line x1="18" y1="104" x2="18" y2="116"/>
+
+    <!-- Bottom-Right Fiducial -->
+    <circle cx="110" cy="110" r="4" fill="none"/>
+    <line x1="104" y1="110" x2="116" y2="110"/>
+    <line x1="110" y1="104" x2="110" y2="116"/>
+  </g>
+
+  <!-- 3. Subsurface Inner Copper Traces (faint ground plane / traces) -->
+  <g opacity="0.25" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none">
+    <path d="M 28 36 L 40 36 L 48 44"/>
+    <path d="M 100 36 L 88 36 L 80 44"/>
+    <path d="M 28 92 L 40 92 L 48 84"/>
+    <path d="M 100 92 L 88 92 L 80 84"/>
+  </g>
+
+  <!-- 4. 45° Gold Conductive Traces (Surface Layer) -->
+  <g stroke="url(#copperTrace)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Top-Left: Pad (52, 38) -> (52, 30) -> 45° to (40, 18) -> (30, 18) -->
+    <path d="M 52 38 L 52 30 L 40 18 L 30 18"/>
+
+    <!-- Top-Right: Pad (76, 38) -> (76, 30) -> 45° to (88, 18) -> (98, 18) -->
+    <path d="M 76 38 L 76 30 L 88 18 L 98 18"/>
+
+    <!-- Bottom-Left: Pad (52, 90) -> (52, 98) -> 45° to (40, 110) -> (30, 110) -->
+    <path d="M 52 90 L 52 98 L 40 110 L 30 110"/>
+
+    <!-- Bottom-Right: Pad (76, 90) -> (76, 98) -> 45° to (88, 110) -> (98, 110) -->
+    <path d="M 76 90 L 76 98 L 88 110 L 98 110"/>
+
+    <!-- Mid-Left: Pad (38, 64) -> (22, 64) -->
+    <path d="M 38 64 L 22 64"/>
+
+    <!-- Mid-Right: Pad (90, 64) -> (106, 64) -->
+    <path d="M 90 64 L 106 64"/>
+  </g>
+
+  <!-- 5. Plated Through-Hole Vias (Annular Rings + Drill Holes) -->
+  <g>
+    <!-- Solder mask openings (expansion rings) -->
+    <g fill="none" stroke="#10b981" stroke-width="0.8" opacity="0.45">
+      <circle cx="30" cy="18" r="7"/>
+      <circle cx="98" cy="18" r="7"/>
+      <circle cx="30" cy="110" r="7"/>
+      <circle cx="98" cy="110" r="7"/>
+      <circle cx="22" cy="64" r="7"/>
+      <circle cx="106" cy="64" r="7"/>
+    </g>
+
+    <!-- Outer Gold Annular Rings -->
+    <g fill="url(#enigGold)" stroke="#b45309" stroke-width="0.75">
+      <circle cx="30" cy="18" r="5.2"/>
+      <circle cx="98" cy="18" r="5.2"/>
+      <circle cx="30" cy="110" r="5.2"/>
+      <circle cx="98" cy="110" r="5.2"/>
+      <circle cx="22" cy="64" r="5.2"/>
+      <circle cx="106" cy="64" r="5.2"/>
+    </g>
+
+    <!-- Drill Holes (Through Substrate) -->
+    <g fill="#070b0e">
+      <circle cx="30" cy="18" r="2.2"/>
+      <circle cx="98" cy="18" r="2.2"/>
+      <circle cx="30" cy="110" r="2.2"/>
+      <circle cx="98" cy="110" r="2.2"/>
+      <circle cx="22" cy="64" r="2.2"/>
+      <circle cx="106" cy="64" r="2.2"/>
+    </g>
+  </g>
+
+  <!-- 6. IC Package Silkscreen Outline -->
+  <rect x="36" y="36" width="56" height="56" rx="8" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="4 2.5" opacity="0.75"/>
+
+  <!-- Silkscreen Text Reference Designators -->
+  <text x="64" y="31" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Consolas, monospace" font-size="7.5" font-weight="700" fill="#ffffff" letter-spacing="1.2" opacity="0.9">U1 • KICAD 10</text>
+  <text x="64" y="103" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Consolas, monospace" font-size="6.5" font-weight="700" fill="#fbbf24" letter-spacing="1.5" opacity="0.95">HW · FW · FAB</text>
+
+  <!-- 7. SMT IC Component Pins (Gold Contacts) -->
+  <g fill="url(#enigGold)">
+    <!-- Top Pins -->
+    <rect x="49" y="36" width="6" height="6" rx="1"/>
+    <rect x="61" y="36" width="6" height="6" rx="1"/>
+    <rect x="73" y="36" width="6" height="6" rx="1"/>
+
+    <!-- Bottom Pins -->
+    <rect x="49" y="86" width="6" height="6" rx="1"/>
+    <rect x="61" y="86" width="6" height="6" rx="1"/>
+    <rect x="73" y="86" width="6" height="6" rx="1"/>
+
+    <!-- Left Pins -->
+    <rect x="36" y="49" width="6" height="6" rx="1"/>
+    <rect x="36" y="61" width="6" height="6" rx="1"/>
+    <rect x="36" y="73" width="6" height="6" rx="1"/>
+
+    <!-- Right Pins -->
+    <rect x="86" y="49" width="6" height="6" rx="1"/>
+    <rect x="86" y="61" width="6" height="6" rx="1"/>
+    <rect x="86" y="73" width="6" height="6" rx="1"/>
+  </g>
+
+  <!-- 8. Central IC Body -->
+  <rect x="42" y="42" width="44" height="44" rx="6" fill="url(#chipBody)" stroke="url(#enigGold)" stroke-width="1.2"/>
+
+  <!-- Pin 1 Dot Marker -->
+  <circle cx="48" cy="48" r="2" fill="#fbbf24"/>
+
+  <!-- Central Exposed Ground / Thermal Die (Gold Pad) -->
+  <rect x="50" y="50" width="28" height="28" rx="4" fill="url(#enigGold)" stroke="#b45309" stroke-width="0.75"/>
+
+  <!-- Internal Silicon Trace / Microcontroller Core Glyph -->
+  <g stroke="#064e3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M 55 64 L 60 64 L 64 60 L 69 60 L 73 64"/>
+  </g>
+  <circle cx="55" cy="64" r="1.5" fill="#064e3b"/>
+  <circle cx="73" cy="64" r="1.5" fill="#064e3b"/>
+  <circle cx="64" cy="60" r="1.2" fill="#064e3b"/>
+</svg>

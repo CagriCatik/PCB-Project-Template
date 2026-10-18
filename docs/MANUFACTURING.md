@@ -12,29 +12,31 @@ overwritten (exit 21).
 
 ```mermaid
 flowchart TD
-    EXPORT_TRIGGER["scripts/kit export &lt;project&gt; --revision &lt;REV&gt;"] --> RUN_VERIF["1. Automatischer Verification-Run"]
+    EXPORT_TRIGGER["scripts/kit export &lt;project&gt; --revision &lt;REV&gt;"] --> RUN_VERIF["1. Automated Verification Run"]
     RUN_VERIF --> CHECK_GATES{"Quality Gates PASS?"}
     
-    CHECK_GATES -->|Nein (Required FAIL)| ABORT["Abbruch: Export verweigert<br/>(Keine Artefakterstellung)"]
-    CHECK_GATES -->|Ja| STAGING["2. Staging im temporären Ordner<br/>Gerber, Drill, BOM, Pos, STEP, PDF"]
+    CHECK_GATES -->|Required FAIL| ABORT["Abort: Export Blocked<br/>(No artifacts generated)"]
+    CHECK_GATES -->|All PASS| STAGING["2. Staging in Temporary Directory<br/>Gerbers, Drill, BOM, Pos, STEP, PDF"]
     
-    STAGING --> CHECK_AUTH{"--approval &amp; --authorize<br/>angegeben?"}
+    STAGING --> CHECK_AUTH{"--approval and --authorize<br/>provided?"}
     
-    CHECK_AUTH -->|Nein (Standard)| DRAFT_RELEASE["rev-&lt;REV&gt;-DRAFT/<br/>Entscheidung: NO-GO<br/>'DRAFT - NOT FOR FABRICATION'"]
-    CHECK_AUTH -->|Ja| GO_RELEASE["rev-&lt;REV&gt;-GO/<br/>Entscheidung: GO<br/>Fabrikationsfertig &amp; signiert"]
+    CHECK_AUTH -->|Default DRAFT| DRAFT_RELEASE["rev-&lt;REV&gt;-DRAFT/<br/>Decision: NO-GO<br/>DRAFT - NOT FOR FABRICATION"]
+    CHECK_AUTH -->|Authorized GO| GO_RELEASE["rev-&lt;REV&gt;-GO/<br/>Decision: GO<br/>Signed fabrication release"]
     
-    DRAFT_RELEASE --> MANIFEST["manifest.json generieren<br/>SHA-256 Hashes &amp; Normalisierte Digests"]
+    DRAFT_RELEASE --> MANIFEST["Generate manifest.json<br/>Raw SHA-256 and Normalized Digests"]
     GO_RELEASE --> MANIFEST
     
-    MANIFEST --> ATOMIC_PUB["3. Atomares Veröffentlichen nach:<br/>manufacturing/releases/generated/"]
+    MANIFEST --> ATOMIC_PUB["3. Atomic Publish to:<br/>manufacturing/releases/generated/"]
 
     subgraph DriftDetection ["Stale &amp; Drift Detection (scripts/kit releases)"]
-        STATE_CUR["CURRENT: Quell-Hashes &amp; Artefakte intakt"]
-        STATE_STALE["STALE: Quelldateien nach Export verändert"]
-        STATE_MOD["MODIFIED: Artefakte manuell editiert"]
+        STATE_CUR["CURRENT: Source hashes and artifacts intact"]
+        STATE_STALE["STALE: Design modified after export"]
+        STATE_MOD["MODIFIED: Output artifacts hand-edited"]
     end
 
-    ATOMIC_PUB -.-> DriftDetection
+    ATOMIC_PUB -.-> STATE_CUR
+    ATOMIC_PUB -.-> STATE_STALE
+    ATOMIC_PUB -.-> STATE_MOD
 ```
 
 ## Outputs

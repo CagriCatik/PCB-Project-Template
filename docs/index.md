@@ -1,8 +1,14 @@
-# ⚡ PCB Project Template – Dokumentation
+# PCB Project Template – Dokumentation
 
 <div class="kit-hero">
   <p><strong>Ein klarer, reproduzierbarer Start für professionelle Hardware- und Firmware-Entwicklung mit KiCad 10.0.7 auf macOS.</strong></p>
   <p>Verlässliche Projektstruktur, automatisierte Verification Gates (ERC/DRC mit Schaltplan-Parität), autorisierte Fertigungsfreigaben mit SHA-256-Manifesten und Steuerung via CLI (<code>scripts/kit</code>) sowie moderner Desktop-Manager GUI.</p>
+  <div class="kit-hero-badges">
+    <span class="badge badge-info">KiCad 10.0.7</span>
+    <span class="badge badge-info">macOS</span>
+    <span class="badge badge-info">Python 3.10+</span>
+    <span class="badge badge-go">Release GO / DRAFT</span>
+  </div>
 </div>
 
 ## Willkommen
@@ -11,7 +17,7 @@ Das **PCB-Project-Template** ist eine erprobte Entwicklungsvorlage für macOS, d
 
 - **Verlässliche Projektstruktur:** Klare Ablage für Schaltplan, Board, Firmware (HAL/BSP getrennt von Anwendungslogik), Bibliotheken und Fertigungsunterlagen.
 - **Reproduzierbare Prüfungen:** Automatisierte Verification Gates (ERC, DRC mit Schaltplan-Parität, Footprint-Validierung, 3D-Modelle, Bauteil-Metadaten).
-- **Geordnete Fertigung:** Gezielte Trennung zwischen vorläufigen Entwürfen (<code>DRAFT</code> / <code>NO-GO</code>) und geprüften, autorisierten Freigaben (<code>GO</code>) mit lückenlosen Manifesten und SHA-256-Prüfsummen.
+- **Geordnete Fertigung:** Gezielte Trennung zwischen vorläufigen Entwürfen (<code>DRAFT / NO-GO</code>) und geprüften, autorisierten Freigaben (<code>GO</code>) mit lückenlosen Manifesten und SHA-256-Prüfsummen.
 - **Bedienung nach Wahl:** Volle Funktionalität über die Befehlszeile (<code>scripts/kit</code>), interaktive Skripte sowie einen modernen Desktop-Manager (<code>scripts/kit gui</code>).
 
 ---
@@ -19,63 +25,70 @@ Das **PCB-Project-Template** ist eine erprobte Entwicklungsvorlage für macOS, d
 ## Dokumentationsübersicht
 
 <div class="kit-cards-grid">
-  <a class="kit-card" href="ARCHITECTURE.md">
-    <h3>📐 Architektur & Grundlagen</h3>
+  <div class="kit-card">
+    <h3>Architektur &amp; Konzept</h3>
     <p>Grundsätze, Tool-Paketierung, Invarianten und Verzeichnisstrukturen des Projekts.</p>
-    <div class="kit-card-footer">Dokumentation öffnen →</div>
-  </a>
-  <a class="kit-card" href="INSTALLATION.md">
-    <h3>🛠️ Installation & Bedienung</h3>
+    <div class="kit-card-links">
+      <a href="ARCHITECTURE.md">Architektur</a> ·
+      <a href="PROJECT_STRUCTURE.md">Projektstruktur</a> ·
+      <a href="KICAD_COMPATIBILITY.md">KiCad 10</a> ·
+      <a href="LIBRARY_MANAGEMENT.md">Bibliotheken</a>
+    </div>
+    <a class="kit-card-footer" href="ARCHITECTURE.md">Bereich öffnen →</a>
+  </div>
+
+  <div class="kit-card">
+    <h3>Bedienung &amp; Tools</h3>
     <p>Setup für macOS, CLI-Referenz (<code>scripts/kit</code>), Desktop-GUI und PCM-Plugins.</p>
-    <div class="kit-card-footer">Dokumentation öffnen →</div>
-  </a>
-  <a class="kit-card" href="VERIFICATION.md">
-    <h3>🛡️ Qualität & Fertigung</h3>
+    <div class="kit-card-links">
+      <a href="INSTALLATION.md">Installation</a> ·
+      <a href="CLI_REFERENCE.md">CLI-Referenz</a> ·
+      <a href="DESKTOP_MANAGER.md">Desktop-GUI</a> ·
+      <a href="PLUGIN_MANAGEMENT.md">Plugins</a> ·
+      <a href="KICAD_IPC.md">KiCad IPC</a>
+    </div>
+    <a class="kit-card-footer" href="INSTALLATION.md">Bereich öffnen →</a>
+  </div>
+
+  <div class="kit-card">
+    <h3>Qualität &amp; Fertigung</h3>
     <p>Automatisierte Verification Gates (ERC/DRC), Gerber-Exporte und Freigabeprozesse.</p>
-    <div class="kit-card-footer">Dokumentation öffnen →</div>
-  </a>
-  <a class="kit-card" href="IMPLEMENTATION_STATUS.md">
-    <h3>📋 Status & Berichte</h3>
+    <div class="kit-card-links">
+      <a href="VERIFICATION.md">Verifikation</a> ·
+      <a href="MANUFACTURING.md">Fertigung &amp; Exporte</a> ·
+      <a href="THERMAL_ANALYSIS.md">Thermische Analyse</a> ·
+      <a href="TROUBLESHOOTING.md">Fehlerbehebung</a>
+    </div>
+    <a class="kit-card-footer" href="VERIFICATION.md">Bereich öffnen →</a>
+  </div>
+
+  <div class="kit-card">
+    <h3>Berichte &amp; Status</h3>
     <p>Implementierungsstand aller Module, Abnahmetests und gesammelte Erfahrungen.</p>
-    <div class="kit-card-footer">Dokumentation öffnen →</div>
-  </a>
+    <div class="kit-card-links">
+      <a href="IMPLEMENTATION_STATUS.md">Status</a> ·
+      <a href="ACCEPTANCE_REPORT.md">Abnahmebericht</a> ·
+      <a href="LESSONS_LEARNED.md">Lessons Learned</a>
+    </div>
+    <a class="kit-card-footer" href="IMPLEMENTATION_STATUS.md">Bereich öffnen →</a>
+  </div>
 </div>
 
-### 📐 Architektur & Grundlagen
-- [**Architektur (ARCHITECTURE.md)**](ARCHITECTURE.md) – Grundsätze, Tool-Paketierung, Invarianten und Designentscheidungen.
-- [**Projektstruktur (PROJECT_STRUCTURE.md)**](PROJECT_STRUCTURE.md) – Verzeichnisaufbau, Ablageorte für Hardware, Firmware, Komponenten und Doku.
-- [**KiCad 10 Kompatibilität (KICAD_COMPATIBILITY.md)**](KICAD_COMPATIBILITY.md) – Spezifische Anforderungen für KiCad 10.0.7.
-
-### 🛠️ Installation & Bedienung
-- [**Installation & Setup (INSTALLATION.md)**](INSTALLATION.md) – Schritt-für-Schritt-Anleitung für macOS, Python-Venv und Toolchains.
-- [**CLI-Referenz (CLI_REFERENCE.md)**](CLI_REFERENCE.md) – Alle Befehle (`create`, `verify`, `export`, `doctor`, `gui` u. a.) im Detail.
-- [**GUI-Abnahmetest (GUI_ACCEPTANCE.md)**](GUI_ACCEPTANCE.md) – Anleitung und Checkliste für die Desktop-Anwendung.
-- [**Bibliotheksverwaltung (LIBRARY_MANAGEMENT.md)**](LIBRARY_MANAGEMENT.md) – Portabilität über `${KIPRJMOD}`, lokale Symbole und Footprints.
-- [**Plugin-Verwaltung (PLUGIN_MANAGEMENT.md)**](PLUGIN_MANAGEMENT.md) – KiCad PCM-Erweiterungen (InteractiveHtmlBom, Freerouting, KiKit).
-- [**KiCad API & IPC (KICAD_IPC.md)**](KICAD_IPC.md) – Live-Schnittstellen und Fallback-Verhalten.
-
-### 🛡️ Qualität & Fertigung
-- [**Verifikation & Quality Gates (VERIFICATION.md)**](VERIFICATION.md) – ERC, DRC, Netzlisten-Parität und Release-Kriterien.
-- [**Fertigung & Releases (MANUFACTURING.md)**](MANUFACTURING.md) – Gerber, Bohrdaten, BOM, Bestückungskoordinaten und DRAFT/GO-Freigabeprozess.
-- [**Thermische Analyse (THERMAL_ANALYSIS.md)**](THERMAL_ANALYSIS.md) – Finite-Differenzen-Schätzung für Verlustleistungen.
-- [**Fehlerbehebung (TROUBLESHOOTING.md)**](TROUBLESHOOTING.md) – Lösungen für häufige Fehler und Warnungen.
-
-### 📋 Status & Berichte
-- [**Implementierungsstatus (IMPLEMENTATION_STATUS.md)**](IMPLEMENTATION_STATUS.md) – Aktueller technischer Stand aller Komponenten.
-- [**Abnahmebericht (ACCEPTANCE_REPORT.md)**](ACCEPTANCE_REPORT.md) – Detaillierte Testergebnisse und Validierungsprotokolle.
-- [**Lessons Learned (LESSONS_LEARNED.md)**](LESSONS_LEARNED.md) – Erfahrungen aus der PCB-Praxis und Template-Entwicklung.
+---
 
 ## Entwicklungs-Workflow
 
 ```mermaid
-flowchart LR
-    A["1. Vorlage wählen<br/>generic / stm32 / arduino"] --> B["2. Projekt erstellen<br/>scripts/kit create"]
-    B --> C["3. Hardware & Firmware<br/>KiCad 10.0.7 & HAL/BSP"]
-    C --> D["4. Verification Gates<br/>scripts/kit verify"]
-    D -->|Fehler / Warnung| C
-    D -->|Alle Gates PASS| E{"5. Fertigungsexport"}
-    E -->|Vorläufiger Stand| F["DRAFT Export<br/>NO-GO (nicht für Fertigung)"]
-    E -->|Signierte Freigabe| G["GO Release<br/>Gerber, BOM, SHA-256 Manifest"]
+flowchart TD
+    A["1. Vorlage wählen<br/>generic-pcb · stm32-embedded · arduino-shield"] --> B["2. Projekt erstellen<br/>scripts/kit create &lt;name&gt; --template ..."]
+    B --> C["3. Hardware- &amp; Firmware-Design<br/>KiCad 10.0.7 Schaltplan &amp; Layout · HAL/BSP getrennt"]
+    C --> D["4. Automatisierte Verification Gates<br/>scripts/kit verify (ERC, DRC, Parität, 3D-Modelle)"]
+    
+    D -->|Prüfung fehlgeschlagen| C
+    D -->|Alle Gates PASS| E{"5. Fertigungsexport<br/>scripts/kit export"}
+    
+    E -->|Vorläufiger Stand| F["DRAFT-Export (NO-GO)<br/>Vorläufige Unterlagen (nicht für Fertigung)"]
+    E -->|Mit --approval &amp; --authorize| G["GO-Release (GO)<br/>Autorisiert, Gerber, BOM &amp; SHA-256 Manifest"]
 ```
 
 ---

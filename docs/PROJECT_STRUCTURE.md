@@ -52,23 +52,23 @@ My Board/
 
 ```mermaid
 graph TD
-    subgraph KitRepo ["PCB-Project-Template (Kit-Repository)"]
+    subgraph KitRepo ["PCB-Project-Template (Kit Repository)"]
         TEMPLATES["meta/templates/<br/>generic-pcb / stm32-embedded / arduino-shield"]
-        KIT_TOOLS["tools/ & scripts/<br/>CLI, GUI, Verification, Thermal, Releases"]
-        PROFILES["meta/templates/profiles/<br/>2-Layer & 4-Layer Board-Profile"]
+        KIT_TOOLS["tools/ &amp; scripts/<br/>CLI, GUI, Verification, Thermal, Releases"]
+        PROFILES["meta/templates/profiles/<br/>2-Layer &amp; 4-Layer Board Profiles"]
     end
 
-    subgraph Generation ["Materialisierung via scripts/kit create"]
+    subgraph Generation ["Instantiation via scripts/kit create"]
         GEN_PROC["scripts/kit create 'My Board' --template ..."]
     end
 
-    subgraph UserProject ["Eigenständiges Board-Projekt ('My Board/')"]
-        PROJ_ROOT["My Board.kicad_pro / .kicad_sch / .kicad_pcb<br/>(Natives KiCad-Projekt auf Wurzelebene)"]
+    subgraph UserProject ["Independent Board Project ('My Board/')"]
+        PROJ_ROOT["My Board.kicad_pro / .kicad_sch / .kicad_pcb<br/>(Native KiCad project at root)"]
         HW["hardware/<br/>libraries (${KIPRJMOD}), constraints, interfaces"]
-        FW["firmware/<br/>app/ (Plattform-unabhängig) & bsp/ (HAL)"]
-        COMP["components/<br/>approved-parts/ (MPN-JSONs, Datenblätter)"]
-        MFG["manufacturing/<br/>releases/ (GO/DRAFT Exporte, Manifeste)"]
-        QA["qa/<br/>verification.json, Testberichte"]
+        FW["firmware/<br/>app/ (platform-agnostic) &amp; bsp/ (HAL)"]
+        COMP["components/<br/>approved-parts/ (MPN records, datasheets)"]
+        MFG["manufacturing/<br/>releases/ (GO/DRAFT exports, manifests)"]
+        QA["qa/<br/>verification.json, test reports"]
     end
 
     TEMPLATES --> GEN_PROC

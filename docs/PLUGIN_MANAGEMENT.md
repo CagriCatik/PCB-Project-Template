@@ -44,13 +44,13 @@ stateDiagram-v2
     [*] --> NOT_INSTALLED
     
     NOT_INSTALLED --> INSTALLED_UNVERIFIED: KiCad PCM Installation
-    NOT_INSTALLED --> SHIM_ONLY: PCM Shim ohne Python-Backend (z.B. KiKit)
+    NOT_INSTALLED --> SHIM_ONLY: PCM shim without Python backend (e.g. KiKit)
     
-    SHIM_ONLY --> INSTALLED_UNVERIFIED: pip install in KiCad Python
+    SHIM_ONLY --> INSTALLED_UNVERIFIED: pip install into KiCad Python
     
-    INSTALLED_UNVERIFIED --> VERIFIED: Headless Test erfolgreich (IBOM, Freerouting, KiKit)
-    INSTALLED_UNVERIFIED --> VERIFICATION_FAILED: Headless Test fehlgeschlagen
-    INSTALLED_UNVERIFIED --> MANUAL_VERIFICATION_REQUIRED: Reines GUI-Plugin (z.B. KiBuzzard, Board2Pdf)
+    INSTALLED_UNVERIFIED --> VERIFIED: Headless test passed (IBOM, Freerouting, KiKit)
+    INSTALLED_UNVERIFIED --> VERIFICATION_FAILED: Headless test failed
+    INSTALLED_UNVERIFIED --> MANUAL_VERIFICATION_REQUIRED: GUI-only plugin (e.g. KiBuzzard, Board2Pdf)
 ```
 
 ## Commands

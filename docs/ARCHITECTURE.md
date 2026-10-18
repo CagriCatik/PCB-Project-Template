@@ -9,26 +9,6 @@ numpy/scipy for the thermal estimate (`tools/thermal/`).
 
 ## Layers
 
-```text
- install_template.command   project-manager.command   scripts/*.sh (thin aliases)
-            \                       |                        /
-             +---------> scripts/kit  =  python -m tools  (.venv or python3 >= 3.10)
-                                    |
-                     tools/cli/      main.py (non-interactive CLI, exit codes)
-                                     interactive.py (menu, same core calls)
-                                    |
-   +-------------+-------------+----+---------+-------------+-------------+
- environment/   project/      quality/      release/      plugins/      thermal/
- installer      templates     verification  exports       manager       analysis, geometry,
-                registry      firmware      packaging     catalog.json  solver, render,
-                components         |             |                      compare, config
-                     \              |             |              /
-                      +------- tools/kicad/ ------------------+
-                               cli (kicad-cli), ipc, ipc_client, design, libraries
-                                    |
-                      tools/core/   kicad_env (all machine paths), common, sexpr
-```
-
 ```mermaid
 graph TD
     subgraph Entrypoints ["1. User Entrypoints"]
@@ -46,12 +26,12 @@ graph TD
     end
 
     subgraph Domains ["3. Domain Logic"]
-        ENV["environment/<br/>installer & doctor"]
-        PROJ["project/<br/>templates, registry & parts"]
-        QUAL["quality/<br/>verification & firmware"]
-        REL["release/<br/>exports & manifests"]
-        PLUG["plugins/<br/>PCM manager & catalog"]
-        THERM["thermal/<br/>2.5D solver & heatmaps"]
+        ENV["environment/<br/>installer &amp; doctor"]
+        PROJ["project/<br/>templates, registry &amp; parts"]
+        QUAL["quality/<br/>verification &amp; firmware"]
+        REL["release/<br/>exports &amp; manifests"]
+        PLUG["plugins/<br/>PCM manager &amp; catalog"]
+        THERM["thermal/<br/>2.5D solver &amp; heatmaps"]
     end
 
     subgraph KiCadLayer ["4. KiCad Integration"]
@@ -62,24 +42,37 @@ graph TD
         CORE["tools/core/<br/>kicad_env, common, sexpr parser"]
     end
 
-    Entrypoints --> KIT
+    CMD_INST --> KIT
+    CMD_MGR --> KIT
+    CMD_GUI --> KIT
+    SH_ALIASES --> KIT
+
     KIT --> CLI_MAIN
     KIT --> CLI_INTER
     KIT --> GUI_APP
-    CLI_MAIN --> Domains
-    CLI_INTER --> Domains
-    GUI_APP --> Domains
 
-    ENV --> PROJ
-    ENV --> QUAL
-    ENV --> PLUG
+    CLI_MAIN --> ENV
+    CLI_MAIN --> PROJ
+    CLI_MAIN --> QUAL
+    CLI_MAIN --> REL
+    CLI_MAIN --> PLUG
+    CLI_MAIN --> THERM
+
+    GUI_APP --> PROJ
+    GUI_APP --> QUAL
+    GUI_APP --> REL
+    GUI_APP --> ENV
+
     REL --> QUAL
-    REL --> PLUG
+    ENV --> PROJ
     QUAL --> PROJ
-    QUAL -.-> THERM
+    QUAL --> THERM
 
-    Domains --> KICAD
-    Domains --> CORE
+    PROJ --> KICAD
+    QUAL --> KICAD
+    REL --> KICAD
+    ENV --> KICAD
+
     KICAD --> CORE
 ```
 

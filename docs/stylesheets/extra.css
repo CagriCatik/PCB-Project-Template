@@ -1,144 +1,474 @@
 /* ==========================================================================
-   PCB-Project-Template — Custom Documentation Styling (extra.css)
-   Clean, modern, high-contrast engineering aesthetic for KiCad 10 docs.
+   PCB-Project-Template — Professional Documentation Styling (extra.css)
+   Authentic PCB Engineering aesthetic: Emerald Solder Mask, ENIG Gold Traces,
+   FR-4 Matte Core substrate and high-contrast silkscreen typography.
    ========================================================================== */
 
-/* --- Design Tokens & Theme Colors --- */
-:root {
-  --md-primary-fg-color:        #2563eb; /* Modern Royal Blue */
-  --md-primary-fg-color--light:  #3b82f6;
-  --md-primary-fg-color--dark:   #1d4ed8;
-  --md-accent-fg-color:         #06b6d4; /* Clean Cyan */
-  --md-accent-fg-color--transparent: rgba(6, 182, 212, 0.1);
+/* --- Design Tokens & PCB Color Systems --- */
+:root,
+[data-md-color-scheme="default"] {
+  /* Solder Mask Green (KiCad Classic Emerald) */
+  --md-primary-fg-color:             #047857; /* Rich Solder Mask Emerald */
+  --md-primary-fg-color--light:       #059669;
+  --md-primary-fg-color--dark:        #064e3b;
+  
+  /* ENIG Gold / Copper Trace Accents */
+  --md-accent-fg-color:              #d97706; /* Warm ENIG Gold / Copper */
+  --md-accent-fg-color--transparent:  rgba(217, 119, 6, 0.08);
 
-  /* Subtle card & element surfaces (Light Mode) */
-  --kit-surface-card:           #ffffff;
-  --kit-surface-card-hover:     #f8fafc;
-  --kit-border-subtle:          #e2e8f0;
-  --kit-border-glow:            rgba(37, 99, 235, 0.15);
-  --kit-shadow-sm:              0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --kit-shadow-md:              0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
-  --kit-shadow-lg:              0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --md-default-bg-color:             #ffffff;
+  --md-default-bg-color--light:       #f8fafc;
+  --md-default-bg-color--lighter:     #f1f5f9;
+  --md-default-fg-color:             #0f172a; /* Silkscreen Dark Slate */
+  --md-default-fg-color--light:       #475569;
+  --md-default-fg-color--lighter:     #64748b;
+  --md-code-bg-color:                #f8fafc;
 
-  --kit-font-family-sans:       -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --kit-font-family-mono:       ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, monospace;
+  /* Surfaces & Shadows */
+  --kit-surface-card:                #ffffff;
+  --kit-surface-card-hover:          #f8fafc;
+  --kit-surface-hero:                linear-gradient(135deg, rgba(4, 120, 87, 0.06) 0%, rgba(217, 119, 6, 0.04) 50%, #f8fafc 100%);
+  --kit-border-subtle:               #e2e8f0;
+  --kit-border-focus:                #059669;
+  --kit-border-glow:                 rgba(4, 120, 87, 0.16);
+  
+  --kit-header-bg:                   rgba(255, 255, 255, 0.94);
+  --kit-header-fg:                   #0f172a;
+  --kit-header-border:               #e2e8f0;
+
+  --kit-code-inline-bg:              rgba(4, 120, 87, 0.06);
+  --kit-code-inline-border:          rgba(4, 120, 87, 0.18);
+  --kit-code-inline-fg:              #047857; /* Solder Emerald for inline code */
+
+  --kit-shadow-sm:                   0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --kit-shadow-md:                   0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --kit-shadow-lg:                   0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+
+  --kit-font-mono:                   ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 }
 
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color:        #3b82f6;
-  --md-primary-fg-color--light:  #60a5fa;
-  --md-primary-fg-color--dark:   #2563eb;
-  --md-accent-fg-color:         #22d3ee;
-  --md-accent-fg-color--transparent: rgba(34, 211, 238, 0.12);
+  /* Luminous Circuit Emerald */
+  --md-primary-fg-color:             #10b981; /* Luminous Trace Emerald */
+  --md-primary-fg-color--light:       #34d399;
+  --md-primary-fg-color--dark:        #059669;
+  
+  /* Luminous ENIG Gold / Copper */
+  --md-accent-fg-color:              #f59e0b; /* Vibrant ENIG Gold */
+  --md-accent-fg-color--transparent:  rgba(245, 158, 11, 0.12);
 
-  /* Deep space navy surfaces (Dark Mode) */
-  --md-default-bg-color:        #0c1017;
-  --md-default-bg-color--light:  #141a24;
-  --md-default-bg-color--lighter:#1a2230;
-  --md-code-bg-color:           #121822;
+  /* Matte Black / Charcoal PCB Substrate (FR-4 Matte Core) */
+  --md-default-bg-color:             #0c1218;
+  --md-default-bg-color--light:       #111822;
+  --md-default-bg-color--lighter:     #172230;
+  --md-default-fg-color:             #f8fafc; /* Crisp Silkscreen White */
+  --md-default-fg-color--light:       #94a3b8;
+  --md-default-fg-color--lighter:     #64748b;
+  --md-code-bg-color:                #0f1620;
 
-  --kit-surface-card:           #131823;
-  --kit-surface-card-hover:     #182030;
-  --kit-border-subtle:          rgba(255, 255, 255, 0.09);
-  --kit-border-glow:            rgba(96, 165, 250, 0.22);
-  --kit-shadow-sm:              0 1px 3px rgba(0, 0, 0, 0.3);
-  --kit-shadow-md:              0 4px 8px rgba(0, 0, 0, 0.4);
-  --kit-shadow-lg:              0 12px 24px rgba(0, 0, 0, 0.5);
+  /* Surfaces & Shadows */
+  --kit-surface-card:                #111822;
+  --kit-surface-card-hover:          #172230;
+  --kit-surface-hero:                linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(245, 158, 11, 0.06) 50%, rgba(12, 18, 24, 0.8) 100%);
+  --kit-border-subtle:               rgba(255, 255, 255, 0.09);
+  --kit-border-focus:                #10b981;
+  --kit-border-glow:                 rgba(16, 185, 129, 0.25);
+
+  --kit-header-bg:                   rgba(12, 18, 24, 0.90);
+  --kit-header-fg:                   #f8fafc;
+  --kit-header-border:               rgba(255, 255, 255, 0.08);
+
+  --kit-code-inline-bg:              rgba(245, 158, 11, 0.10);
+  --kit-code-inline-border:          rgba(245, 158, 11, 0.24);
+  --kit-code-inline-fg:              #fbbf24; /* ENIG Gold for code designators */
+
+  --kit-shadow-sm:                   0 1px 3px rgba(0, 0, 0, 0.35);
+  --kit-shadow-md:                   0 4px 8px rgba(0, 0, 0, 0.45);
+  --kit-shadow-lg:                   0 12px 24px rgba(0, 0, 0, 0.55);
 }
 
-/* --- Global Typography & Smoothing --- */
-body {
+/* --- Global Layout & Grid Width --- */
+.md-grid {
+  max-width: 78rem !important; /* 1248px: generous breathing room for KiCad tables & schematics */
+}
+
+/* --- Global Rendering & Antialiasing --- */
+html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: optimizeLegibility;
 }
 
-/* --- Header Glassmorphism --- */
+/* --- Header & Top Navigation Bar --- */
 .md-header {
+  background-color: var(--kit-header-bg) !important;
+  color: var(--kit-header-fg) !important;
+  border-bottom: 1px solid var(--kit-header-border) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  background-color: rgba(30, 41, 59, 0.88);
-  border-bottom: 1px solid var(--kit-border-subtle);
+  box-shadow: none !important;
 }
 
-[data-md-color-scheme="slate"] .md-header {
-  background-color: rgba(12, 16, 23, 0.85);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+.md-header__button.md-logo {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
 }
 
-/* --- Navigation Tabs & Sidebar --- */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 6px;
+  display: block;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+}
+
+.md-header__button.md-logo:hover img,
+.md-header__button.md-logo:hover svg {
+  transform: scale(1.08);
+  filter: drop-shadow(0 2px 8px var(--kit-border-glow));
+}
+
+.md-header__topic {
+  color: var(--kit-header-fg) !important;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.md-header__button {
+  color: var(--kit-header-fg) !important;
+  opacity: 0.85;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.md-header__button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Search input styling in header */
+.md-search__inner {
+  border-radius: 8px;
+}
+
+.md-search__form {
+  background-color: var(--md-default-bg-color--lighter) !important;
+  border: 1px solid var(--kit-border-subtle) !important;
+  border-radius: 8px;
+}
+
+.md-search__input {
+  color: var(--md-default-fg-color) !important;
+}
+
+.md-search__input::placeholder {
+  color: var(--md-default-fg-color--light) !important;
+}
+
+/* Tabs Bar */
 .md-tabs {
-  background-color: transparent;
+  background-color: var(--md-default-bg-color) !important;
   border-bottom: 1px solid var(--kit-border-subtle);
 }
 
 .md-tabs__link {
+  color: var(--md-default-fg-color--light) !important;
   font-weight: 500;
   font-size: 0.85rem;
-  opacity: 0.8;
-  transition: opacity 0.2s ease, color 0.2s ease;
-  padding: 0.6rem 0.8rem;
+  padding: 0.55rem 0.85rem;
   border-radius: 6px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  opacity: 1 !important;
 }
 
-.md-tabs__item--active .md-tabs__link,
 .md-tabs__link:hover {
-  opacity: 1;
+  color: var(--md-default-fg-color) !important;
   background-color: var(--md-accent-fg-color--transparent);
 }
 
+.md-tabs__item--active .md-tabs__link {
+  color: var(--md-primary-fg-color) !important;
+  font-weight: 650;
+  background-color: var(--md-accent-fg-color--transparent);
+}
+
+/* --- Left Sidebar Navigation --- */
 .md-nav__link {
   border-radius: 6px;
-  padding: 0.25rem 0.5rem;
+  padding: 0.28rem 0.6rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.88rem;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .md-nav__link:hover {
+  color: var(--md-default-fg-color);
   background-color: rgba(125, 125, 125, 0.08);
 }
 
 .md-nav__item--active > .md-nav__link {
-  font-weight: 600;
-  color: var(--md-primary-fg-color);
+  font-weight: 650;
+  color: var(--md-primary-fg-color) !important;
+  background-color: var(--md-accent-fg-color--transparent);
+  border-left: 3px solid var(--md-primary-fg-color);
+  border-radius: 0 6px 6px 0;
 }
 
 /* --- Content Headings --- */
 .md-content h1 {
   font-weight: 750;
   letter-spacing: -0.025em;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--md-default-fg-color);
 }
 
 .md-content h2 {
   font-weight: 650;
-  letter-spacing: -0.02em;
-  margin-top: 2rem;
-  padding-bottom: 0.4rem;
+  letter-spacing: -0.015em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.35rem;
   border-bottom: 1px solid var(--kit-border-subtle);
+  color: var(--md-default-fg-color);
 }
 
 .md-content h3 {
   font-weight: 600;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--md-default-fg-color);
+}
+
+/* --- Hero Section --- */
+.kit-hero {
+  background: var(--kit-surface-hero);
+  border: 1px solid var(--kit-border-subtle);
+  border-radius: 12px;
+  padding: 1.6rem 1.8rem;
+  margin: 1.2rem 0 1.8rem 0;
+  box-shadow: var(--kit-shadow-sm);
+}
+
+.kit-hero h2,
+.kit-hero p {
+  margin: 0 0 0.6rem 0;
+}
+
+.kit-hero p:last-child {
+  margin-bottom: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.kit-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* --- Card Grid --- */
+.kit-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.md-typeset .kit-card {
+  background: var(--kit-surface-card);
+  border: 1px solid var(--kit-border-subtle);
+  border-radius: 12px;
+  padding: 1.4rem;
+  box-shadow: var(--kit-shadow-sm);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.md-typeset .kit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--kit-shadow-md), 0 0 0 1px var(--kit-border-glow);
+  border-color: var(--md-primary-fg-color--light);
+}
+
+.md-typeset .kit-card h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.1rem;
+  font-weight: 650;
+  color: var(--md-default-fg-color);
+  transition: color 0.15s ease;
+}
+
+.md-typeset .kit-card:hover h3 {
+  color: var(--md-primary-fg-color);
+}
+
+.md-typeset .kit-card p {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 0.8rem 0;
+  flex-grow: 1;
+}
+
+.md-typeset .kit-card .kit-card-links {
+  font-size: 0.85rem;
+  color: var(--md-default-fg-color--lighter);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  border-top: 1px solid var(--kit-border-subtle);
+  padding-top: 0.6rem;
+}
+
+.md-typeset .kit-card .kit-card-links a {
+  color: var(--md-default-fg-color);
+  font-weight: 550;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.md-typeset .kit-card .kit-card-links a:hover {
+  color: var(--md-primary-fg-color);
+  text-decoration: underline;
+}
+
+.md-typeset .kit-card .kit-card-footer {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--md-primary-fg-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.md-typeset .kit-card:hover .kit-card-footer {
+  transform: translateX(4px);
+  color: var(--md-accent-fg-color);
+}
+
+/* --- Mermaid Diagram Container --- */
+.mermaid {
+  display: block !important;
+  text-align: center !important;
+  background: var(--kit-surface-card) !important;
+  border: 1px solid var(--kit-border-subtle) !important;
+  border-radius: 12px !important;
+  padding: 1.8rem 1.4rem !important;
+  margin: 1.8rem 0 !important;
+  overflow-x: auto !important;
+  box-shadow: var(--kit-shadow-sm) !important;
+}
+
+.mermaid svg {
+  display: inline-block !important;
+  margin: 0 auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* --- Responsive & Polished Tables --- */
+.md-typeset__scrollwrap,
+.md-typeset__table {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.5rem 0 2rem 0;
+  border-radius: 10px;
+}
+
+.md-typeset table:not([class]) {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--kit-border-subtle);
+  box-shadow: var(--kit-shadow-sm);
+  margin: 1.5rem 0 2rem 0;
+  table-layout: auto;
+}
+
+.md-typeset > table:not([class]) {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--md-default-bg-color--lighter);
+  font-weight: 650;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 0.95rem;
+  border-bottom: 2px solid var(--kit-border-subtle);
+  color: var(--md-default-fg-color);
+  white-space: nowrap;
+  vertical-align: bottom;
+  text-align: left;
+}
+
+.md-typeset table:not([class]) td {
+  padding: 0.7rem 0.95rem;
+  border-bottom: 1px solid var(--kit-border-subtle);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  vertical-align: top;
+  text-align: left;
+}
+
+.md-typeset table:not([class]) tr:last-child td {
+  border-bottom: none;
+}
+
+.md-typeset table:not([class]) tr:hover td {
+  background-color: rgba(125, 125, 125, 0.04);
+}
+
+/* Code tokens inside table cells: break long paths cleanly at slashes/words */
+.md-typeset table:not([class]) td code {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* --- Code Blocks & Syntax Highlighting --- */
-.md-typeset pre > code {
-  font-family: var(--kit-font-family-mono);
-  font-size: 0.85rem;
-  line-height: 1.6;
+.md-typeset pre {
+  margin: 1.25rem 0;
   border-radius: 10px;
   border: 1px solid var(--kit-border-subtle);
+  box-shadow: var(--kit-shadow-sm);
+  background-color: var(--md-code-bg-color) !important;
 }
 
-.md-typeset code {
-  font-family: var(--kit-font-family-mono);
+.md-typeset pre > code {
+  font-family: var(--kit-font-mono) !important;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  padding: 1rem 1.2rem;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+/* Inline code tags: subtle, refined, no giant gap before punctuation or inside parens */
+.md-typeset :not(pre) > code {
+  font-family: var(--kit-font-mono) !important;
   font-size: 0.85em;
-  padding: 0.15em 0.4em;
-  border-radius: 5px;
-  background-color: rgba(125, 125, 125, 0.1);
-  border: 1px solid rgba(125, 125, 125, 0.12);
+  padding: 0.1em 0.32em;
+  margin: 0 0.05em;
+  border-radius: 4px;
+  background-color: var(--kit-code-inline-bg);
+  border: 1px solid var(--kit-code-inline-border);
+  color: var(--kit-code-inline-fg);
+  font-weight: 500;
 }
 
 .md-clipboard {
@@ -150,11 +480,12 @@ body {
   transform: scale(1.1);
 }
 
-/* --- Admonitions (Notes, Tips, Warnings) --- */
+/* --- Admonitions --- */
 .md-typeset .admonition {
   border-radius: 10px;
   box-shadow: var(--kit-shadow-sm);
   border-left-width: 4px;
+  margin: 1.5rem 0;
   transition: box-shadow 0.2s ease;
 }
 
@@ -162,168 +493,60 @@ body {
   box-shadow: var(--kit-shadow-md);
 }
 
-/* --- Tables --- */
-.md-typeset table:not([class]) {
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--kit-border-subtle);
-  box-shadow: var(--kit-shadow-sm);
-  margin: 1.5rem 0;
-}
-
-.md-typeset table:not([class]) th {
-  background-color: rgba(125, 125, 125, 0.06);
-  font-weight: 650;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.75rem 1rem;
-  border-bottom: 2px solid var(--kit-border-subtle);
-}
-
-.md-typeset table:not([class]) td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--kit-border-subtle);
-  font-size: 0.9rem;
-}
-
-.md-typeset table:not([class]) tr:last-child td {
-  border-bottom: none;
-}
-
-.md-typeset table:not([class]) tr:hover td {
-  background-color: rgba(125, 125, 125, 0.04);
-}
-
-/* --- Custom Cards & Grid Layouts --- */
-.kit-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  margin: 1.75rem 0;
-}
-
-.md-typeset a.kit-card {
-  background: var(--kit-surface-card);
-  border: 1px solid var(--kit-border-subtle);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--kit-shadow-sm);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  color: inherit;
-  text-decoration: none !important;
-}
-
-.md-typeset a.kit-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--kit-shadow-lg), 0 0 0 1px var(--kit-border-glow);
-  border-color: var(--md-primary-fg-color--light);
-  text-decoration: none !important;
-}
-
-.md-typeset a.kit-card h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.15rem;
-  font-weight: 650;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: var(--md-default-fg-color);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.md-typeset a.kit-card:hover h3 {
+/* --- Global Links --- */
+.md-typeset a {
   color: var(--md-primary-fg-color);
+  text-decoration: underline;
+  text-decoration-color: var(--md-accent-fg-color--transparent);
+  text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
-.md-typeset a.kit-card p {
-  color: var(--md-default-fg-color--light);
-  font-size: 0.92rem;
-  line-height: 1.55;
-  margin: 0 0 1.2rem 0;
-  flex-grow: 1;
-  text-decoration: none;
-}
-
-.md-typeset a.kit-card .kit-card-footer {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--md-primary-fg-color);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  text-decoration: none;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.md-typeset a.kit-card:hover .kit-card-footer {
-  transform: translateX(5px);
+.md-typeset a:hover {
   color: var(--md-accent-fg-color);
+  text-decoration-color: var(--md-accent-fg-color);
 }
 
-/* --- Hero Section Styling --- */
-.kit-hero {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, rgba(6, 182, 212, 0.04) 100%);
-  border: 1px solid var(--kit-border-subtle);
-  border-radius: 14px;
-  padding: 1.8rem 2rem;
-  margin: 1.5rem 0 2rem 0;
-}
-
-[data-md-color-scheme="slate"] .kit-hero {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(34, 211, 238, 0.05) 100%);
-  border-color: rgba(255, 255, 255, 0.09);
-}
-
-.kit-hero p {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  margin-bottom: 0.8rem;
-}
-
-/* --- Status Badges & Pills --- */
+/* --- Status Badges & Chips --- */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
 }
 
 .badge-go {
-  background-color: rgba(16, 185, 129, 0.15);
+  background-color: rgba(16, 185, 129, 0.12);
   color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .badge-draft {
-  background-color: rgba(245, 158, 11, 0.15);
+  background-color: rgba(245, 158, 11, 0.12);
   color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .badge-info {
-  background-color: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background-color: rgba(4, 120, 87, 0.10);
+  color: #047857;
+  border: 1px solid rgba(4, 120, 87, 0.22);
 }
 
-/* --- Scrollbar Refinement --- */
+[data-md-color-scheme="slate"] .badge-info {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+/* --- Scrollbars --- */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -332,7 +555,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: rgba(125, 125, 125, 0.25);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

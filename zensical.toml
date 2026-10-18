@@ -19,7 +19,7 @@ nav = [
   { "Bedienung & Tools" = [
       { "Installation" = "INSTALLATION.md" },
       { "CLI-Referenz" = "CLI_REFERENCE.md" },
-      { "Desktop-Manager (GUI)" = "GUI_ACCEPTANCE.md" },
+      { "Desktop-Manager (GUI)" = "DESKTOP_MANAGER.md" },
       { "Plugin-Verwaltung" = "PLUGIN_MANAGEMENT.md" },
       { "KiCad IPC & API" = "KICAD_IPC.md" }
   ]},
@@ -32,6 +32,7 @@ nav = [
   { "Berichte & Status" = [
       { "Implementierungsstatus" = "IMPLEMENTATION_STATUS.md" },
       { "Abnahmebericht" = "ACCEPTANCE_REPORT.md" },
+      { "Manuelle KiCad-Prüfliste" = "GUI_ACCEPTANCE.md" },
       { "Lessons Learned" = "LESSONS_LEARNED.md" }
   ]}
 ]
@@ -44,6 +45,8 @@ extra_javascript = [
 
 [project.theme]
 language = "de"
+logo = "assets/logo.svg"
+favicon = "assets/favicon.svg"
 features = [
   "navigation.tabs",
   "navigation.sections",
@@ -72,6 +75,7 @@ admonition = {}
 attr_list = {}
 def_list = {}
 footnotes = {}
+tables = {}
 md_in_html = {}
 toc.permalink = true
 pymdownx.arithmatex.generic = true

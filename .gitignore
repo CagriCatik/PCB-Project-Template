@@ -15,6 +15,7 @@ outputs/
 # OS files
 .DS_Store
 Thumbs.db
+.cache
 
 # Development kit generated data
 __pycache__/

@@ -14,39 +14,43 @@ and referenced through `${KIPRJMOD}`, so the project keeps working when it is
 moved, renamed, cloned or opened on another machine.
 
 ```mermaid
-graph TD
-    subgraph Schematic ["Schaltplan-Ebene"]
-        SYM["Symbol lib_id:<br/>'Project_Parts:U1'"]
-        SYM_TABLE["sym-lib-table"]
+flowchart TD
+    subgraph DesignLayer ["1. Schematic &amp; Layout References"]
+        SYM["Schematic Symbol<br/><code>lib_id: Project_Parts:U1</code>"]
+        FP["PCB Footprint<br/><code>Project_Footprints:QFN-24</code>"]
+        M3D["Footprint 3D Model<br/><code>model path: *.step</code>"]
     end
 
-    subgraph Board ["Layout-Ebene"]
-        FP["Footprint-Referenz:<br/>'Project_Footprints:QFN-24'"]
-        FP_TABLE["fp-lib-table"]
-        MODEL_REF["3D-Modell Pfad"]
+    subgraph TableResolution ["2. Relocatable Project Tables (${KIPRJMOD})"]
+        SYM_TAB["sym-lib-table<br/><code>${KIPRJMOD}/hardware/libraries/symbols/...</code>"]
+        FP_TAB["fp-lib-table<br/><code>${KIPRJMOD}/hardware/libraries/footprints/...</code>"]
+        M3D_PATH["In-tree Model Reference<br/><code>${KIPRJMOD}/hardware/libraries/3d-models/...</code>"]
     end
 
-    subgraph Resolution ["Auflösung & Portabilitätsprüfung"]
-        KIPRJMOD["${KIPRJMOD} Basisverzeichnis<br/>(Projekt-lokal & relocatable)"]
-        CHECK_ABS{"Absolute Pfade /<br/>Home-Dir oder ${KICAD9_*}?"}
+    subgraph ProjectStorage ["3. In-Tree Storage (Git Versioned)"]
+        SYM_FILE["hardware/libraries/symbols/*.kicad_sym"]
+        FP_DIR["hardware/libraries/footprints/*.pretty/"]
+        STEP_FILE["hardware/libraries/3d-models/*.step"]
     end
 
-    subgraph Storage ["hardware/libraries/"]
-        SYM_FILE["symbols/*.kicad_sym"]
-        FP_DIR["footprints/*.pretty/"]
-        STEP_FILE["3d-models/*.step"]
+    subgraph QualityGates ["4. Automated Verification Gates"]
+        GATE_REF["Gate: library_references<br/>All symbols, footprints &amp; pins resolve"]
+        GATE_PORT["Gate: portability<br/>Zero machine-dependent or absolute paths"]
     end
 
-    SYM --> SYM_TABLE
-    FP --> FP_TABLE
-    
-    SYM_TABLE -->|Präfix '${KIPRJMOD}'| SYM_FILE
-    FP_TABLE -->|Präfix '${KIPRJMOD}'| FP_DIR
-    MODEL_REF -->|Präfix '${KIPRJMOD}'| STEP_FILE
+    SYM --> SYM_TAB
+    FP --> FP_TAB
+    M3D --> M3D_PATH
 
-    KIPRJMOD --> CHECK_ABS
-    CHECK_ABS -->|Ja| GATE_FAIL["Gate portability: FAIL<br/>(Nicht portabel)"]
-    CHECK_ABS -->|Nein| GATE_PASS["Gate portability: PASS<br/>(Git clone- & teamfähig)"]
+    SYM_TAB --> SYM_FILE
+    FP_TAB --> FP_DIR
+    M3D_PATH --> STEP_FILE
+
+    SYM_FILE --> GATE_REF
+    FP_DIR --> GATE_REF
+    STEP_FILE --> GATE_REF
+
+    GATE_REF --> GATE_PORT
 ```
 
 ## Adding a library or part
