@@ -10,6 +10,33 @@ Every export first runs verification, then stages all outputs in a temporary
 directory and publishes it atomically. An existing revision directory is never
 overwritten (exit 21).
 
+```mermaid
+flowchart TD
+    EXPORT_TRIGGER["scripts/kit export &lt;project&gt; --revision &lt;REV&gt;"] --> RUN_VERIF["1. Automatischer Verification-Run"]
+    RUN_VERIF --> CHECK_GATES{"Quality Gates PASS?"}
+    
+    CHECK_GATES -->|Nein (Required FAIL)| ABORT["Abbruch: Export verweigert<br/>(Keine Artefakterstellung)"]
+    CHECK_GATES -->|Ja| STAGING["2. Staging im temporären Ordner<br/>Gerber, Drill, BOM, Pos, STEP, PDF"]
+    
+    STAGING --> CHECK_AUTH{"--approval &amp; --authorize<br/>angegeben?"}
+    
+    CHECK_AUTH -->|Nein (Standard)| DRAFT_RELEASE["rev-&lt;REV&gt;-DRAFT/<br/>Entscheidung: NO-GO<br/>'DRAFT - NOT FOR FABRICATION'"]
+    CHECK_AUTH -->|Ja| GO_RELEASE["rev-&lt;REV&gt;-GO/<br/>Entscheidung: GO<br/>Fabrikationsfertig &amp; signiert"]
+    
+    DRAFT_RELEASE --> MANIFEST["manifest.json generieren<br/>SHA-256 Hashes &amp; Normalisierte Digests"]
+    GO_RELEASE --> MANIFEST
+    
+    MANIFEST --> ATOMIC_PUB["3. Atomares Veröffentlichen nach:<br/>manufacturing/releases/generated/"]
+
+    subgraph DriftDetection ["Stale &amp; Drift Detection (scripts/kit releases)"]
+        STATE_CUR["CURRENT: Quell-Hashes &amp; Artefakte intakt"]
+        STATE_STALE["STALE: Quelldateien nach Export verändert"]
+        STATE_MOD["MODIFIED: Artefakte manuell editiert"]
+    end
+
+    ATOMIC_PUB -.-> DriftDetection
+```
+
 ## Outputs
 
 `manufacturing/releases/generated/rev-<REV>-DRAFT/` (or `-GO/`):

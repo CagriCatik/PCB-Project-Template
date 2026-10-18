@@ -29,6 +29,60 @@ numpy/scipy for the thermal estimate (`tools/thermal/`).
                       tools/core/   kicad_env (all machine paths), common, sexpr
 ```
 
+```mermaid
+graph TD
+    subgraph Entrypoints ["1. User Entrypoints"]
+        CMD_INST["install_template.command"]
+        CMD_MGR["project-manager.command"]
+        CMD_GUI["gui.command"]
+        SH_ALIASES["scripts/*.sh"]
+    end
+
+    subgraph CentralDispatcher ["2. Central Dispatcher"]
+        KIT["scripts/kit (python -m tools)"]
+        CLI_MAIN["tools/cli/main.py (CLI)"]
+        CLI_INTER["tools/cli/interactive.py (Menu)"]
+        GUI_APP["tools/gui/ (PySide6 Desktop GUI)"]
+    end
+
+    subgraph Domains ["3. Domain Logic"]
+        ENV["environment/<br/>installer & doctor"]
+        PROJ["project/<br/>templates, registry & parts"]
+        QUAL["quality/<br/>verification & firmware"]
+        REL["release/<br/>exports & manifests"]
+        PLUG["plugins/<br/>PCM manager & catalog"]
+        THERM["thermal/<br/>2.5D solver & heatmaps"]
+    end
+
+    subgraph KiCadLayer ["4. KiCad Integration"]
+        KICAD["tools/kicad/<br/>kicad-cli, IPC client, design, libraries"]
+    end
+
+    subgraph CoreLayer ["5. Foundational Core"]
+        CORE["tools/core/<br/>kicad_env, common, sexpr parser"]
+    end
+
+    Entrypoints --> KIT
+    KIT --> CLI_MAIN
+    KIT --> CLI_INTER
+    KIT --> GUI_APP
+    CLI_MAIN --> Domains
+    CLI_INTER --> Domains
+    GUI_APP --> Domains
+
+    ENV --> PROJ
+    ENV --> QUAL
+    ENV --> PLUG
+    REL --> QUAL
+    REL --> PLUG
+    QUAL --> PROJ
+    QUAL -.-> THERM
+
+    Domains --> KICAD
+    Domains --> CORE
+    KICAD --> CORE
+```
+
 Dependencies only point downward, enforced by `test_tools_package_layering`:
 
 | Package | May import |

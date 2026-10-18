@@ -50,6 +50,38 @@ My Board/
 └── meta/project.json                                template, kit version, provenance
 ```
 
+```mermaid
+graph TD
+    subgraph KitRepo ["PCB-Project-Template (Kit-Repository)"]
+        TEMPLATES["meta/templates/<br/>generic-pcb / stm32-embedded / arduino-shield"]
+        KIT_TOOLS["tools/ & scripts/<br/>CLI, GUI, Verification, Thermal, Releases"]
+        PROFILES["meta/templates/profiles/<br/>2-Layer & 4-Layer Board-Profile"]
+    end
+
+    subgraph Generation ["Materialisierung via scripts/kit create"]
+        GEN_PROC["scripts/kit create 'My Board' --template ..."]
+    end
+
+    subgraph UserProject ["Eigenständiges Board-Projekt ('My Board/')"]
+        PROJ_ROOT["My Board.kicad_pro / .kicad_sch / .kicad_pcb<br/>(Natives KiCad-Projekt auf Wurzelebene)"]
+        HW["hardware/<br/>libraries (${KIPRJMOD}), constraints, interfaces"]
+        FW["firmware/<br/>app/ (Plattform-unabhängig) & bsp/ (HAL)"]
+        COMP["components/<br/>approved-parts/ (MPN-JSONs, Datenblätter)"]
+        MFG["manufacturing/<br/>releases/ (GO/DRAFT Exporte, Manifeste)"]
+        QA["qa/<br/>verification.json, Testberichte"]
+    end
+
+    TEMPLATES --> GEN_PROC
+    PROFILES --> GEN_PROC
+    GEN_PROC ==> UserProject
+
+    PROJ_ROOT --- HW
+    PROJ_ROOT --- FW
+    PROJ_ROOT --- COMP
+    PROJ_ROOT --- MFG
+    PROJ_ROOT --- QA
+```
+
 | Template | Differences |
 | --- | --- |
 | `generic-pcb` | Blank schematic and board from the chosen profile (`2-layer` default, or `4-layer`); `firmware/` holds only guidance READMEs. |

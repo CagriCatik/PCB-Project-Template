@@ -29,6 +29,27 @@ forces all `release_gates` to required. Older KiCad 9 variables such as
 `${KICAD9_3DMODEL_DIR}` are deliberately not aliased: `kicad-cli` 10.0.7 does not
 resolve them either, so they are reported.
 
+```mermaid
+flowchart TD
+    START(["scripts/kit verify"]) --> PRE_CHECK{"Integritätsprüfung"}
+    PRE_CHECK -->|"Lock-Datei (~*.lck)"| ABORT_LCK["Abbruch (Exit 14): Editor geöffnet"]
+    PRE_CHECK -->|"Dateien intakt"| SNAPSHOT["Quell-Hashes erfassen"]
+
+    SNAPSHOT --> G_NATIVE["1. KiCad Native Gates (kicad-cli)<br/>• erc (Schaltplan-Prüfung)<br/>• drc (Designregeln & Unconnected)<br/>• schematic_parity (Netzlisten)"]
+    G_NATIVE --> G_PORT["2. Bibliotheken & Portabilität<br/>• library_references (Existenz in Tabellen)<br/>• portability (${KIPRJMOD}, keine absoluten Pfade)<br/>• footprint_assignment & pin_pad_mapping"]
+    G_PORT --> G_META["3. Metadaten & Freigabeprüfung<br/>• component_metadata (Hersteller, MPN, Datenblatt)<br/>• models_3d (Vorhandensein von STEP-Dateien)<br/>• bom (Approved Parts) · firmware · thermal"]
+
+    G_META --> EVAL{"Gate-Auswertung (qa/verification.json)"}
+
+    EVAL -->|"Required FAIL"| RES_FAIL["Quality Gate: FAIL<br/>GO-Export blockiert"]
+    EVAL -->|"Nur Advisory FAIL"| RES_WARN["Quality Gate: PASS (mit Hinweisen)<br/>DRAFT-Export möglich"]
+    EVAL -->|"Alle PASS"| RES_PASS["Quality Gate: PASS<br/>Berechtigt für GO-Freigabe"]
+
+    RES_FAIL --> REPORT["Report-Ablage:<br/>qa/generated/verification/"]
+    RES_WARN --> REPORT
+    RES_PASS --> REPORT
+```
+
 What a PASS means: KiCad's rule checks, library resolution and metadata checks
 found nothing. It does **not** establish electrical correctness, thermal
 safety, current capacity, EMC behaviour or fabrication readiness. Those need the

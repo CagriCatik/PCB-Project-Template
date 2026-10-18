@@ -16,6 +16,33 @@ without a running KiCad.
   an open board: name, footprint, net, track, via and zone counts, copper layer
   count and title block.
 
+```mermaid
+graph TD
+    subgraph KiCadApp ["KiCad 10.0.7 Desktop Session"]
+        PREF["kicad_common.json<br/>api.enable_server"]
+        SERVER["KiCad API Server Thread"]
+        SOCKET["Unix Domain Socket<br/>/tmp/kicad/api.sock"]
+        DOCS["Offenes Board &amp; Schaltplan<br/>(Lagen, Footprints, Netze)"]
+    end
+
+    subgraph KitIPC ["PCB-Project-Template IPC Layer"]
+        PROBE["tools/kicad/ipc.py<br/>Isolierter Subprocess-Probe (Budgetiert)"]
+        SESSION["tools/kicad/ipc_client.py<br/>IpcSession (kicad-python 0.8.0)"]
+    end
+
+    subgraph CLIFallback ["Headless KiCad Integration (Standard)"]
+        KICAD_CLI["kicad-cli binary<br/>ERC, DRC, Exporte (100% unabhängig von IPC)"]
+    end
+
+    PREF -->|true| SERVER
+    SERVER --> SOCKET
+    SERVER --- DOCS
+
+    PROBE -->|Erkennt Status &amp; PID| SOCKET
+    SOCKET -->|Verbindung hergestellt| SESSION
+    SESSION -->|Read-Only Abfrage| DOCS
+```
+
 ## Diagnosis on this machine (2026-10-18)
 
 `scripts/kit ipc status` reported `UNAVAILABLE` with the root cause:

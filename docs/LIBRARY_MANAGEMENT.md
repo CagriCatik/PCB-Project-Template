@@ -13,6 +13,42 @@ Everything a project needs beyond KiCad's own libraries is inside the project
 and referenced through `${KIPRJMOD}`, so the project keeps working when it is
 moved, renamed, cloned or opened on another machine.
 
+```mermaid
+graph TD
+    subgraph Schematic ["Schaltplan-Ebene"]
+        SYM["Symbol lib_id:<br/>'Project_Parts:U1'"]
+        SYM_TABLE["sym-lib-table"]
+    end
+
+    subgraph Board ["Layout-Ebene"]
+        FP["Footprint-Referenz:<br/>'Project_Footprints:QFN-24'"]
+        FP_TABLE["fp-lib-table"]
+        MODEL_REF["3D-Modell Pfad"]
+    end
+
+    subgraph Resolution ["Auflösung & Portabilitätsprüfung"]
+        KIPRJMOD["${KIPRJMOD} Basisverzeichnis<br/>(Projekt-lokal & relocatable)"]
+        CHECK_ABS{"Absolute Pfade /<br/>Home-Dir oder ${KICAD9_*}?"}
+    end
+
+    subgraph Storage ["hardware/libraries/"]
+        SYM_FILE["symbols/*.kicad_sym"]
+        FP_DIR["footprints/*.pretty/"]
+        STEP_FILE["3d-models/*.step"]
+    end
+
+    SYM --> SYM_TABLE
+    FP --> FP_TABLE
+    
+    SYM_TABLE -->|Präfix '${KIPRJMOD}'| SYM_FILE
+    FP_TABLE -->|Präfix '${KIPRJMOD}'| FP_DIR
+    MODEL_REF -->|Präfix '${KIPRJMOD}'| STEP_FILE
+
+    KIPRJMOD --> CHECK_ABS
+    CHECK_ABS -->|Ja| GATE_FAIL["Gate portability: FAIL<br/>(Nicht portabel)"]
+    CHECK_ABS -->|Nein| GATE_PASS["Gate portability: PASS<br/>(Git clone- & teamfähig)"]
+```
+
 ## Adding a library or part
 
 1. Put the library file/folder under `hardware/libraries/`.

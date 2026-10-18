@@ -39,6 +39,20 @@ verification column counts as evidence.
 | `VERIFICATION_FAILED` | Installed, but the invocation failed (details in the JSON report). |
 | `MANUAL_VERIFICATION_REQUIRED` | Installed GUI-only plugin; check it in the PCB Editor. |
 
+```mermaid
+stateDiagram-v2
+    [*] --> NOT_INSTALLED
+    
+    NOT_INSTALLED --> INSTALLED_UNVERIFIED: KiCad PCM Installation
+    NOT_INSTALLED --> SHIM_ONLY: PCM Shim ohne Python-Backend (z.B. KiKit)
+    
+    SHIM_ONLY --> INSTALLED_UNVERIFIED: pip install in KiCad Python
+    
+    INSTALLED_UNVERIFIED --> VERIFIED: Headless Test erfolgreich (IBOM, Freerouting, KiKit)
+    INSTALLED_UNVERIFIED --> VERIFICATION_FAILED: Headless Test fehlgeschlagen
+    INSTALLED_UNVERIFIED --> MANUAL_VERIFICATION_REQUIRED: Reines GUI-Plugin (z.B. KiBuzzard, Board2Pdf)
+```
+
 ## Commands
 
 ```sh

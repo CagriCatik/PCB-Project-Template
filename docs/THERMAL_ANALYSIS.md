@@ -57,6 +57,45 @@ Component values: `board_max_c` / `board_mean_c` are board temperatures under
 the part. With `theta_jb_c_per_w` the report adds
 `junction_estimate_c = board_max_c + P · θJB`; limits use that value if present.
 
+```mermaid
+flowchart TD
+    subgraph Inputs ["1. Analyse-Eingaben"]
+        PCB[".kicad_pcb Layout<br/>Outline, Lagen, Vias, Pads"]
+        PWR["power_sources.csv<br/>Verlustleistung pro Bauteil (W)"]
+        CFG["thermal.json<br/>Umgebung T_amb, Konvektion h, Gitterweite"]
+    end
+
+    subgraph Geometry ["2. Geometrie & Rasterung (geometry.py)"]
+        RAST["2x2 Supersampled Rasterizer<br/>Kupferanteile & Schichtdicke"]
+        VIAS["Via-Kopplung & thermische Leitfähigkeit"]
+    end
+
+    subgraph Solver ["3. 2.5D Finite-Volume Solver (solver.py)"]
+        DISC["Discretization: div(S grad T) - h(T - T_amb) + q = 0"]
+        SPARSE["SciPy Sparse Matrix Solve<br/>Top- & Bottom-Kupferknoten"]
+        BALANCE{"Energiebilanz intakt?<br/>P_out = P_in ± 1e-6"}
+    end
+
+    subgraph OutputSection ["4. Generierte Ergebnisse"]
+        HEATMAPS["PNG Heatmaps<br/>temperature_top.png / bottom.png"]
+        HTML_REP["Interaktiver HTML-Report<br/>thermal_report.html"]
+        CSV_DATA["CSV-Daten<br/>component_temperatures.csv, hotspots.csv"]
+    end
+
+    PCB --> RAST
+    PCB --> VIAS
+    PWR --> DISC
+    CFG --> DISC
+    RAST --> DISC
+    VIAS --> DISC
+    DISC --> SPARSE
+    SPARSE --> BALANCE
+    BALANCE -->|Ja| HEATMAPS
+    BALANCE -->|Ja| HTML_REP
+    BALANCE -->|Ja| CSV_DATA
+    BALANCE -->|Nein| FAIL["Abbruch (Exit 20)<br/>Energiebilanz verletzt"]
+```
+
 ## Outputs (`<project>/qa/generated/thermal/<run>/`, ignored by Git)
 
 `temperature_top.png`, `temperature_bottom.png` (viewed from the top, bottom not

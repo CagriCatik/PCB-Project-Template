@@ -65,6 +65,19 @@ Das **PCB-Project-Template** ist eine erprobte Entwicklungsvorlage für macOS, d
 - [**Abnahmebericht (ACCEPTANCE_REPORT.md)**](ACCEPTANCE_REPORT.md) – Detaillierte Testergebnisse und Validierungsprotokolle.
 - [**Lessons Learned (LESSONS_LEARNED.md)**](LESSONS_LEARNED.md) – Erfahrungen aus der PCB-Praxis und Template-Entwicklung.
 
+## Entwicklungs-Workflow
+
+```mermaid
+flowchart LR
+    A["1. Vorlage wählen<br/>generic / stm32 / arduino"] --> B["2. Projekt erstellen<br/>scripts/kit create"]
+    B --> C["3. Hardware & Firmware<br/>KiCad 10.0.7 & HAL/BSP"]
+    C --> D["4. Verification Gates<br/>scripts/kit verify"]
+    D -->|Fehler / Warnung| C
+    D -->|Alle Gates PASS| E{"5. Fertigungsexport"}
+    E -->|Vorläufiger Stand| F["DRAFT Export<br/>NO-GO (nicht für Fertigung)"]
+    E -->|Signierte Freigabe| G["GO Release<br/>Gerber, BOM, SHA-256 Manifest"]
+```
+
 ---
 
 ## Die drei Board-Vorlagen
