@@ -1,0 +1,15 @@
+DESIGN REVIEW (OPEN)
+Revision / source commit:
+Reviewer / date:
+Requirement IDs and evidence paths:
+Schematic / PCB / firmware scope:
+Finding ID | Severity | Description | Owner | Due date | Closure evidence | Status
+
+ERC/DRC exclusions and disabled checks reviewed:
+Power / thermal / protection review:
+Footprint / pin-1 / connector / model review:
+Stackup / DFM / assembly review:
+Prototype validation evidence (or justified not-applicable decision):
+Unresolved critical findings:
+Decision: NO-GO
+Approver / signature reference:

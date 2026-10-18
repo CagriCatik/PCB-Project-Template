@@ -1,0 +1,147 @@
+{
+  "schema": 2,
+  "pcm_repository": "https://repository.kicad.org/repository.json",
+  "plugins": {
+    "interactivehtmlbom": {
+      "name": "InteractiveHtmlBom",
+      "tier": "required",
+      "pcm_identifier": "org.openscopeproject.InteractiveHtmlBom",
+      "install": "pcm",
+      "kicad10": "PCM 2.12.0 declares kicad_version_max 10 (checked 2026-10-18)",
+      "verify": "ibom-headless",
+      "manual_repository": "https://github.com/openscopeproject/InteractiveHtmlBom.git",
+      "manual_tag": "v2.12.0",
+      "homepage": "https://github.com/openscopeproject/InteractiveHtmlBom/wiki/Installation",
+      "purpose": "Interactive HTML assembly BOM with board view",
+      "optional_dependencies": [],
+      "known_limitations": [
+        "Reflects the board as saved; re-generate after every change.",
+        "Optional in the kit's export: missing plugin gives SKIPPED, not a failure."
+      ]
+    },
+    "freerouting": {
+      "name": "Freerouting",
+      "tier": "required",
+      "pcm_identifier": "app.freerouting.kicad-plugin",
+      "install": "pcm",
+      "kicad10": "PCM 2.4.1 declares kicad_version 6.0 with no maximum (checked 2026-10-18)",
+      "java_min_major": 25,
+      "verify": "freerouting-headless",
+      "homepage": "https://github.com/freerouting/freerouting/tree/master/integrations/KiCad",
+      "purpose": "Autorouter via Specctra DSN/SES exchange",
+      "optional_dependencies": [
+        "Java runtime >= 25"
+      ],
+      "known_limitations": [
+        "Routes only what the DSN describes; review every result with DRC and engineering judgement.",
+        "Not suitable as a substitute for routing of high-speed, analog or power paths.",
+        "The kit never invokes it on user boards automatically."
+      ]
+    },
+    "kikit": {
+      "name": "KiKit",
+      "tier": "recommended",
+      "pcm_identifier": "com.github.yaqwsx.kikit",
+      "install": "pcm+pip",
+      "pip_package": "kikit",
+      "kicad10": "PCM 1.6.0 action shim declares kicad_version 7.0, no maximum; backend is the kikit Python package in KiCad's bundled Python",
+      "verify": "kikit-panelize",
+      "homepage": "https://yaqwsx.github.io/KiKit/latest/installation/macos/",
+      "purpose": "Panelization and fabrication-preset helpers",
+      "optional_dependencies": [
+        "kikit Python package in KiCad's bundled Python"
+      ],
+      "known_limitations": [
+        "The PCM package is only an action shim without the backend package."
+      ]
+    },
+    "kibuzzard": {
+      "name": "KiBuzzard",
+      "tier": "recommended",
+      "pcm_identifier": "com.github.gregdavill.KiBuzzard",
+      "install": "pcm",
+      "kicad10": "PCM 1.7.0 declares kicad_version 6.0 with no maximum (checked 2026-10-18)",
+      "verify": "gui-only",
+      "homepage": "https://github.com/gregdavill/KiBuzzard",
+      "purpose": "Text/label graphics for silkscreen and copper",
+      "optional_dependencies": [],
+      "known_limitations": [
+        "GUI action plugin; not verified headlessly by the kit."
+      ]
+    },
+    "board2pdf": {
+      "name": "Board2Pdf",
+      "tier": "recommended",
+      "pcm_identifier": "com.gitlab.dennevi.Board2Pdf",
+      "install": "pcm",
+      "kicad10": "PCM 1.9.3 declares kicad_version_max 10.0 (checked 2026-10-18)",
+      "verify": "gui-only",
+      "homepage": "https://gitlab.com/dennevi/Board2Pdf",
+      "purpose": "Configurable multi-layer PDF board documentation",
+      "optional_dependencies": [],
+      "known_limitations": [
+        "GUI action plugin in this kit; the kit's assembly PDFs use kicad-cli instead."
+      ]
+    },
+    "kibot": {
+      "name": "KiBot",
+      "tier": "recommended",
+      "install": "pip",
+      "pip_package": "kibot",
+      "kicad10": "Not a PCM package; needs an interpreter that imports pcbnew (KiCad's bundled Python on macOS)",
+      "verify": "kibot-version",
+      "homepage": "https://kibot.readthedocs.io/en/master/installation.html",
+      "purpose": "Scripted output generation (alternative pipeline)",
+      "optional_dependencies": [
+        "Interpreter that imports pcbnew (KiCad's bundled Python)"
+      ],
+      "known_limitations": [
+        "Not a PCM package; overlaps with the kit's own export pipeline."
+      ]
+    },
+    "pcb_action_tools": {
+      "name": "pcb-action-tools",
+      "tier": "optional",
+      "pcm_identifier": "com.github.easyw.kicad-action-tools",
+      "install": "pcm",
+      "kicad10": "PCM 1.0.7 declares kicad_version 8.0 with no maximum (checked 2026-10-18)",
+      "verify": "gui-only",
+      "purpose": "Collection of pcbnew action tools (e.g. footprint/track helpers)",
+      "optional_dependencies": [],
+      "known_limitations": [
+        "GUI action plugins; KiCad 10 compatibility only declared, not verified by the kit."
+      ],
+      "homepage": "https://github.com/easyw/kicad-action-tools"
+    },
+    "round_tracks": {
+      "name": "Round Tracks",
+      "tier": "optional",
+      "pcm_identifier": "com.github.mitxela.kicad-round-tracks",
+      "install": "pcm",
+      "kicad10": "PCM 1.6 declares kicad_version 7.0.1 with no maximum (checked 2026-10-18)",
+      "verify": "gui-only",
+      "purpose": "Rounds track corners (arcs or subdivisions)",
+      "optional_dependencies": [],
+      "known_limitations": [
+        "Cosmetic/geometric change of routed copper: re-run DRC afterwards.",
+        "Rounded corners are not an electrical requirement for ordinary signals."
+      ],
+      "homepage": "https://github.com/mitxela/kicad-round-tracks"
+    },
+    "hq_dfm": {
+      "name": "HQ DFM",
+      "tier": "optional",
+      "pcm_identifier": "com.github.Huaqiu-Electronics.kicad-hqdfm-plugin",
+      "install": "pcm",
+      "kicad10": "PCM 2.0.11 declares kicad_version 9.0 with no maximum (checked 2026-10-18)",
+      "verify": "gui-only",
+      "purpose": "Design-for-manufacturing analysis from a PCB manufacturer (Huaqiu)",
+      "optional_dependencies": [],
+      "known_limitations": [
+        "Manufacturer-specific rules; results do not transfer to other fabricators.",
+        "Check whether it contacts external services before using it on confidential designs."
+      ],
+      "homepage": "https://github.com/Huaqiu-Electronics/kicad-hqdfm-plugin"
+    }
+  }
+}

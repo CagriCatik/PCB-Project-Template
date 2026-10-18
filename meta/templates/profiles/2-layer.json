@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "id": "2-layer",
+  "title": "2 copper layers, 1.6 mm FR-4 (example)",
+  "description": "General-purpose two-layer starting point. All values are examples typical of standard prototype PCB services, not universal defaults: confirm stack-up, minimum features and net-class values with your fabricator and your circuit's current, voltage and impedance requirements before layout.",
+  "copper_layers": 2,
+  "stackup": [
+    {"layer": "F.Mask", "type": "Top Solder Mask", "thickness": 0.01},
+    {"layer": "F.Cu", "type": "copper", "thickness": 0.035},
+    {"layer": "dielectric 1", "type": "core", "thickness": 1.51, "material": "FR4", "epsilon_r": 4.5, "loss_tangent": 0.02},
+    {"layer": "B.Cu", "type": "copper", "thickness": 0.035},
+    {"layer": "B.Mask", "type": "Bottom Solder Mask", "thickness": 0.01}
+  ],
+  "rules": {
+    "min_clearance": 0.15,
+    "min_track_width": 0.15,
+    "min_via_diameter": 0.5,
+    "min_through_hole_diameter": 0.3,
+    "min_via_annular_width": 0.1,
+    "min_hole_to_hole": 0.25,
+    "min_copper_edge_clearance": 0.3
+  },
+  "netclasses": [
+    {"name": "Default", "clearance": 0.2, "track_width": 0.25, "via_diameter": 0.6, "via_drill": 0.3},
+    {"name": "Power", "clearance": 0.2, "track_width": 0.5, "via_diameter": 0.8, "via_drill": 0.4}
+  ]
+}

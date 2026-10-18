@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "description": "Gate severities for scripts/kit verify: required | advisory | disabled. A formal release forces release_gates to required.",
+  "gates": {
+    "erc": "required",
+    "drc": "required",
+    "schematic_parity": "required",
+    "library_references": "required",
+    "portability": "required",
+    "footprint_assignment": "required",
+    "pin_pad_mapping": "required",
+    "component_metadata": "advisory",
+    "models_3d": "advisory",
+    "bom": "advisory",
+    "firmware": "disabled",
+    "thermal": "disabled"
+  },
+  "metadata_fields": [
+    "Manufacturer",
+    "MPN"
+  ],
+  "manufacturer_field": "Manufacturer",
+  "mpn_field": "MPN",
+  "release_gates": [
+    "erc",
+    "drc",
+    "schematic_parity",
+    "library_references",
+    "portability",
+    "footprint_assignment",
+    "pin_pad_mapping",
+    "component_metadata",
+    "models_3d",
+    "bom"
+  ]
+}

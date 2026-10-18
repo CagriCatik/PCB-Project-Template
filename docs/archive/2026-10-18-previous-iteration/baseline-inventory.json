@@ -1,0 +1,389 @@
+{
+  "git_status": " M README.md\n?? .gitignore\n?? AGENTS.md\n?? \"README Kopie.md\"\n?? components/\n?? docs/\n?? firmware/\n?? hardware/\n?? install_template.command\n?? manufacturing/\n?? meta/\n?? qa/\n?? requirements.txt\n?? scripts/\n?? test_template.py\n?? tools/\n",
+  "entries": [
+    {
+      "path": ".DS_Store",
+      "sha256": "dd84846924ad7008cad190168c265acb2315692c451469bc68e6bdbe74aa97c0",
+      "mode": "0o644"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "42f178919cd7884a4ddb43b66f8e3b18783b14386c5797ed5ccca5c1b22acbbb",
+      "mode": "0o644"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "258ecb3444d34b2d179215de3f310924432cdd8e76bfd5bb8df728d14b98f99c",
+      "mode": "0o644"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "f73d1dcb3663c267bf733d88cce133acd59b0e820d9a7eb9040698e6a6f0619e",
+      "mode": "0o644"
+    },
+    {
+      "path": "README Kopie.md",
+      "sha256": "eded76385b57afb541b13366f5aee21777b14c70d655e6b0959e1457f1a694cd",
+      "mode": "0o644"
+    },
+    {
+      "path": "README.md",
+      "sha256": "71617ac54b64814d49e36fbf7d0eb44ebcb7c4e9b6d3f8d4f7fcaff41252fe3c",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/"
+    },
+    {
+      "path": "components/.DS_Store",
+      "sha256": "9d083387e092e272a5b29d6b0474bae4f3009f6edcae63e5ee7818b2f13ad5dd",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/README.md",
+      "sha256": "c2d5424e370af69c83b1c24035f42227ef95e1f8eaacf011aac9a411c54319c6",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/approved-parts/"
+    },
+    {
+      "path": "components/approved-parts/README.md",
+      "sha256": "1879adddb8732e068b8f52cc60f8ef0c3f9f77cf2800dcb5201ec7a0a2e243f0",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/bom_master.csv",
+      "sha256": "9dd79045f33c6271e268b4e3457bd6bfc9ab3345ea0394d02bd5ec79d42b4ae7",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/datasheets/"
+    },
+    {
+      "path": "components/datasheets/README.md",
+      "sha256": "d14d892e26185f5cdc56814629388cfbf13e1300282cb92454c00c434015b5d3",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/sources.csv",
+      "sha256": "b2d034f84e84ee6ce2d4e2885e696b33fc3ac746d40402febbdffb9a3506dcdc",
+      "mode": "0o644"
+    },
+    {
+      "path": "components/spice-models/"
+    },
+    {
+      "path": "components/spice-models/README.md",
+      "sha256": "0fab3e641d53ebf1f9e462afc39de18867dcc72396cb6ba9bcca93fb32e11be0",
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256": "baa9648e659d8887b043fc2aaa006dfed0b417adddfb78b9c314b1eadd7cbba8",
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/bringup.md",
+      "sha256": "5949376456ea22251604185384330c4d53acb7342867d6c6b444fb65be7cff52",
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/decisions/"
+    },
+    {
+      "path": "docs/decisions/ADR-0001-repo-boundaries.md",
+      "sha256": "b1abeac45f89010c628ce1d72589e4dafac108e97971c8c23f165646d9db67a9",
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/interfaces.md",
+      "sha256": "19d74690422ac9477b65c24aa522bc88493f3375e505d663a2842706c855bc51",
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/requirements.md",
+      "sha256": "f028305eb67f0ee0c36f0e0af9fa999aaeadd09ce09eaab83f9852754897c082",
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/verification-plan.md",
+      "sha256": "fc0d895841cf1762cfab3539fe702521be54e401d7e72bbb1d273a84e2888b38",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/"
+    },
+    {
+      "path": "firmware/.DS_Store",
+      "sha256": "41f7aed07b0cb32cf14377ce8f21da5d24760c1617aaaf7f7c5cc0c3b855d9c8",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/README.md",
+      "sha256": "ee0bf9e4f4f6f122e98c46a6d0233e2ba9267af230ab21987b91f4b1bb7367a5",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/app/"
+    },
+    {
+      "path": "firmware/app/README.md",
+      "sha256": "4c26c3efd9495765fbe246af785b3ea521ddaadb0a949ddefd2ec816c40c8eee",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/bsp/"
+    },
+    {
+      "path": "firmware/bsp/README.md",
+      "sha256": "bd76acfd45a00f21041fc4ba3482bbe0843eabf5ea38c67d40521865688ba0a4",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/config/"
+    },
+    {
+      "path": "firmware/config/README.md",
+      "sha256": "6c4a4fd34441939e7578fa8f01771e44bc58584897f28d113b4c18fa93f217df",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/drivers/"
+    },
+    {
+      "path": "firmware/drivers/README.md",
+      "sha256": "7c3ea579eeb09491d1a378d5c9dc13effee040cc586535e6ff290c6b2f2ef9d7",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/tests/"
+    },
+    {
+      "path": "firmware/tests/README.md",
+      "sha256": "ec7871a94d2753018944ce10b2d54dea0a22a333f815bf5f3644ca95dadafce1",
+      "mode": "0o644"
+    },
+    {
+      "path": "firmware/tools/"
+    },
+    {
+      "path": "firmware/tools/README.md",
+      "sha256": "57e10ce04c13ef7db05914443fae8703980e514bbfdc89e87e51a0d2153aa5b6",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/"
+    },
+    {
+      "path": "hardware/.DS_Store",
+      "sha256": "d07b850450a17bde69a3745e46961bd95b8ee4451b2add390b06094218b997d4",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/README.md",
+      "sha256": "7340360880e1654adae5731e743804958fff680a498130325397b1419652d107",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/constraints/"
+    },
+    {
+      "path": "hardware/constraints/README.md",
+      "sha256": "b99dc29175f4d0b7c6e7eaed9678ab8625feb52229a6d3d5e7c400fb81eae8c5",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/interfaces/"
+    },
+    {
+      "path": "hardware/interfaces/README.md",
+      "sha256": "121e180d657ca9d44a296f5b8d720c1f95fe7981e6280a3bf6f795315896ba45",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/interfaces/pinmap.csv",
+      "sha256": "2d9a6c0642eede4dadba8d5a2d58c48092c763d52c29a973ab650780a6ee15cd",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/interfaces/power_budget.csv",
+      "sha256": "330e8b93751415eaeeadbc175093f5011fe1514d08619f4bf130a0f04d57fc39",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/libraries/"
+    },
+    {
+      "path": "hardware/libraries/.DS_Store",
+      "sha256": "a6836656d838071f326479461d40f08bca9429ecedb557b07996d8b6c020bc00",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/libraries/3d-models/"
+    },
+    {
+      "path": "hardware/libraries/3d-models/README.md",
+      "sha256": "7ccd383990ba6a6b182e506dca77540720b0a049dfabe8354a9d67cc6b22eb13",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/libraries/README.md",
+      "sha256": "6c7caaf050c2cabe0e766fb4e419871ea5b019f921db9f79a984729cf4435031",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/libraries/footprints/"
+    },
+    {
+      "path": "hardware/libraries/footprints/README.md",
+      "sha256": "dc6c1c2d783bc098d737cde3425f7f13d333c2c36fa178d1bdfcae142ee4f62f",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/libraries/symbols/"
+    },
+    {
+      "path": "hardware/libraries/symbols/README.md",
+      "sha256": "a57f65ddf2c72630804bd13d8884d615d4eaef7a1950a1620f9af02e94181652",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/mechanical/"
+    },
+    {
+      "path": "hardware/mechanical/README.md",
+      "sha256": "ca57fc4c10b3964cf41253cc0c9f1ca45385a031b875a2a09f2e36ce6a3ae138",
+      "mode": "0o644"
+    },
+    {
+      "path": "hardware/simulations/"
+    },
+    {
+      "path": "hardware/simulations/README.md",
+      "sha256": "cfbb8c7dd261f52837c76c9ea2b35e1e6c4d7dff3479629f46224faedcf59bc3",
+      "mode": "0o644"
+    },
+    {
+      "path": "install_template.command",
+      "sha256": "f763af5374e4117d8d52898a1761e63bc2068ac88c3dbde51257c38c35667a22",
+      "mode": "0o755"
+    },
+    {
+      "path": "manufacturing/"
+    },
+    {
+      "path": "manufacturing/.DS_Store",
+      "sha256": "45c24603847cb4e5a16c0f6a8fa484104af3f4eab97b7e196a6ffa524c903d6b",
+      "mode": "0o644"
+    },
+    {
+      "path": "manufacturing/README.md",
+      "sha256": "c451814aef6d8c768935b6e15b366707acd46ab2f4254b60e497f8fd021bf740",
+      "mode": "0o644"
+    },
+    {
+      "path": "manufacturing/assembly/"
+    },
+    {
+      "path": "manufacturing/assembly/README.md",
+      "sha256": "55a6a3a384416f9fdfa084636445c9d0098b24b6f3285412af4334eba3238811",
+      "mode": "0o644"
+    },
+    {
+      "path": "manufacturing/fabrication/"
+    },
+    {
+      "path": "manufacturing/fabrication/README.md",
+      "sha256": "8eb8452385b76cdf9e679466293c22d192789f487ff1b332729c5bffb65dd144",
+      "mode": "0o644"
+    },
+    {
+      "path": "manufacturing/releases/"
+    },
+    {
+      "path": "manufacturing/releases/RELEASE_CHECKLIST.md",
+      "sha256": "2d7846203467cd06676d005fc0232802f408d9d540ee8317bce96f848850bec5",
+      "mode": "0o644"
+    },
+    {
+      "path": "meta/"
+    },
+    {
+      "path": "meta/info.html",
+      "sha256": "82b940d9783a4b36aa72678de7e8b70575ff79fc0989cd0e71cdbfff7fefa211",
+      "mode": "0o644"
+    },
+    {
+      "path": "qa/"
+    },
+    {
+      "path": "qa/.DS_Store",
+      "sha256": "3d9cab1e402a31d5ca810ae94f503ab5940febd769f75f751e3162d28effa871",
+      "mode": "0o644"
+    },
+    {
+      "path": "qa/README.md",
+      "sha256": "ec34d2d3e98caf6c066cc32055a120ce5f6b53701d3399055b90bad547bb3290",
+      "mode": "0o644"
+    },
+    {
+      "path": "qa/design-reviews/"
+    },
+    {
+      "path": "qa/design-reviews/README.md",
+      "sha256": "3c50dce67fc6406a70beb68e7ec24604af5d628f1b73c54889698a08b558a5ac",
+      "mode": "0o644"
+    },
+    {
+      "path": "qa/reports/"
+    },
+    {
+      "path": "qa/reports/README.md",
+      "sha256": "0fa96b7e5dc2cf6ca0b637abebef14500c8bd782bde68ff04249fdef6624f60f",
+      "mode": "0o644"
+    },
+    {
+      "path": "qa/tests/"
+    },
+    {
+      "path": "qa/tests/README.md",
+      "sha256": "e75a7e5acad9ff95bd1b6f6695bf347e55e2e37f133855512e77cc11fe648959",
+      "mode": "0o644"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "a736524887980769116f3f627396095451eaec544efaecae9ef8f97c4ce66c71",
+      "mode": "0o644"
+    },
+    {
+      "path": "scripts/"
+    },
+    {
+      "path": "scripts/install-kicad.sh",
+      "sha256": "4a34485a9ebb996da22fb62ae3d2735adb322bc10fdf69a8f8c17d67efc362c8",
+      "mode": "0o755"
+    },
+    {
+      "path": "scripts/install-plugins.sh",
+      "sha256": "1910096910d81a212e1a2aa4c667ceedc724358f4ff3ca9f259ec5cb8a418046",
+      "mode": "0o755"
+    },
+    {
+      "path": "test_template.py",
+      "sha256": "eaa5bf0f9a7e8c8e9af7298b915ca1315b06bee3deda12f006ad04fa6d6cc610",
+      "mode": "0o644"
+    },
+    {
+      "path": "tools/"
+    },
+    {
+      "path": "tools/verify.sh",
+      "sha256": "066f2ddd071301bb472bb00365c84bb0d6c783a99bb2c27e82f08c82843034df",
+      "mode": "0o755"
+    }
+  ]
+}

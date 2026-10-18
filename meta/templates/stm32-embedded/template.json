@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "stm32-embedded",
+  "title": "STM32 Embedded",
+  "description": "Blank KiCad 10 board plus optional STM32 firmware infrastructure: CMake presets, platform-independent application module, BSP interface, host unit tests and an STM32CubeMX integration point. No MCU, pinout or vendor code is preselected.",
+  "kicad_base": {
+    "type": "native-defaults"
+  },
+  "overlays": [
+    {
+      "from": "firmware/templates/common",
+      "to": "firmware"
+    },
+    {
+      "from": "firmware/templates/stm32",
+      "to": "firmware"
+    }
+  ],
+  "firmware": "stm32",
+  "verification": {
+    "gates": {
+      "firmware": "advisory"
+    }
+  },
+  "profiles": [
+    "2-layer",
+    "4-layer"
+  ],
+  "default_profile": "2-layer"
+}

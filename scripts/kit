@@ -1,0 +1,22 @@
+#!/bin/bash
+# Single launcher for the kit CLI (python -m tools -> tools/cli/main.py). Picks, in order:
+#   $KICAD_KIT_PYTHON, the repo .venv, then the newest python3.x >= 3.10 on PATH.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+pick_python() {
+  if [[ -n "${KICAD_KIT_PYTHON:-}" ]]; then echo "$KICAD_KIT_PYTHON"; return; fi
+  if [[ -x "$ROOT/.venv/bin/python" ]]; then echo "$ROOT/.venv/bin/python"; return; fi
+  local candidate
+  for candidate in python3.14 python3.13 python3.12 python3.11 python3.10 python3; do
+    if command -v "$candidate" >/dev/null 2>&1 &&
+       "$candidate" -c 'import sys; sys.exit(sys.version_info < (3, 10))' 2>/dev/null; then
+      command -v "$candidate"; return
+    fi
+  done
+  echo "Error: Python >= 3.10 is required (e.g. brew install python@3.13)." >&2
+  exit 2
+}
+PYTHON="$(pick_python)"
+# No cd: relative paths given by the user resolve against their own directory.
+export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+exec "$PYTHON" -m tools "$@"

@@ -1,0 +1,58 @@
+{
+  "decision": "NO-GO",
+  "revision": "TODO",
+  "commit": "TODO_EXACT_COMMIT",
+  "approver": "",
+  "date": "",
+  "signed_checklist": "manufacturing/releases/RELEASE_CHECKLIST.md",
+  "gates": {
+    "requirements": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "interfaces": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "erc_review": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "drc_review": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "netlist_review": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "power_thermal": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "vendor_assets": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "mechanical": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "fabrication": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "assembly": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "firmware_interfaces": {
+      "status": "OPEN",
+      "evidence": ""
+    },
+    "prototype_validation": {
+      "status": "OPEN",
+      "evidence": ""
+    }
+  }
+}

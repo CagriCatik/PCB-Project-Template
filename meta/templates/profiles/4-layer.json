@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "4-layer",
+  "title": "4 copper layers, 1.6 mm FR-4, symmetric (example)",
+  "description": "Four-layer starting point (e.g. signal / reference plane / reference plane or power / signal). Layer thicknesses are an example symmetric build, not a fabricator's stack-up: obtain the real stack-up (prepreg/core thicknesses, copper weights, dielectric constants) from your fabricator, especially when impedance control is required. Rule and net-class values are examples to be confirmed.",
+  "copper_layers": 4,
+  "stackup": [
+    {"layer": "F.Mask", "type": "Top Solder Mask", "thickness": 0.01},
+    {"layer": "F.Cu", "type": "copper", "thickness": 0.035},
+    {"layer": "dielectric 1", "type": "prepreg", "thickness": 0.1, "material": "FR4", "epsilon_r": 4.5, "loss_tangent": 0.02},
+    {"layer": "In1.Cu", "type": "copper", "thickness": 0.035},
+    {"layer": "dielectric 2", "type": "core", "thickness": 1.24, "material": "FR4", "epsilon_r": 4.5, "loss_tangent": 0.02},
+    {"layer": "In2.Cu", "type": "copper", "thickness": 0.035},
+    {"layer": "dielectric 3", "type": "prepreg", "thickness": 0.1, "material": "FR4", "epsilon_r": 4.5, "loss_tangent": 0.02},
+    {"layer": "B.Cu", "type": "copper", "thickness": 0.035},
+    {"layer": "B.Mask", "type": "Bottom Solder Mask", "thickness": 0.01}
+  ],
+  "rules": {
+    "min_clearance": 0.1,
+    "min_track_width": 0.1,
+    "min_via_diameter": 0.45,
+    "min_through_hole_diameter": 0.2,
+    "min_via_annular_width": 0.1,
+    "min_hole_to_hole": 0.25,
+    "min_copper_edge_clearance": 0.3
+  },
+  "netclasses": [
+    {"name": "Default", "clearance": 0.15, "track_width": 0.2, "via_diameter": 0.45, "via_drill": 0.25},
+    {"name": "Power", "clearance": 0.2, "track_width": 0.5, "via_diameter": 0.8, "via_drill": 0.4}
+  ]
+}

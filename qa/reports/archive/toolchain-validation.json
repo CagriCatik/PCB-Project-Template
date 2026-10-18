@@ -1,0 +1,79 @@
+{
+  "recorded": "2026-10-18T06:54:23.694642+00:00",
+  "kicad_version": "10.0.7",
+  "legacy_tests": {
+    "count": 5,
+    "result": "PASS"
+  },
+  "regression_tests": {
+    "count": 22,
+    "native_enabled": true,
+    "result": "PASS"
+  },
+  "native_results": {
+    "blank_project_gate": "FAIL",
+    "outline_fixture_gate": "PASS",
+    "draft_exports_complete": true,
+    "draft_decision": "NO-GO",
+    "artifact_hashes": {
+      "bom.csv": "74a5eef9c33640030b19ef71c990490f44ff0468297dec8617383ddca32a98c5",
+      "positions.csv": "7565b037b9375e5a5070ba77a93488768c56409db7c519ace55cc83bb2f74819",
+      "board.step": "2ff301dd163428dbccf226b1d9de53abf1b9894360c60b4e74f05906af03e71f",
+      "drill/Native Board.drl": "1c5264fe1a05219b3932dfc48566158d30427caecfcbc13add80a0cd157c2de0",
+      "verification/erc.json": "1aad5d591d097e302a8b3df5c509b97574cecb59813fbdad637a4bf3b86f8057",
+      "verification/drc.json": "3b4e4a4f1e386f21417b3a57441a4381abff797fa60c900f47e38cd54defb3f7",
+      "verification/verification.json": "461307d9407b5bef6990b50ebece3031a743fdb2a654967bd62b5e17336f6f8d",
+      "gerbers/Native Board-User_4.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-User_Eco1.gbr": "5c900870f9ba9b5122cb7068c7c108f029a094200034a449e2d8b77da5398c77",
+      "gerbers/Native Board-B_Mask.gbs": "b85335517dd7aff14143767ae96ff474e3cd0d7e1cc6432066e05eaf31f4dfc2",
+      "gerbers/Native Board-F_Fab.gbr": "d3c293f278323541569a0bc5871540f151d8c2bdea520f8465553c79f78196ec",
+      "gerbers/Native Board-User_Eco2.gbr": "a9357d925c51cf92493937f6371651e433865b0bfcd5080f90c913daf9e8dd7a",
+      "gerbers/Native Board-User_Drawings.gbr": "04f5b5e1d5038aa4fa673202df2e5b668125c8658d2482ea19d7f3e02db73e0f",
+      "gerbers/Native Board-User_2.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-B_Paste.gbp": "220b45eab789f66d5175849009fbde4f07d03fa214cd8e363922484d95682c52",
+      "gerbers/Native Board-User_3.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-User_1.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-User_Comments.gbr": "cc4bfe0ce49243d428d1a1e47fd3d5241af42d86683072166099ebba17735559",
+      "gerbers/Native Board-F_Adhesive.gta": "d731d95dcd1055be416e7e9862a5693464f8dba355ab0a1b3d862f1b1d7549e4",
+      "gerbers/Native Board-B_Courtyard.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-F_Courtyard.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-F_Silkscreen.gto": "fd39de9e612f3919eaaa244847bb0e2ee59f9a49c0bb8ffbf8a2163296304959",
+      "gerbers/Native Board-B_Silkscreen.gbo": "a1174afe249b4793c864416e7a25a0a02ae08f3fd2ab478812a874d0bf3404be",
+      "gerbers/Native Board-Margin.gbr": "0089a4e5ab589b25c462504e97e3c76c74a9a82156dc928af87e218ac15f9cbc",
+      "gerbers/Native Board-Edge_Cuts.gm1": "2bfa3bb112b3f240bf909da141cc0241a07de164b9076c832cf328204b46fcfc",
+      "gerbers/Native Board-F_Mask.gts": "0d76f9c74cad9e440551f33fd505edb6ce99ea8865ba34f34e188657224827b3",
+      "gerbers/Native Board-B_Adhesive.gba": "87f221ccb40bd36de101a672d0efa47fd60247884c049147ad40fcbcc57d31f2",
+      "gerbers/Native Board-job.gbrjob": "df36bd7bd95ed371dc25f6f38acd3dc14984aa3cf96a77b3677df53da8c38d1e",
+      "gerbers/Native Board-B_Fab.gbr": "e83627f4a2dc2f5253c905fff5b94a3ae81354653a8cda10fbde7a355f8b8cec",
+      "gerbers/Native Board-F_Paste.gtp": "1141bad695e0d0c8342f33c3b739682a414eb275ed430d4f1eeb20627c495461",
+      "gerbers/Native Board-B_Cu.gbl": "d09427b77bccb1c5d381b33dda7277641455b6ba50e64a731d647b1deea7cf3c",
+      "gerbers/Native Board-F_Cu.gtl": "4f7ff702eaf821fe31adf44951350d0c869cc3eaa5c56091afd1ae9ca22a60e5"
+    },
+    "fixture_source_unchanged": true
+  },
+  "gui_template_creation": {
+    "result": "PASS",
+    "method": "KiCad Manager File > New Project, browsed installed template, created /tmp/GUI Integration Board",
+    "metadata_omitted_by_kicad": true
+  },
+  "ipc": {
+    "client": "kicad-python 0.8.0",
+    "environment_installation": "PASS (isolated /tmp virtual environment)",
+    "live_socket": "UNAVAILABLE: connection refused",
+    "connected_claim": false
+  },
+  "vscode_launch": {
+    "command": "code /private/tmp/CLI Workflow Board",
+    "exit_code": 0,
+    "stderr": "Electron emitted task_name_for_pid error; launcher returned zero, visual editor state not asserted"
+  },
+  "not_tested": [
+    "Clean-machine DMG application installation",
+    "Production FreeRouting or InteractiveHtmlBom execution",
+    "Vendor-specific STM32/Arduino builds or hardware flashing",
+    "Real circuit electrical/thermal behavior",
+    "Physical prototype validation",
+    "Human approval signatures"
+  ],
+  "evidence_directory": "qa/generated/native-integration/run-pqs44zkh"
+}

@@ -1,0 +1,13 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "host-tests",
+      "displayName": "Host unit tests",
+      "binaryDir": "${sourceDir}/build/host-tests",
+      "cacheVariables": {"FW_TARGET": "host", "FW_BUILD_TESTS": "ON", "CMAKE_BUILD_TYPE": "Debug"}
+    }
+  ],
+  "buildPresets": [{"name": "host-tests", "configurePreset": "host-tests"}],
+  "testPresets": [{"name": "host-tests", "configurePreset": "host-tests", "output": {"outputOnFailure": true}}]
+}

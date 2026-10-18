@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "description": "Thermal model parameters for scripts/kit thermal analyze. Values below are typical literature defaults, not data for your laminate or enclosure: replace them with datasheet or measured values. Copper thickness null = take it from the board stack-up (0.035 mm if the board has none).",
+  "ambient_c": 25.0,
+  "grid_mm": 0.25,
+  "h_top_w_m2k": 10.0,
+  "h_bottom_w_m2k": 10.0,
+  "copper_k_w_mk": 390.0,
+  "dielectric_k_inplane_w_mk": 0.8,
+  "dielectric_k_through_w_mk": 0.3,
+  "copper_thickness_mm": {"F.Cu": null, "B.Cu": null},
+  "via_plating_mm": 0.025,
+  "board_max_c": 105.0,
+  "hotspot_count": 10,
+  "hotspot_separation_mm": 2.0
+}

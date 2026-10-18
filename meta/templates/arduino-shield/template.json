@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "id": "arduino-shield",
+  "title": "Arduino Shield",
+  "description": "Arduino Uno Rev3 shield based on KiCad's official Arduino_Uno template (board outline, headers, mounting holes) copied from the installed KiCad 10.0.7, plus optional PlatformIO firmware with host unit tests.",
+  "kicad_base": {
+    "type": "kicad-bundled",
+    "template": "Arduino_Uno",
+    "project": "Arduino_Uno",
+    "attribution": "KiCad official template 'Arduino Uno Shield': (c) 2021 Caleb Reister, (c) 2015 Jonathan Iapicco. Distributed with KiCad under the KiCad libraries license (CC-BY-SA 4.0 with an exception for designs using the material; gitlab.com/kicad/libraries/kicad-templates LICENSE.md).",
+    "library_moves": {
+      "Arduino_MountingHole.pretty": "hardware/libraries/footprints/Arduino_MountingHole.pretty"
+    },
+    "migrate_legacy_3d_models": true
+  },
+  "overlays": [
+    {
+      "from": "firmware/templates/common",
+      "to": "firmware"
+    },
+    {
+      "from": "firmware/templates/arduino",
+      "to": "firmware"
+    }
+  ],
+  "firmware": "arduino",
+  "verification": {
+    "gates": {
+      "firmware": "advisory"
+    }
+  },
+  "profiles": [
+    "official"
+  ],
+  "default_profile": "official"
+}

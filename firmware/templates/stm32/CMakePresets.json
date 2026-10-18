@@ -1,0 +1,45 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "host-tests",
+      "displayName": "Host unit tests",
+      "binaryDir": "${sourceDir}/build/host-tests",
+      "cacheVariables": {
+        "FW_TARGET": "host",
+        "FW_BUILD_TESTS": "ON",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "stm32-debug",
+      "displayName": "STM32 target (requires STM32CubeMX output and arm-none-eabi-gcc)",
+      "binaryDir": "${sourceDir}/build/stm32-debug",
+      "toolchainFile": "${sourceDir}/bsp/stm32/cubemx/cmake/gcc-arm-none-eabi.cmake",
+      "cacheVariables": {
+        "FW_TARGET": "stm32",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "FW_STATUS_LED": "STATUS_LED"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "host-tests",
+      "configurePreset": "host-tests"
+    },
+    {
+      "name": "stm32-debug",
+      "configurePreset": "stm32-debug"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "host-tests",
+      "configurePreset": "host-tests",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

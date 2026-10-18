@@ -1,0 +1,35 @@
+# KiCad local state and recovery files
+*.kicad_prl
+*.kicad_sch.lck
+*.kicad_pcb.lck
+~*.lck
+*.bak
+*.bck
+*.kicad_sch-bak
+*.kicad_pcb-bak
+_autosave-*
+*-backups/
+fp-info-cache
+# Generated manufacturing and validation outputs
+outputs/
+# OS files
+.DS_Store
+Thumbs.db
+
+# Development kit generated data
+__pycache__/
+*.pyc
+.venv/
+qa/generated/
+qa/reports/generated/
+manufacturing/fabrication/generated/
+manufacturing/assembly/generated/
+manufacturing/releases/generated/
+.template-install.json
+# Firmware build output (CMake presets, PlatformIO)
+firmware/build/
+.pio/
+# Same outputs inside nested projects (e.g. qa/fixtures/*) and generated projects
+**/qa/generated/
+**/manufacturing/releases/generated/
+**/firmware/build/

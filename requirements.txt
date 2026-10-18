@@ -1,0 +1,29 @@
+# Python dependencies for PCB-Project-Template repository tooling.
+# Installed by ./install_template.command into the repo-local .venv (never into
+# generated projects, system Python, or KiCad's bundled Python).
+#
+# Most of the kit (tools/, tests) uses only the Python >= 3.10 standard library.
+# External dependencies:
+# - the official KiCad IPC client for `scripts/kit ipc ...` with its tested
+#   transitive pins (macOS arm64, Python 3.13.5)
+attrs==26.1.0
+cffi==2.1.1
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+kicad-python==0.8.0
+protobuf==5.29.6
+pycparser==3.11
+pynng==0.9.0
+referencing==0.37.0
+rpds-py==2026.9.1
+sniffio==1.3.1
+# - numerical stack for `scripts/kit thermal ...` (tested with Python 3.13.5, macOS arm64)
+numpy==2.5.4
+scipy==1.18.1
+#
+# Not pip dependencies (detected and reported by `scripts/kit doctor`):
+# - KiCad == 10.0.7 (app, kicad-cli, bundled Python with pcbnew, official libraries)
+# - git; optional: VS Code, Java >= 25 (Freerouting 2.4.1), CMake + C compiler
+#   (firmware host tests), arm-none-eabi-gcc (STM32), PlatformIO (Arduino).
+# - KiCad plugins are managed by KiCad's Plugin and Content Manager; KiKit and
+#   KiBot backends live in KiCad's bundled Python. See docs/PLUGIN_MANAGEMENT.md.

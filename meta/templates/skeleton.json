@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "description": "Kit paths copied into every generated project (from -> to). Directories are copied recursively without generated output.",
+  "copy": [
+    {
+      "from": "hardware",
+      "to": "hardware",
+      "exclude": [
+        "native-defaults"
+      ]
+    },
+    {
+      "from": "firmware",
+      "to": "firmware",
+      "exclude": [
+        "templates"
+      ]
+    },
+    {
+      "from": "components",
+      "to": "components"
+    },
+    {
+      "from": "manufacturing",
+      "to": "manufacturing"
+    },
+    {
+      "from": "docs/project-template",
+      "to": "docs"
+    },
+    {
+      "from": "docs/engineering",
+      "to": "docs/engineering"
+    },
+    {
+      "from": "qa/README.md",
+      "to": "qa/README.md"
+    },
+    {
+      "from": "qa/design-reviews",
+      "to": "qa/design-reviews"
+    },
+    {
+      "from": "qa/reports/README.md",
+      "to": "qa/reports/README.md"
+    },
+    {
+      "from": "qa/project-template",
+      "to": "qa"
+    },
+    {
+      "from": ".gitignore",
+      "to": ".gitignore"
+    },
+    {
+      "from": ".gitattributes",
+      "to": ".gitattributes"
+    },
+    {
+      "from": "meta/templates/project-root",
+      "to": ".",
+      "render": true
+    }
+  ],
+  "directories": [
+    "hardware",
+    "firmware",
+    "components",
+    "manufacturing",
+    "docs",
+    "qa"
+  ]
+}
