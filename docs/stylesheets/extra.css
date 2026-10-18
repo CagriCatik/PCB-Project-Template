@@ -203,52 +203,90 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.25rem;
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
 }
 
-.kit-card {
+.md-typeset a.kit-card {
   background: var(--kit-surface-card);
   border: 1px solid var(--kit-border-subtle);
   border-radius: 12px;
-  padding: 1.4rem;
+  padding: 1.5rem;
   box-shadow: var(--kit-shadow-sm);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.2s ease;
   display: flex;
   flex-direction: column;
+  color: inherit;
+  text-decoration: none !important;
 }
 
-.kit-card:hover {
-  transform: translateY(-3px);
+.md-typeset a.kit-card:hover {
+  transform: translateY(-4px);
   box-shadow: var(--kit-shadow-lg), 0 0 0 1px var(--kit-border-glow);
   border-color: var(--md-primary-fg-color--light);
+  text-decoration: none !important;
 }
 
-.kit-card h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
+.md-typeset a.kit-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.15rem;
   font-weight: 650;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
 
-.kit-card p {
+.md-typeset a.kit-card:hover h3 {
+  color: var(--md-primary-fg-color);
+}
+
+.md-typeset a.kit-card p {
   color: var(--md-default-fg-color--light);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0 0 1.2rem 0;
   flex-grow: 1;
+  text-decoration: none;
 }
 
-.kit-card-footer {
-  font-size: 0.85rem;
+.md-typeset a.kit-card .kit-card-footer {
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--md-primary-fg-color);
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.md-typeset a.kit-card:hover .kit-card-footer {
+  transform: translateX(5px);
+  color: var(--md-accent-fg-color);
+}
+
+/* --- Hero Section Styling --- */
+.kit-hero {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, rgba(6, 182, 212, 0.04) 100%);
+  border: 1px solid var(--kit-border-subtle);
+  border-radius: 14px;
+  padding: 1.8rem 2rem;
+  margin: 1.5rem 0 2rem 0;
+}
+
+[data-md-color-scheme="slate"] .kit-hero {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(34, 211, 238, 0.05) 100%);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.kit-hero p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
 }
 
 /* --- Status Badges & Pills --- */

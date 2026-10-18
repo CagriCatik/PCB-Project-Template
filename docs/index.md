@@ -1,8 +1,9 @@
 # ⚡ PCB Project Template – Dokumentation
 
-**Ein klarer, reproduzierbarer Start für professionelle Hardware- und Firmware-Entwicklung mit KiCad 10.0.7.**
-
----
+<div class="kit-hero">
+  <p><strong>Ein klarer, reproduzierbarer Start für professionelle Hardware- und Firmware-Entwicklung mit KiCad 10.0.7 auf macOS.</strong></p>
+  <p>Verlässliche Projektstruktur, automatisierte Verification Gates (ERC/DRC mit Schaltplan-Parität), autorisierte Fertigungsfreigaben mit SHA-256-Manifesten und Steuerung via CLI (<code>scripts/kit</code>) sowie moderner Desktop-Manager GUI.</p>
+</div>
 
 ## Willkommen
 
@@ -10,8 +11,8 @@ Das **PCB-Project-Template** ist eine erprobte Entwicklungsvorlage für macOS, d
 
 - **Verlässliche Projektstruktur:** Klare Ablage für Schaltplan, Board, Firmware (HAL/BSP getrennt von Anwendungslogik), Bibliotheken und Fertigungsunterlagen.
 - **Reproduzierbare Prüfungen:** Automatisierte Verification Gates (ERC, DRC mit Schaltplan-Parität, Footprint-Validierung, 3D-Modelle, Bauteil-Metadaten).
-- **Geordnete Fertigung:** Gezielte Trennung zwischen vorläufigen Entwürfen (`DRAFT` / `NO-GO`) und geprüften, autorisierten Freigaben (`GO`) mit lückenlosen Manifesten und SHA-256-Prüfsummen.
-- **Bedienung nach Wahl:** Volle Funktionalität über die Befehlszeile (`scripts/kit`), interaktive Skripte sowie einen modernen Desktop-Manager (`scripts/kit gui`).
+- **Geordnete Fertigung:** Gezielte Trennung zwischen vorläufigen Entwürfen (<code>DRAFT</code> / <code>NO-GO</code>) und geprüften, autorisierten Freigaben (<code>GO</code>) mit lückenlosen Manifesten und SHA-256-Prüfsummen.
+- **Bedienung nach Wahl:** Volle Funktionalität über die Befehlszeile (<code>scripts/kit</code>), interaktive Skripte sowie einen modernen Desktop-Manager (<code>scripts/kit gui</code>).
 
 ---
 
