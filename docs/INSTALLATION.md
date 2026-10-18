@@ -52,9 +52,21 @@ Options: `--skip-venv`, `--template-dir DIR`, `--update-templates`,
 
 ```sh
 scripts/kit doctor                       # read-only re-check at any time
-./project-manager.command                # interactive manager
+./project-manager.command                # interactive CLI manager
+./gui.command                            # PySide6 desktop GUI (or: scripts/kit gui)
 scripts/kit create --template generic-pcb --name "My Board" --dest "$HOME/Projects/My Board"
 ```
+
+### Optional PySide6 Desktop GUI
+
+The desktop application is an optional frontend for creating boards, running verification, and generating exports without replacing KiCad:
+
+```sh
+.venv/bin/pip install -r requirements-gui.txt
+./gui.command                            # or: scripts/kit gui
+```
+
+Headless CLI automation and tests remain functional without PySide6.
 
 KiCad reads user templates from that directory for **File > New Project from
 Template**. The installed folders follow KiCad's template format (one

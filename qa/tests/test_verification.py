@@ -36,7 +36,7 @@ class OfflineGateTests(TempDirTest):
 
     def test_invalid_gate_configuration(self):
         board = self.fixture_copy()
-        (board / "qa").mkdir()
+        (board / "qa").mkdir(exist_ok=True)
         (board / "qa/verification.json").write_text(json.dumps({"gates": {"erc": "sometimes"}}))
         with self.assertRaises(KitError):
             load_config(board)

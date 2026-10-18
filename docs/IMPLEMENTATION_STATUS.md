@@ -37,6 +37,7 @@ Git staging, commits or pushes were made; all changes are uncommitted.
 | ++ | Template hardening (follow-up brief, milestones A–E) | Done: engineering guidelines (`docs/engineering/`), board profiles, portability and pin/pad gates, custom-library reference project and relocation tests, KiCad version policy, designator consistency, stale-export detection, extended manifest, three optional plugins catalogued. See below. |
 | +++ | STM32 toolchain verification | Real cross-build verified with CubeMX 6.18 output and Arm GCC 15.3; four integration defects fixed; see ACCEPTANCE_REPORT. Hardware execution NOT_TESTED. |
 | + | Thermal analysis, phase 1 (follow-up request) | Done: steady-state 2.5D estimate, `scripts/kit thermal`, optional `thermal` gate, analytic validation. Phases 2–3 (inner layers, I²R, transient/3D) open; see `docs/THERMAL_ANALYSIS.md`. |
+| ++++ | PySide6 Desktop GUI & Test Suite | Done: PySide6 Desktop GUI (Dashboard, New Project, Projects, Verification, Manufacturing, Settings), `gui.command`, `scripts/gui.sh`, `scripts/kit gui`. 52 automated GUI tests passing in `qa/tests/test_gui.py`. Total test suite expanded to 205 tests (0 failures). |
 
 ## What was reused, replaced and moved
 

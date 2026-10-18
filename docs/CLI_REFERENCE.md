@@ -29,6 +29,7 @@ current directory. Every command supports `--help`.
 | `scripts/kit projects list\|add PATH\|forget PATH` | Machine-local project registry. |
 | `scripts/kit open PROJECT [--vscode]` | Open in KiCad (default) or VS Code. |
 | `scripts/kit manager` | Interactive menu (also `./project-manager.command`). |
+| `scripts/kit gui [--project PATH]` | Desktop PySide6 application (also `./gui.command` and `scripts/gui.sh`). |
 
 ## Verification and manufacturing
 
@@ -63,7 +64,7 @@ Shell aliases in `scripts/` map to these commands: `install-template.sh`,
 `firmware-build.sh` → `firmware`; `manage-libraries.sh` → `libraries`;
 `open-project.sh` → `open`; `install-plugins.sh` → `plugins` (default `status`);
 `thermal-analysis.sh` → `thermal`;
-`package.sh` → `package`. `install-kicad.sh` installs the official KiCad DMG;
+`package.sh` → `package`; `gui.sh` → `gui`. `install-kicad.sh` installs the official KiCad DMG;
 `install-vscode-extensions.sh [--optional] [--no-firmware] [--update] [--dry-run]`
 installs the recommended VS Code extensions (`--list` shows them).
 

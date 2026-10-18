@@ -45,7 +45,7 @@ class LayoutTests(unittest.TestCase):
             self.assertTrue((ROOT / name).exists(), name)
 
     def test_entrypoints_are_executable(self):
-        for name in ["install_template.command", "project-manager.command", "scripts/kit"] + [
+        for name in ["install_template.command", "project-manager.command", "gui.command", "scripts/kit"] + [
                 "scripts/" + p.name for p in (ROOT / "scripts").glob("*.sh")]:
             path = ROOT / name
             self.assertTrue(path.is_file() and os.access(path, os.X_OK), name)
@@ -82,7 +82,8 @@ class LayoutTests(unittest.TestCase):
             "quality": {"core", "kicad", "project", "thermal"},
             "release": {"core", "kicad", "quality", "plugins"},
             "environment": {"core", "kicad", "project", "quality", "plugins"},
-            "cli": {"core", "kicad", "project", "quality", "release", "plugins", "environment", "thermal"},
+            "gui": {"core", "kicad", "project", "quality", "release", "plugins", "environment", "thermal"},
+            "cli": {"core", "kicad", "project", "quality", "release", "plugins", "environment", "thermal", "gui"},
         }
         for path in sorted((ROOT / "tools").rglob("*.py")):
             rel = path.relative_to(ROOT / "tools").parts

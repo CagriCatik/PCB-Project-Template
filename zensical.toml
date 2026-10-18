@@ -1,0 +1,80 @@
+[project]
+site_name = "PCB Project Template"
+site_description = "Wiederverwendbare Entwicklungsvorlage für KiCad 10.0.7 Hardware, Firmware & Fertigung"
+site_author = "Cagri Catik"
+site_url = "https://cagricatik.github.io/PCB-Project-Template/"
+
+repo_url = "https://github.com/CagriCatik/PCB-Project-Template"
+repo_name = "CagriCatik/PCB-Project-Template"
+edit_uri = "edit/main/docs/"
+
+nav = [
+  { "Startseite" = "index.md" },
+  { "Architektur & Konzept" = [
+      { "Architektur" = "ARCHITECTURE.md" },
+      { "Projektstruktur" = "PROJECT_STRUCTURE.md" },
+      { "KiCad 10 Kompatibilität" = "KICAD_COMPATIBILITY.md" },
+      { "Bibliotheksverwaltung" = "LIBRARY_MANAGEMENT.md" }
+  ]},
+  { "Bedienung & Tools" = [
+      { "Installation" = "INSTALLATION.md" },
+      { "CLI-Referenz" = "CLI_REFERENCE.md" },
+      { "Desktop-Manager (GUI)" = "GUI_ACCEPTANCE.md" },
+      { "Plugin-Verwaltung" = "PLUGIN_MANAGEMENT.md" },
+      { "KiCad IPC & API" = "KICAD_IPC.md" }
+  ]},
+  { "Qualität & Fertigung" = [
+      { "Verifikation & Gates" = "VERIFICATION.md" },
+      { "Fertigung & Exporte" = "MANUFACTURING.md" },
+      { "Thermische Analyse" = "THERMAL_ANALYSIS.md" },
+      { "Fehlerbehebung" = "TROUBLESHOOTING.md" }
+  ]},
+  { "Berichte & Status" = [
+      { "Implementierungsstatus" = "IMPLEMENTATION_STATUS.md" },
+      { "Abnahmebericht" = "ACCEPTANCE_REPORT.md" },
+      { "Lessons Learned" = "LESSONS_LEARNED.md" }
+  ]}
+]
+
+extra_css = ["stylesheets/extra.css"]
+
+[project.theme]
+language = "de"
+features = [
+  "navigation.tabs",
+  "navigation.sections",
+  "navigation.expand",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "search.share",
+  "content.code.copy"
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Zum dunklen Modus wechseln"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Zum hellen Modus wechseln"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+toc.permalink = true
+pymdownx.arithmatex.generic = true
+pymdownx.betterem = {}
+pymdownx.caret = {}
+pymdownx.details = {}
+pymdownx.highlight.anchor_linenums = true
+pymdownx.inlinehilite = {}
+pymdownx.snippets = {}
+pymdownx.superfences = {}

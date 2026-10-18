@@ -134,6 +134,9 @@ def build_parser():
     c.add_argument("--target", choices=["host", "stm32", "arduino"], default="host")
 
     cmd("manager", "interactive project manager")
+    c = cmd("gui", "launch PySide6 desktop GUI")
+    c.add_argument("--project", help="initial project directory to open")
+    c.add_argument("--offscreen", action="store_true", help=argparse.SUPPRESS)
     cmd("version", "kit and KiCad versions")
     c = cmd("package", "source ZIP of the kit (outside the repository)")
     c.add_argument("--output", required=True)
@@ -356,6 +359,18 @@ def run_command(args):
         _emit(args, info, ["PCB-Project-Template %(kit)s; KiCad required %(kicad_required)s; installed: "
                            "%(kicad_installed)s" % info])
         return 0
+    if c == "gui":
+        try:
+            import PySide6  # noqa: F401
+        except ImportError:
+            raise KitError(
+                "PySide6 is not installed. To launch the desktop GUI, install optional dependencies with:\n"
+                "  .venv/bin/pip install -r requirements-gui.txt\n"
+                "(or: pip install 'PySide6>=6.5')"
+            )
+        from tools.gui.main import main as gui_main
+
+        return gui_main(project=getattr(args, "project", None), offscreen=getattr(args, "offscreen", False))
     if c == "package":
         from tools.release.packaging import package
 

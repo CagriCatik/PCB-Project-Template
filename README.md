@@ -8,6 +8,7 @@
 <p>
   <a href="https://www.kicad.org/"><img src="https://img.shields.io/badge/KiCad-10.0.7-314CB0?style=for-the-badge" alt="KiCad 10.0.7"></a>
   <a href="requirements.txt"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&amp;logo=python&amp;logoColor=white" alt="Python ab 3.10"></a>
+  <a href="https://cagricatik.github.io/PCB-Project-Template/"><img src="https://img.shields.io/badge/Docs-Zensical-526CFE?style=for-the-badge&amp;logo=materialformkdocs&amp;logoColor=white" alt="Online Dokumentation"></a>
   <a href="docs/INSTALLATION.md"><img src="https://img.shields.io/badge/Setup-macOS-222222?style=for-the-badge&amp;logo=apple&amp;logoColor=white" alt="Setup für macOS"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-2E8B57?style=for-the-badge" alt="MIT-Lizenz"></a>
 </p>
@@ -138,6 +139,8 @@ Jedes Projekt erhält `hardware/`, `firmware/`, `components/`, `manufacturing/`,
 Projekte kopiert. Aufbau: [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
 ## Dokumentation
+
+> 🌐 **Online-Dokumentation:** Die vollständige Dokumentation steht auch als durchsuchbare Webseite bereit: [cagricatik.github.io/PCB-Project-Template](https://cagricatik.github.io/PCB-Project-Template/)
 
 | Thema | Dokument |
 | --- | --- |

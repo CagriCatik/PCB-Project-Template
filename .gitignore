@@ -33,3 +33,5 @@ firmware/build/
 **/qa/generated/
 **/manufacturing/releases/generated/
 **/firmware/build/
+# Static site documentation build output
+site/
