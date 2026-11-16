@@ -31,10 +31,10 @@ class Scripted:
 
 class ManagerTests(TempDirTest):
     def test_create_project_with_retry_on_invalid_name(self):
-        # Menu answers: create, template 2 (generic-pcb), profile 1 (2-layer), bad name, good name,
+        # Menu answers: create, template 3 (generic-pcb), profile 1 (2-layer), bad name, good name,
         # parent, no git, confirm, list projects, exit.
         parent = self.tmp / "my projects"
-        io_ = Scripted(["1", "2", "1", "bad/name", "Board With Spaces", str(parent), "n", "y", "9", "0"])
+        io_ = Scripted(["1", "3", "1", "bad/name", "Board With Spaces", str(parent), "n", "y", "9", "0"])
         self.assertEqual(Manager(io_.ask, io_.say).run(), 0)
         project = parent / "Board With Spaces"
         self.assertTrue((project / "Board With Spaces.kicad_pro").is_file())
@@ -46,7 +46,7 @@ class ManagerTests(TempDirTest):
 
     def test_cancel_creates_nothing(self):
         parent = self.tmp / "p"
-        io_ = Scripted(["1", "2", "2", "Cancelled Board", str(parent), "n", "n", "0"])
+        io_ = Scripted(["1", "3", "2", "Cancelled Board", str(parent), "n", "n", "0"])
         Manager(io_.ask, io_.say).run()
         self.assertFalse((parent / "Cancelled Board").exists())
         self.assertIn("Cancelled.", io_.text)
@@ -55,7 +55,7 @@ class ManagerTests(TempDirTest):
         parent = self.tmp / "p"
         (parent / "Taken").mkdir(parents=True)
         (parent / "Taken/file.txt").write_text("mine")
-        io_ = Scripted(["1", "2", "1", "Taken", str(parent), "n", "y", "0"])
+        io_ = Scripted(["1", "3", "1", "Taken", str(parent), "n", "y", "0"])
         Manager(io_.ask, io_.say).run()
         self.assertIn("ERROR: Destination exists", io_.text)
         self.assertEqual(os.listdir(parent / "Taken"), ["file.txt"])
@@ -114,7 +114,7 @@ class CliTests(TempDirTest):
     def test_plugin_guide_and_templates_list(self):
         self.assertEqual(self.call("plugins", "guide", "board2pdf")[0], 0)
         code, out = self.call("templates", "list", "--json")
-        self.assertEqual({r["id"] for r in json.loads(out)}, {"generic-pcb", "stm32-embedded", "arduino-shield"})
+        self.assertEqual({r["id"] for r in json.loads(out)}, {"generic-pcb", "stm32-embedded", "arduino-shield", "esp32-carrier"})
 
     @requires_kicad
     def test_verify_exit_codes(self):

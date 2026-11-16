@@ -16,7 +16,7 @@
 <p>
   <a href="#installation"><strong>Loslegen</strong></a>
   &nbsp; · &nbsp;
-  <a href="#drei-vorlagen">Vorlagen</a>
+  <a href="#vier-vorlagen">Vorlagen</a>
   &nbsp; · &nbsp;
   <a href="#dokumentation">Dokumentation</a>
   &nbsp; · &nbsp;
@@ -55,8 +55,9 @@ verwenden und an deinen eigenen Entwicklungsablauf anpassen.
 
 | Nutzen im Alltag | Umsetzung |
 | --- | --- |
-| Ein neues Board in Sekunden anlegen | Drei Vorlagen (Generic PCB, STM32 Embedded, Arduino Shield) erzeugen eigenständige Projekte – per Doppelklick auf `project-manager.command`, per `scripts/kit create` oder in KiCad über **File > New Project from Template**. Vorhandene Ordner werden nie überschrieben. |
+| Ein neues Board in Sekunden anlegen | Vier Vorlagen (Generic PCB, STM32 Embedded, Arduino Shield, ESP32 Carrier) erzeugen eigenständige Projekte – per Doppelklick auf `project-manager.command`, per `scripts/kit create` oder in KiCad über **File > New Project from Template**. Vorhandene Ordner werden nie überschrieben. |
 | Dieselben Prüfungen bei jeder Revision | `scripts/kit verify` führt ERC, DRC mit Schaltplan-Abgleich sowie Prüfungen auf Bibliotheksreferenzen, Footprints, Bauteil-Metadaten, 3D-Modelle und BOM aus. Jede Prüfung ist pro Projekt als *required*, *advisory* oder *disabled* konfigurierbar. |
+| Lesbare Schaltpläne prüfen | `scripts/kit schematic` erzeugt Baseline-Snapshots, elektrische Vergleiche sowie PDF-/PNG-Blattansichten und feste Detailausschnitte mit Hash-Manifest. [Review-Ablauf](docs/engineering/schematic-review.md); die Sichtprüfung bleibt ausdrücklich offen. |
 | Fertigungsdaten mit bekanntem Stand | `scripts/kit export` erzeugt Gerber, Bohrdaten, BOM, Bestückungsdaten, Bestückungszeichnungen, STEP, Schaltplan-PDF, Netzliste und Interactive HTML BOM – mit Manifest, SHA-256-Werten und Reproduzierbarkeitsvergleich. |
 | Entwurf und Freigabe klar trennen | Exporte sind standardmäßig `DRAFT` / `NO-GO`. Eine `GO`-Ausgabe verlangt `--authorize`, eine signierte Freigabedatei zur exakten Revision und zum Commit, einen sauberen Git-Stand und bestandene Prüfungen. |
 | Plugins und Umgebung im Blick | Der Installer prüft KiCad 10.0.7, richtet `.venv` ein, installiert die Vorlagen, ruft InteractiveHtmlBom, Freerouting und KiKit tatsächlich auf und diagnostiziert die KiCad-IPC-Schnittstelle. |
@@ -126,12 +127,13 @@ abzustimmen, nicht universell richtig.
 Projekte bei geöffnetem Editor nicht automatisiert prüfen: KiCads Lock-Dateien
 führen dann bewusst zum Abbruch (Exit 14).
 
-## Drei Vorlagen
+## Vier Vorlagen
 
 | Vorlage | Inhalt |
 | --- | --- |
 | `generic-pcb` | Leerer, von KiCad 10.0.7 erzeugter Schaltplan und PCB – unabhängig von einem Mikrocontroller. |
 | `stm32-embedded` | Leeres Board plus CMake-Presets, plattformunabhängiges Anwendungsmodul mit Host-Tests und Anbindung an ein STM32CubeMX-Projekt. MCU und Pinbelegung werden nicht vorgegeben. |
+| `esp32-carrier` | Leeres Carrier-Board, ESP32-S3-PlatformIO/Arduino-Gerüst, Host-Tests und vollständiges Sockelpin-Inventar. Boardvariante, Pinbelegung, Footprint und Versorgung werden vor dem Entwurf geprüft; keine fertige Schaltung. |
 | `arduino-shield` | Basierend auf KiCads offizieller Vorlage *Arduino Uno Shield* (Kontur, Steckverbinder, Bohrungen; © Caleb Reister, Jonathan Iapicco), plus PlatformIO-Firmware. |
 
 Jedes Projekt erhält `hardware/`, `firmware/`, `components/`, `manufacturing/`,
@@ -145,6 +147,7 @@ Projekte kopiert. Aufbau: [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)
 | Thema | Dokument |
 | --- | --- |
 | **Entwurfsrichtlinien** (Bauteilauswahl, Datenblatt-Checkliste, Schaltplan, Platzierung, Routing, Fertigung, Lessons Learned) | [docs/engineering/README.md](docs/engineering/README.md) |
+| Carrier-/DevKit-Regeln und Sockelpins | [docs/engineering/carrier-guidelines.md](docs/engineering/carrier-guidelines.md) |
 | Architektur und Modulgrenzen | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
 | Installation | [docs/INSTALLATION.md](docs/INSTALLATION.md) |
 | Repository- und Projektaufbau | [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) |

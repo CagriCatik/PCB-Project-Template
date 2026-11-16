@@ -13,12 +13,21 @@ of PCB-Project-Template {{KIT_VERSION}} on {{CREATED}}.
 | `docs/` | Requirements, architecture, interfaces, bring-up, decisions |
 | `qa/` | Verification configuration, design reviews, reports |
 
+## Schematic review
+
+Follow `docs/engineering/schematic-review.md`. Copy
+`qa/schematic-views.example.json` to `qa/schematic-views.json` and define the
+functional detail crops for your sheets. Keep actual inspection findings in
+`qa/design-reviews/`; generated PDF/PNG runs stay ignored in `qa/generated/`.
+Run `scripts/kit schematic` from the kit checkout against this project's root
+`.kicad_sch`; the kit is not duplicated into each board repository.
+
 ## Everyday commands (run from the kit checkout)
 
 ```sh
 scripts/kit verify  "<this project>"                 # ERC, DRC, parity, libraries, metadata, 3D, BOM
 scripts/kit export  "<this project>" --revision A1   # NO-GO draft manufacturing outputs
-scripts/kit open    "<this project>" --kicad         # or --vscode
+scripts/kit open    "<this project>"         # or --vscode
 ```
 
 Or double-click `project-manager.command` in the kit. A clean ERC/DRC run is a

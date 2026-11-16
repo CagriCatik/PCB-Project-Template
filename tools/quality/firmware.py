@@ -4,6 +4,7 @@ Targets:
   host    CMake + host C compiler: builds firmware/app and runs its unit tests
   stm32   CMake preset stm32-debug: needs STM32CubeMX output + arm-none-eabi-gcc
   arduino PlatformIO environment "uno"
+  esp32   PlatformIO environment "esp32" (review memory variant before flashing)
 
 The Arm GNU toolchain is located via ARM_GNU_TOOLCHAIN_BIN, PATH, or standard
 install locations; its bin/ is prepended to PATH for the build subprocess only.
@@ -27,6 +28,7 @@ TARGETS = {
     "stm32": {"tools": ["cmake", "arm-none-eabi-gcc"],
               "commands": [["cmake", "--preset", "stm32-debug"], ["cmake", "--build", "--preset", "stm32-debug"]],
               "requires": "CMakePresets.json"},
+    "esp32": {"tools": ["pio"], "commands": [["pio", "run", "-e", "esp32"]], "requires": "platformio.ini"},
     "arduino": {"tools": ["pio"], "commands": [["pio", "run", "-e", "uno"]], "requires": "platformio.ini"},
 }
 
@@ -129,7 +131,7 @@ def elf_report(fw, preset, bin_dir, log):
 
 def build(root, target="host"):
     if target not in TARGETS:
-        raise KitError("Unknown firmware target %r (host, stm32, arduino)." % target)
+        raise KitError("Unknown firmware target %r (host, stm32, arduino, esp32)." % target)
     root = Path(root).resolve()
     fw = root / "firmware"
     spec = TARGETS[target]

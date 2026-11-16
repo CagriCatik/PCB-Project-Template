@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "module": {"manufacturer": "", "model": "", "revision": "", "variant": "", "pinout_source": ""},
+  "sockets": [],
+  "pin_inventory": "carrier-pins.csv",
+  "note": "Fill from the exact purchased DevKit and manufacturer documents. Empty values intentionally fail carrier check; no socket/pin assignment is invented."
+}

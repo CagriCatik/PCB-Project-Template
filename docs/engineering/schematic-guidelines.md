@@ -73,3 +73,11 @@ placement; never move schematic symbols to mimic the layout.
 2. Every symbol has a footprint whose pads cover all its pins (`pin_pad_mapping`).
 3. Datasheet checklists completed for every non-trivial part.
 4. Power tree reviewed: each rail's source, maximum load and protection.
+
+## Reproducible visual review
+
+Use [schematic-review.md](schematic-review.md) before and after schematic layout
+changes. Capture a semantic baseline, render every sheet and functional detail,
+inspect the images, compare connectivity and retain a versioned review summary.
+Keep raw runs under ignored `qa/generated/`. Never infer readable grouping or
+collision-free text from ERC alone.

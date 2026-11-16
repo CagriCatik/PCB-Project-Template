@@ -1,0 +1,4 @@
+{
+  "description": "Copy to qa/schematic-views.json; select actual PDF pages and functional groups. Coordinates are top-left paper mm; details render at 300 dpi.",
+  "views": []
+}

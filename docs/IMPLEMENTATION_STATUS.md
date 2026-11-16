@@ -120,3 +120,54 @@ installer idempotency, documentation link and command tests.
 Remaining: GUI and live IPC unverified; a four-layer *reference board* is
 deliberately not provided (no circuit needs it); the source tutorial was not
 available, so lessons describe failure modes without tutorial specifics.
+
+## Schematic evidence workflow — 2026-11-15
+
+Implemented as read-only `scripts/kit schematic snapshot|compare|review|lint|status`.
+New `tools/schematic/` owns the native inventory/canonical XML netlist model,
+fresh PDF/PNG runs, fixed 300-dpi detail views, source/artifact hashes, ERC,
+HTML index, conservative text-anchor hints and evidence staleness checks.
+CLI renders are explicitly distinguished from GUI screenshots. Automatic
+manifests never claim a visual review. Native files and release gates are unchanged.
+
+Generated projects receive the workflow, view-config example, review-summary
+form and agent rules through the existing skeleton copier. Tools remain in the
+kit checkout. See `docs/engineering/schematic-review.md` for commands and scope.
+
+Validation in this Linux environment: targeted schematic suite 19 tests,
+18 passed and 1 native integration test skipped. Layout/architecture suite:
+15 passed. Full suite: 220 tests reported, 86 skips and 2 existing environment
+errors (missing PySide6; a thermal test requires KiCad 10.0.7 while 9.0.2 is
+installed). No new full-suite failures. The new supported-toolchain render
+integration remains unverified here; its test runs when 10.0.7 is available.
+No native schematic/PCB files, staging, commits or remote refs were changed.
+
+## Agent workflow and ESP32 carrier — 2026-11-16
+
+The owner explicitly authorized updating Git policy and publishing this task.
+Root and generated AGENTS.md now require KiCad 10.0.7 for native work and name
+the applicable implemented tools. Agents may commit/push task-owned reviewed
+source through a checked fast-forward; kit commands still never commit/push.
+Schematic evidence additionally rejects the untested-version override in code.
+Independent source/docs/unit work remains possible without the native toolchain.
+
+Added a fourth template, `esp32-carrier`, using the existing native blank files,
+2/4-layer profiles, skeleton copying and common host-tested application/BSP.
+PlatformIO/Arduino has a separate `esp32` build target pinned to Espressif32
+8.0.0 with the documented S3 N8 baseline. GPIO output is unassigned by default;
+N16R8 memory settings, socket geometry, GPIO allocation and power circuitry are
+not supplied or implied as verified. PlatformIO is absent here, so no ESP32
+cross-build/upload/hardware execution is claimed.
+
+The independent `scripts/kit carrier check PROJECT` checks a complete declared
+socket-pad inventory and identity/provenance consistency. Empty template
+inventories deliberately fail. This is not a manufacturer-pinout, netlist or
+geometry validator and is not added silently to release gates.
+
+Final targeted results: schematic 21 tests (20 pass, 1 native skip); carrier
+12 tests (11 pass, 1 host-toolchain skip); template generation 22 tests (17 pass,
+5 native skips); manager 16 (14 pass, 2 native skips); architecture/layout 15
+pass. Full suite: 230 tests reported, 87 skips and the same 2 pre-existing
+environment errors (PySide6 absent and KiCad 10.0.7 unavailable). No new failures.
+The new template is generated/parsed by offline tests; native KiCad loading,
+PDF/PNG/actual visual review and ESP32 cross-build remain unverified here.

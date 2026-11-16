@@ -24,11 +24,11 @@ class TemplateTests(unittest.TestCase):
             text = info.read_text()
             self.assertRegex(text.lower(), r"<title>[^<]+</title>", str(info))
 
-    def test_three_templates_declared(self):
+    def test_four_templates_declared(self):
         import json
 
         ids = {json.loads(p.read_text())["id"] for p in (ROOT / "meta/templates").glob("*/template.json")}
-        self.assertEqual(ids, {"generic-pcb", "stm32-embedded", "arduino-shield"})
+        self.assertEqual(ids, {"generic-pcb", "stm32-embedded", "arduino-shield", "esp32-carrier"})
 
     def test_pinmap_columns_unique(self):
         import csv

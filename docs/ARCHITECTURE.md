@@ -1,7 +1,7 @@
 # Architecture
 
 PCB-Project-Template is a local development kit for KiCad **10.0.7** on macOS. It
-creates independent board projects from three templates, installs those
+creates independent board projects from four templates, installs those
 templates into KiCad, verifies designs with the real KiCad toolchain and
 produces reproducible manufacturing outputs. Logic is Python 3.10+ standard
 library except two optional areas: the official `kicad-python` IPC client and
@@ -82,6 +82,7 @@ Dependencies only point downward, enforced by `test_tools_package_layering`:
 | --- | --- |
 | `core/` | nothing from the kit |
 | `kicad/`, `plugins/`, `thermal/` | `core/` |
+| `schematic/` | `core/`, `kicad/` (read-only review evidence) |
 | `project/` | `core/`, `kicad/` |
 | `quality/` | `core/`, `kicad/`, `project/`, `thermal/` (optional gate) |
 | `release/` | `core/`, `kicad/`, `quality/` (pre-export verification), `plugins/` (IBOM) |
@@ -103,8 +104,10 @@ All imports are absolute (`tools.<package>.<module>`).
 | `kicad/portability.py` | Detects machine-specific paths in tables, models, sheets and project settings. |
 | `kicad/associations.py` | Symbol pin ↔ footprint pad check from library data. |
 | `project/templates.py` | Materializes a template into a project tree; used for both `create` and native template installation. |
+| `project/carrier.py` | Complete socket-pad inventory and module identity/provenance consistency; no electrical or physical approval. |
 | `project/registry.py` | Machine-local list of generated projects; KiCad/VS Code launchers. |
 | `project/components.py` | Per-part JSON records (manufacturer, MPN, datasheet, symbol, footprint, 3D model, ratings, procurement, approval). |
+| `schematic/model.py`, `evidence.py`, `layout.py` | Layout-independent snapshots using KiCad-resolved connectivity; fresh PDF/PNG review runs, source hashes and conservative text-anchor hints. No native writes or automatic visual approval. |
 | `quality/verification.py` | Twelve configurable gates; writes reports under `qa/generated/verification/`. |
 | `quality/firmware.py` | Host CMake tests, STM32 preset build, PlatformIO build; missing toolchains reported. |
 | `release/exports.py` | Draft and GO exports, IBOM, manifest with raw and normalized hashes, approval binding. |

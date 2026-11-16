@@ -25,7 +25,7 @@ The installer performs these steps and prints one status line per step:
 2. **kicad** – locates KiCad.app and `kicad-cli`, enforces 10.0.7, discovers CLI commands. Aborts before any write if this fails.
 3. **tools** – Python, Git, VS Code, Java, firmware toolchains.
 4. **python_venv** – creates `.venv` in the kit and installs `requirements.txt` (kicad-python 0.8.0 with its tested transitive pins, numpy 2.5.4 and scipy 1.18.1 for thermal analysis). A stamp file skips reinstalling unchanged requirements.
-5. **kicad_templates** – installs `generic-pcb`, `stm32-embedded`, `arduino-shield` into KiCad's user template directory (`~/Documents/KiCad/10.0/template`, or `KICAD_USER_TEMPLATE_DIR`).
+5. **kicad_templates** – installs `generic-pcb`, `stm32-embedded`, `arduino-shield`, `esp32-carrier` into KiCad's user template directory (`~/Documents/KiCad/10.0/template`, or `KICAD_USER_TEMPLATE_DIR`).
 6. **plugins** – reads the PCM database and invokes each installed plugin headlessly; prints guided setup for missing ones.
 7. **library_paths** – resolves every global symbol/footprint library (223/155 on a stock 10.0.7).
 8. **ipc** – IPC configuration, process, socket and live-probe diagnostics.
@@ -101,7 +101,7 @@ exercised in this session (see `docs/ACCEPTANCE_REPORT.md`).
 
 ## Removing
 
-Delete `.venv/`, the three folders under `~/Documents/KiCad/10.0/template/`
+Delete `.venv/`, the four folders under `~/Documents/KiCad/10.0/template/`
 that contain `meta/kit-template.json`, and
 `~/Library/Application Support/PCB-Project-Template/`. Generated projects are
 independent and keep working with KiCad alone.

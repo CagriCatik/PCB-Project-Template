@@ -18,7 +18,7 @@ import sys
 from tools import __version__
 from tools.core.common import KitError
 
-LEGACY_FIRMWARE = {"generic": "generic-pcb", "stm32": "stm32-embedded", "arduino": "arduino-shield"}
+LEGACY_FIRMWARE = {"generic": "generic-pcb", "stm32": "stm32-embedded", "arduino": "arduino-shield", "esp32": "esp32-carrier"}
 
 
 def _emit(args, data, lines=None):
@@ -53,7 +53,7 @@ def build_parser():
     c.add_argument("--update", action="store_true")
 
     c = cmd("create", "create an independent project from a template")
-    c.add_argument("--template", choices=["generic-pcb", "stm32-embedded", "arduino-shield"])
+    c.add_argument("--template", choices=["generic-pcb", "stm32-embedded", "arduino-shield", "esp32-carrier"])
     c.add_argument("--firmware", choices=sorted(LEGACY_FIRMWARE), help=argparse.SUPPRESS)
     c.add_argument("--name", required=True)
     c.add_argument("--dest", required=True, help="new (or empty) project directory")
@@ -73,6 +73,15 @@ def build_parser():
     c.add_argument("project")
     c.add_argument("--gate", action="append", dest="gates")
     c.add_argument("--release", action="store_true", help="apply release gate severities")
+
+    c = cmd("schematic", "read-only schematic snapshots, comparison and visual-review evidence")
+    c.add_argument("action", choices=["snapshot", "compare", "review", "lint", "status"])
+    c.add_argument("source", help="root .kicad_sch, snapshot for compare, or manifest for status")
+    c.add_argument("other", nargs="?", help="second snapshot for compare")
+    c.add_argument("--output", help="new snapshot file; review output parent directory")
+    c.add_argument("--baseline", help="earlier snapshot for review comparison")
+    c.add_argument("--views", help="JSON detail views in paper millimetres")
+    c.add_argument("--dpi", type=int, default=150, help="overview resolution (details: 300 dpi)")
 
     c = cmd("export", "manufacturing outputs: NO-GO draft, or GO release with --approval --authorize")
     c.add_argument("project")
@@ -113,6 +122,10 @@ def build_parser():
     c.add_argument("--datasheet-url", default="")
     c.add_argument("--revision", default="")
 
+    c = cmd("carrier", "validate the complete module socket-pin inventory (not electrical approval)")
+    c.add_argument("action", choices=["check"])
+    c.add_argument("project")
+
     c = cmd("libraries", "library table checks and project-local registration")
     c.add_argument("action", choices=["check", "register"])
     c.add_argument("project", nargs="?")
@@ -131,7 +144,7 @@ def build_parser():
 
     c = cmd("firmware", "optional firmware build/test")
     c.add_argument("project")
-    c.add_argument("--target", choices=["host", "stm32", "arduino"], default="host")
+    c.add_argument("--target", choices=["host", "stm32", "arduino", "esp32"], default="host")
 
     cmd("manager", "interactive project manager")
     c = cmd("gui", "launch PySide6 desktop GUI")
@@ -191,7 +204,7 @@ def run_command(args):
 
         template = args.template or LEGACY_FIRMWARE.get(args.firmware or "", None)
         if not template:
-            raise KitError("Choose --template generic-pcb | stm32-embedded | arduino-shield.")
+            raise KitError("Choose --template generic-pcb | stm32-embedded | arduino-shield | esp32-carrier.")
         path, record = t.create(template, args.dest, args.name, args.git, not args.no_register, args.profile)
         _emit(args, {"project": str(path), "record": record},
               ["Created %s project (%s profile): %s" % (record["template_title"], record["profile"], path),
@@ -228,6 +241,36 @@ def run_command(args):
         result = verify(args.project, gates=args.gates, release=args.release)
         _emit(args, result, summary_lines(result))
         return 0 if result["quality_gate"] == "PASS" else 20
+    if c == "schematic":
+        from tools.schematic import evidence, layout, model
+
+        if args.action == "snapshot":
+            if not args.output:
+                raise KitError("schematic snapshot requires --output NEW.json")
+            result = evidence.snapshot(args.source, args.output)
+        elif args.action == "compare":
+            if not args.other:
+                raise KitError("schematic compare needs two snapshot JSON files")
+            result = model.compare(json.loads(Path(args.source).read_text()),
+                                   json.loads(Path(args.other).read_text()))
+        elif args.action == "status":
+            result = evidence.status(args.source)
+        elif args.action == "lint":
+            result = layout.hints(args.source)
+        else:
+            result = evidence.review(args.source, args.output, args.views, args.baseline, args.dpi)
+        _emit(args, result)
+        if args.action == "status":
+            return 0 if result["status"] == "CURRENT" else 20
+        if args.action == "compare":
+            return 0 if result["identical"] and result["toolchain_match"] and result["toolchain_supported"] else 20
+        if args.action == "review":
+            comparison = result.get("comparison", {})
+            failed = (result["erc"]["active"] or comparison.get("identical") is False
+                      or comparison.get("toolchain_match") is False
+                      or comparison.get("toolchain_supported") is False)
+            return 20 if failed else 0
+        return 0
     if c == "export":
         from tools.release.exports import export_project
 
@@ -305,6 +348,12 @@ def run_command(args):
         _emit(args, result, ["Components: %s (%d records, %d approved)" % (result["status"], result["records"],
                                                                          result["approved"])] +
               ["  %s: %s" % (Path(f["file"]).name, f["problem"]) for f in result["findings"]])
+        return 0 if result["status"] == "PASS" else 20
+    if c == "carrier":
+        from tools.project.carrier import check
+
+        result = check(args.project)
+        _emit(args, result)
         return 0 if result["status"] == "PASS" else 20
     if c == "libraries":
         from tools.kicad.libraries import LibraryTables, register_library

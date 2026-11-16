@@ -9,8 +9,8 @@ from tools.core import sexpr
 from tools.project import templates as template_engine
 from tools.core.common import KitError
 
-ALL = ("generic-pcb", "stm32-embedded", "arduino-shield")
-OFFLINE = ("generic-pcb", "stm32-embedded")  # no KiCad install needed to materialize
+ALL = ("generic-pcb", "stm32-embedded", "arduino-shield", "esp32-carrier")
+OFFLINE = ("generic-pcb", "stm32-embedded", "esp32-carrier")  # no KiCad install needed to materialize
 
 
 class NameTests(TempDirTest):

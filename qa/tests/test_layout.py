@@ -59,7 +59,7 @@ class LayoutTests(unittest.TestCase):
     def test_ownership_boundaries(self):
         self.assertTrue((ROOT / "hardware/native-defaults/default.kicad_pcb").is_file())
         self.assertTrue((ROOT / "firmware/templates/common/app/src/heartbeat.c").is_file())
-        for template in ("generic-pcb", "stm32-embedded", "arduino-shield"):
+        for template in ("generic-pcb", "stm32-embedded", "arduino-shield", "esp32-carrier"):
             self.assertTrue((ROOT / "meta/templates" / template / "meta/info.html").is_file())
         # Business logic lives in tools/; scripts are thin wrappers around scripts/kit.
         for script in (ROOT / "scripts").glob("*.sh"):
@@ -79,11 +79,12 @@ class LayoutTests(unittest.TestCase):
             "plugins": {"core"},
             "thermal": {"core"},
             "project": {"core", "kicad"},
+            "schematic": {"core", "kicad"},
             "quality": {"core", "kicad", "project", "thermal"},
             "release": {"core", "kicad", "quality", "plugins"},
             "environment": {"core", "kicad", "project", "quality", "plugins"},
             "gui": {"core", "kicad", "project", "quality", "release", "plugins", "environment", "thermal"},
-            "cli": {"core", "kicad", "project", "quality", "release", "plugins", "environment", "thermal", "gui"},
+            "cli": {"core", "kicad", "project", "quality", "release", "plugins", "environment", "thermal", "gui", "schematic"},
         }
         for path in sorted((ROOT / "tools").rglob("*.py")):
             rel = path.relative_to(ROOT / "tools").parts

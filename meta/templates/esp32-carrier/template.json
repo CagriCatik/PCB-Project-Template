@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "esp32-carrier",
+  "title": "ESP32 DevKit Carrier",
+  "description": "Blank carrier board plus ESP32-S3 PlatformIO/Arduino firmware scaffold, host tests and a complete socket-pin inventory contract. No socket footprint, electrical pin allocation or verified power circuit is supplied. Select the exact purchased module/DevKit revision before designing.",
+  "kicad_base": {"type": "native-defaults"},
+  "overlays": [
+    {"from": "firmware/templates/common", "to": "firmware"},
+    {"from": "firmware/templates/esp32", "to": "firmware"},
+    {"from": "meta/templates/esp32-carrier/project", "to": "."}
+  ],
+  "firmware": "esp32",
+  "verification": {"gates": {"firmware": "advisory"}},
+  "profiles": ["2-layer", "4-layer"],
+  "default_profile": "2-layer"
+}

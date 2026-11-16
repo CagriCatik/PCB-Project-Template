@@ -33,3 +33,8 @@ entered*. They cannot know whether the circuit does what you intended, whether
 a regulator is stable, whether a trace carries its current without overheating
 or whether a connector is mirrored relative to its mate. A clean report is a
 prerequisite for review, never a substitute for it.
+
+For socketed modules and DevKits use [carrier-guidelines.md](carrier-guidelines.md):
+exact board identity, every socket pad, GPIO reservations, boot behaviour,
+power-domain isolation and physical orientation. The ESP32 carrier scaffold
+adds a matching inventory contract and optional firmware path.

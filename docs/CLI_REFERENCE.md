@@ -101,3 +101,23 @@ installs the recommended VS Code extensions (`--list` shows them).
 `KIT_STM32_CUBEMX_SOURCE` / `KIT_STM32_STATUS_LED` (opt-in real STM32 cross-build test),
 `KICAD_KIT_ALLOW_UNTESTED=1` (run with another KiCad version; results marked
 UNTESTED, GO releases blocked — see `docs/KICAD_COMPATIBILITY.md`).
+
+## Schematic review and carrier inventories
+
+```sh
+scripts/kit schematic snapshot /path/to/Board.kicad_sch --output /path/to/before.json
+scripts/kit schematic compare /path/to/before.json /path/to/after.json
+scripts/kit schematic review /path/to/Board.kicad_sch --baseline /path/to/before.json --views /path/to/qa/schematic-views.json
+scripts/kit schematic lint /path/to/Board.kicad_sch
+scripts/kit schematic status /path/to/review-RUN/manifest.json
+scripts/kit create --template esp32-carrier --name Carrier --dest /path/to/new/Carrier
+scripts/kit carrier check /path/to/Carrier
+scripts/kit firmware /path/to/Carrier --target esp32
+```
+
+Snapshots/reviews require exactly KiCad 10.0.7, even if an untested-version
+flag is set. Renders require Poppler. Visual approval is manual; use
+`docs/engineering/schematic-review.md`. The carrier checker validates the
+complete declared socket-pad inventory, not the actual manufacturer pinout or
+schematic. Follow `docs/engineering/carrier-guidelines.md` and the generated
+`docs/esp32-carrier.md`. ESP32 builds require PlatformIO; no flashing is performed.

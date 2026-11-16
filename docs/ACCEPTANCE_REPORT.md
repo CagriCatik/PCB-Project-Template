@@ -253,3 +253,51 @@ Overall acceptance status remains **CONDITIONAL** (KiCad GUI gate NOT_TESTED).
 
 Remaining acceptance blockers: KiCad GUI checklist (mandatory). Live IPC and
 STM32 hardware execution remain optional, NOT_TESTED.
+
+
+## Schematic workflow follow-up — 2026-11-15 (Linux)
+
+This is a separate environment/run; it does not extend the earlier macOS
+KiCad 10.0.7 native acceptance to this machine.
+
+| Check | Observed result |
+| --- | --- |
+| Targeted schematic suite | 19 tests: 18 pass, 1 native test skipped |
+| Layout/architecture suite | 15 pass |
+| Full suite | 220 tests reported, 86 skips, 2 existing environment errors; no failures |
+| Existing GUI error | VectorIconTests.setUpClass: PySide6 is not installed |
+| Existing thermal error | FixtureModelTests.test_cli_and_gate: requires 10.0.7; installed KiCad is 9.0.2 |
+| New unit evidence | Layout-only equality; connectivity/field/flag/interface/identity changes detected; repeated sheets/multi-unit refs retained; cycles, external sheets, source races, failed exports, stale/modified evidence and invalid crops detected |
+| Generated project | Receives workflow, review form, views example and agent rules |
+| Native smoke | Unpinned 9.0.2 refused by the existing capability adapter; no successful PDF/PNG/ERC run claimed |
+| Visual inspection | Not performed on a real review run here; automatic manifests remain NOT_REVIEWED |
+| Scope | No native writer, automatic layout optimizer, release approval or hardware validation |
+
+The new native integration test uses the genuine divider tooling fixture and
+runs with the supported toolchain; it additionally checks PDF/PNG review export
+when Poppler is installed. A supported native run is still needed before
+claiming end-to-end render support on the user's machine.
+
+No staging, commits, pushes or native schematic/PCB changes were made.
+
+## Agent policy and ESP32 carrier follow-up — 2026-11-16
+
+The earlier no-Git-write statement describes the first handoff. The owner has
+now explicitly authorized policy updates, commits and pushing this task.
+
+| Check | Observed result |
+| --- | --- |
+| Required native toolchain | Agent rules require 10.0.7; schematic snapshot/review reject other versions even with the diagnostic override |
+| Schematic suite | 21 tests: 20 pass, 1 native integration skip |
+| Carrier suite | 12 tests: 11 pass, 1 host build skip (host toolchain incomplete) |
+| Template generation | 22 tests: 17 pass, 5 native skips; new ESP32 template materializes and parses offline |
+| Manager / architecture | 16 tests (2 skips) / 15 pass |
+| Full suite | 230 tests reported; 87 skips; same 2 environment errors, no failures |
+| ESP32 target | Dispatch/missing-PlatformIO behaviour tested; actual PlatformIO cross-build and hardware execution NOT_TESTED |
+| Carrier checker | Synthetic cases cover all pads including rails, missing/duplicate/undeclared pins, GPIO conflicts, reserved/blocked reasons, provenance and path validation |
+| Board design | No ESP32 socket, physical pinout, regulator circuit or carrier GPIO allocation fabricated; defaults deliberately incomplete |
+
+Primary ESP32/PlatformIO sources are linked in the generated
+`docs/esp32-carrier.md`; board/memory defaults are separate from a verified
+purchased module variant. A real KiCad 10.0.7 run and a selected-board firmware
+build remain required follow-up before asserting those integrations work.

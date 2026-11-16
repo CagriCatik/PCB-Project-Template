@@ -12,6 +12,41 @@
 5. Generated outputs and external tools are not source files. No hand-editing
    of Gerbers, drill files, position files, PDFs or ERC/DRC reports.
 
+## Mandatory toolchain
+
+- KiCad **10.0.7** is required for native design edits, ERC/DRC,
+  snapshots, renders and accepted verification evidence. Confirm it with
+  `scripts/kit version` before native work; use `scripts/kit doctor` when
+  environment diagnostics are needed.
+- Never use `KICAD_KIT_ALLOW_UNTESTED=1` to bypass this requirement for design
+  work or validation. If the required version is absent, continue independent
+  source/docs/unit-test work and report native checks as blocked or skipped.
+  Do not claim support based on another installed KiCad version.
+
+## Use the implemented tools where they fit
+
+Run these commands from the kit checkout, supplying the target project's path.
+Inspect command `--help` and existing modules before inventing parallel scripts.
+Do not run unrelated tools just to fill a checklist.
+
+| Work | Existing tool to use |
+| --- | --- |
+| Environment/version | `scripts/kit version`, `scripts/kit doctor` |
+| Presentation-only schematic changes | `scripts/kit schematic snapshot` before; `compare` after |
+| Schematic readability review | `scripts/kit schematic review` with functional detail views; inspect all images; `lint` provides hints only |
+| Reusing earlier review evidence | `scripts/kit schematic status` to detect stale sources/modified artifacts |
+| ERC, DRC, parity, footprints, pin/pad, metadata | `scripts/kit verify PROJECT` (use `--gate` for a scoped check) |
+| Component/library records | `scripts/kit components validate PROJECT`, `scripts/kit libraries check PROJECT` |
+| Carrier/socket design | `scripts/kit carrier check PROJECT` for complete pin inventory, plus native pin/pad and schematic review |
+| Firmware work | `scripts/kit firmware PROJECT --target TARGET` when the target/toolchain applies |
+| Thermal work | `scripts/kit thermal analyze PROJECT` only with documented loss estimates |
+| Manufacturing | `scripts/kit export PROJECT --revision REV` for drafts; existing GO authorization/checklist remains mandatory |
+
+A hint, semantic match or unchanged finding count is not visual approval.
+Record real commands, versions, exit codes, evidence hashes and limitations.
+Native files remain the source of truth. Extend the responsible module if an
+existing tool lacks a needed capability; avoid duplicate implementations.
+
 ## Before changing native KiCad files
 
 - Check KiCad version **10.0.7** and project revision; detect any live editing
@@ -23,6 +58,31 @@
 - Do not create dummy 3D models in place of actual vendor STEP/STL models.
 - Always mark calculations as estimates; thermal, electrical and mechanical
   estimates do not replace measurement/prototype testing.
+
+## Carrier and DevKit rules
+
+- For socketed modules follow `docs/engineering/carrier-guidelines.md`.
+  Identify the exact purchased board revision and memory/antenna variant;
+  verify every socket pad including power, ground, reserved and blocked pins.
+- Do not count unavailable memory/USB/boot/onboard-peripheral pins as spare
+  GPIO. Review reset/boot states, unpowered I/O and supply backfeed explicitly.
+- Check carrier/module top-view orientation, pin 1, pad mapping, socket height,
+  antenna keep-out and USB access against manufacturer files and the real board.
+- A blank carrier scaffold or passing inventory checker does not validate its
+  socket, supply circuit or firmware pin assignment. Never invent a footprint.
+
+## Schematic readability and evidence
+
+- Follow `docs/engineering/schematic-guidelines.md` and its review workflow.
+- Before presentation-only edits, capture a `scripts/kit schematic snapshot`.
+  Afterward compare against it; separate intentional electrical changes first.
+- Inspect every rendered sheet and functional detail, including text, grouping,
+  direct local wiring and interface scope. ERC is not a visual review.
+- Keep raw renders in ignored `qa/generated/`; keep a factual review summary in
+  `qa/design-reviews/` with source/artifact hashes and unresolved findings.
+- Never call CLI renders GUI screenshots or mark an unviewed page reviewed.
+- `tools/schematic/` owns read-only evidence and hints; it may import only
+  `core/` and `kicad/`. It never reserializes or regenerates native files.
 
 ## Verification gates
 
@@ -48,16 +108,26 @@ KiCad backups, temporary QA output or unlicensed vendor assets.
 The rules above apply to every generated board project (each project also gets
 its own `AGENTS.md`). The rules below apply when working on this kit.
 
-## Git ownership — hard restriction
+## Git workflow for authorized tasks
 
-The repository owner alone stages, commits and pushes. Agents must never run
-`git add`, `commit`, `push`, `merge`, `rebase`, `reset`, `clean`, `stash`, `tag`,
-`cherry-pick`, or a `checkout`/`switch` that changes the working tree; must not
-create branches, pull requests or releases; and must not ask other services or
-agents to do so. Allowed: `git status`, `diff`, `log`, `ls-files`, `remote -v`,
-`branch --show-current`, `rev-parse`. No kit code may commit or push; project
-creation may only `git init` a *new* project on explicit `--git`. Leave all
-changes unstaged and report them.
+- An instruction to implement changes in this repository authorizes agents to
+  stage reviewed task-owned source/docs, commit and push the result, unless the
+  user explicitly requests local-only work or no commits/pushes. Do not request
+  the same authorization again for routine completion of that task.
+- Inspect status/diff first. Preserve unrelated or concurrent user changes;
+  stage explicit paths only. Never use blanket staging for an unknown tree.
+- Run relevant tests and report failures/skips honestly before publishing.
+  Missing native validation must remain documented; publishing tooling does
+  not approve a hardware design or fabrication release.
+- Fetch/check the remote head before publishing. Push only a fast-forward to
+  the agreed branch; never force-push, rewrite published history, delete user
+  work or discard changes without explicit authorization. If the remote moved,
+  inspect and reconcile the changes before retrying.
+- Report commit SHA, branch, push outcome and any outstanding validation.
+  Do not create a release or tag unless requested.
+- This authorizes the agent's task workflow, not automatic Git mutations in
+  kit commands. Kit code still never stages, commits or pushes; project
+  creation may only `git init` a new project with explicit `--git`.
 
 ## Architecture (see docs/ARCHITECTURE.md)
 
@@ -65,7 +135,7 @@ changes unstaged and report them.
   subprocess, parser), `kicad/` (CLI, IPC, design, libraries), `project/`
   (templates, registry, components), `quality/` (verification, firmware),
   `release/` (exports, packaging), `plugins/`, `environment/` (installer),
-  `thermal/`, `cli/` (entry points). Dependencies point downward to `core/`;
+  `thermal/`, `schematic/` (read-only evidence), `cli/` (entry points). Dependencies point downward to `core/`;
   `cli/` is the only package that depends on everything. Use absolute
   `tools.<package>.<module>` imports.
 - `scripts/kit` (`python -m tools`) is the single launcher; `scripts/*.sh`,
