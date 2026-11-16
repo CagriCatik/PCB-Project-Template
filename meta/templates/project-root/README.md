@@ -22,6 +22,15 @@ functional detail crops for your sheets. Keep actual inspection findings in
 Run `scripts/kit schematic` from the kit checkout against this project's root
 `.kicad_sch`; the kit is not duplicated into each board repository.
 
+## Supply and interface contracts
+
+Fill `hardware/interfaces/design-contracts.json`, the shared `assumptions.json`,
+`pinmap.csv` and `firmware/bsp/pin-bindings.json` together. Model explicit rail
+scenarios in `hardware/simulations/power/budget.json`. The empty defaults are
+intentionally incomplete; they contain no invented electrical values.
+See `docs/engineering/design-contracts.md` for `scripts/kit contracts`,
+`assumptions` and `power-budget`, including their limits and measurement needs.
+
 ## Everyday commands (run from the kit checkout)
 
 ```sh

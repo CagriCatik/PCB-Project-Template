@@ -1,0 +1,5 @@
+{
+  "schema": 1,
+  "assumptions": [],
+  "note": "No electrical values are invented. Populate from verified sources or explicitly labelled estimates; see docs/engineering/design-contracts.md."
+}

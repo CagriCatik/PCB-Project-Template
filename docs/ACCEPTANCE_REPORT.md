@@ -301,3 +301,23 @@ Primary ESP32/PlatformIO sources are linked in the generated
 `docs/esp32-carrier.md`; board/memory defaults are separate from a verified
 purchased module variant. A real KiCad 10.0.7 run and a selected-board firmware
 build remain required follow-up before asserting those integrations work.
+
+## Supply/interface contracts and static budgets — 2026-11-16
+
+| Check | Observed result |
+| --- | --- |
+| `python3 test_template.py -k test_design_contracts.py` | 23 passed (19 new tests plus 4 shared checks) |
+| Architecture/layout suite | 15 passed |
+| Full suite | 249 tests reported, 87 skips, 2 existing environment errors; no failures |
+| HW/FW declaration consistency | Pin/net/GPIO/direction/boot drift and polarity/inversion/safe-state mismatches detected |
+| Operating states/connectors | Missing states/pins, unsafe declared outputs, unintentional reconnect rearm policy and missing provenance/view/limits detected |
+| Native evidence boundary | Current synthetic snapshot membership checked; stale/unpinned evidence rejected; actual KiCad 10.0.7 integration remains unavailable |
+| Numerical model | Shared-total versus individual-branch currents, simultaneous/mixed loads, power conservation, endpoint limits, no-load overvoltage, current limit and infeasible loads exercised |
+| Input/evidence handling | Missing/duplicate/unit-invalid/non-finite/out-of-range inputs rejected; source drift rejected; failures cannot reuse old successful output |
+| Generated templates | Empty inputs are copied and honestly fail/incomplete; no pins or limits invented |
+
+BSP declarations are not actual arbitrary-source analysis. Calculations do not
+prove worst-case converter capacity, stall permission, thermal behaviour,
+transient stability or protection performance. Native files and release gates
+are unchanged. Existing environment errors remain missing PySide6 and missing
+KiCad 10.0.7 for the thermal verifier test. Hardware/target execution is NOT_TESTED.

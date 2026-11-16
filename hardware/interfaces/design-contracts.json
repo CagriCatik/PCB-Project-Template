@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "rails": [],
+  "signals": [],
+  "connectors": [],
+  "states": [],
+  "note": "Intentionally incomplete. Account for all required states; use applicable:false plus reason only when genuinely inapplicable."
+}

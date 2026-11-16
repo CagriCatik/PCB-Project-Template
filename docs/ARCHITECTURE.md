@@ -95,6 +95,7 @@ All imports are absolute (`tools.<package>.<module>`).
 | --- | --- |
 | `core/kicad_env.py` | Locates KiCad.app, `kicad-cli`, bundled Python, config/documents/template dirs, kit state; resolves `${KICAD10_*}` path variables; detects running KiCad. Every path can be overridden by an environment variable. |
 | `core/common.py` | Subprocess records (argv, exit code, output, start time), atomic JSON writes, source hashing, lock-file detection, Git state (read-only). |
+| `core/evidence.py` | Unique calculation/check run directories with explicit failed-run reports; no reuse of a previous success. |
 | `core/sexpr.py` | Read-only KiCad S-expression parser. Native files are never re-serialized by the kit. |
 | `kicad/cli.py` | Version pinning, capability discovery from the installed CLI's `--help`, ERC/DRC with JSON parsing. Unadvertised commands/flags raise exit 15. |
 | `kicad/libraries.py` | Library-table resolution (project overrides global; KiCad 10 nested `Table` entries), symbol/footprint existence checks, `${KIPRJMOD}` registration. |
@@ -104,6 +105,8 @@ All imports are absolute (`tools.<package>.<module>`).
 | `kicad/portability.py` | Detects machine-specific paths in tables, models, sheets and project settings. |
 | `kicad/associations.py` | Symbol pin ↔ footprint pad check from library data. |
 | `project/templates.py` | Materializes a template into a project tree; used for both `create` and native template installation. |
+| `project/assumptions.py`, `project/contracts.py` | Typed source-labelled inputs; operating states and connector/HW-FW declarations cross-checked with pinmap and optional current native snapshot. No arbitrary firmware source parser. |
+| `quality/power_budget.py` | Static common-path/branch estimates and declared limit checks using the shared assumptions register. No circuit/thermal/transient simulator. |
 | `project/carrier.py` | Complete socket-pad inventory and module identity/provenance consistency; no electrical or physical approval. |
 | `project/registry.py` | Machine-local list of generated projects; KiCad/VS Code launchers. |
 | `project/components.py` | Per-part JSON records (manufacturer, MPN, datasheet, symbol, footprint, 3D model, ratings, procurement, approval). |

@@ -121,3 +121,18 @@ flag is set. Renders require Poppler. Visual approval is manual; use
 complete declared socket-pad inventory, not the actual manufacturer pinout or
 schematic. Follow `docs/engineering/carrier-guidelines.md` and the generated
 `docs/esp32-carrier.md`. ESP32 builds require PlatformIO; no flashing is performed.
+
+## Supply and interface contracts
+
+```sh
+scripts/kit assumptions check /path/to/project
+scripts/kit contracts check /path/to/project
+scripts/kit contracts check /path/to/project --snapshot /path/to/current.json
+scripts/kit power-budget calculate /path/to/project
+```
+
+Inputs, units, state names, declaration limits and examples are documented in
+`docs/engineering/design-contracts.md`. Native pin/net checking is explicit;
+without a snapshot the report says NOT_CHECKED. Budgets are static estimates,
+not converter capability or worst-case/transient certification. These commands
+are separate tools; existing `verify` and release gates are unchanged.

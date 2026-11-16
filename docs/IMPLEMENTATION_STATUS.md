@@ -171,3 +171,39 @@ pass. Full suite: 230 tests reported, 87 skips and the same 2 pre-existing
 environment errors (PySide6 absent and KiCad 10.0.7 unavailable). No new failures.
 The new template is generated/parsed by offline tests; native KiCad loading,
 PDF/PNG/actual visual review and ESP32 cross-build remain unverified here.
+
+## Supply/interface contracts and static budgets — 2026-11-16
+
+Implemented the three follow-up priorities from the RoverCore experience:
+
+- source-labelled numerical assumptions with units, conditions and epistemic
+  status; unknown references, duplicate ids, non-finite inputs and unit/range
+  errors are rejected;
+- declared rail/supply states and complete connector contracts, plus a cross-check
+  of pinmap against logical contracts and reviewed BSP binding declarations;
+- static shared-path/individual-branch voltage and current estimates for
+  simultaneous constant-current/resistive loads, explicit rail corners and
+  optional declared current limits/battery-current estimates.
+
+Tools: `scripts/kit assumptions check`, `contracts check` (optional current
+KiCad 10.0.7 `--snapshot`) and `power-budget calculate`. All four templates
+receive intentionally incomplete source files through the existing skeleton.
+New AGENTS rules name these tools when relevant. No native KiCad file or
+existing release gate is changed. Contracts do not automatically parse arbitrary
+firmware source; the report says so, and native membership is explicitly
+NOT_CHECKED unless a current snapshot is supplied. Empty inputs never imply
+completed engineering. Numerical outputs remain estimates under declared
+scenarios, not guaranteed minima or converter/thermal/transient validation.
+
+Every contract/budget invocation gets a unique ignored evidence directory;
+failed attempts get FAILED records. Successful records bind inputs by hash.
+See `docs/engineering/design-contracts.md` for the schema, examples, model,
+corner choices and limitations.
+
+Validation: targeted suite 23 tests passed (19 new plus 4 shared structural
+checks); architecture/layout suite 15 passed. Full suite reports 249 tests,
+87 skips and the same 2 existing environment errors (PySide6 absent; thermal
+verification requires unavailable KiCad 10.0.7). No new failures. Tests use
+synthetic declarations/numerical cases, not invented real circuits or part
+specifications. No live native connectivity, target-firmware behaviour or
+physical measurements are claimed.

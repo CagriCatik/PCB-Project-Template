@@ -1,0 +1,5 @@
+{
+  "schema": 1,
+  "bindings": [],
+  "note": "Reviewed declaration of actual BSP pin, polarity, inversion and default/safe behaviour; not a substitute for source review."
+}

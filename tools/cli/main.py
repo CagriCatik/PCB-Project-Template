@@ -122,6 +122,17 @@ def build_parser():
     c.add_argument("--datasheet-url", default="")
     c.add_argument("--revision", default="")
 
+    c = cmd("contracts", "check supply states, connector contracts, pinmap and declared BSP bindings")
+    c.add_argument("action", choices=["check"])
+    c.add_argument("project")
+    c.add_argument("--snapshot", help="optional current KiCad 10.0.7 schematic snapshot")
+    c = cmd("assumptions", "check source-labelled electrical input values")
+    c.add_argument("action", choices=["check"])
+    c.add_argument("project")
+    c = cmd("power-budget", "estimate static rail/common-path/branch voltage and current")
+    c.add_argument("action", choices=["calculate"])
+    c.add_argument("project")
+
     c = cmd("carrier", "validate the complete module socket-pin inventory (not electrical approval)")
     c.add_argument("action", choices=["check"])
     c.add_argument("project")
@@ -349,6 +360,24 @@ def run_command(args):
                                                                          result["approved"])] +
               ["  %s: %s" % (Path(f["file"]).name, f["problem"]) for f in result["findings"]])
         return 0 if result["status"] == "PASS" else 20
+    if c == "contracts":
+        from tools.project.contracts import check
+
+        result = check(args.project, args.snapshot)
+        _emit(args, result)
+        return 0 if result["status"] == "PASS" else 20
+    if c == "assumptions":
+        from tools.project.assumptions import check
+
+        result = check(args.project)
+        _emit(args, result)
+        return 0 if result["status"] == "PASS" else 20
+    if c == "power-budget":
+        from tools.quality.power_budget import calculate
+
+        result = calculate(args.project)
+        _emit(args, result)
+        return 0 if result["status"] == "WITHIN_LIMITS" else 20
     if c == "carrier":
         from tools.project.carrier import check
 

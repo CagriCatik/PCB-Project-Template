@@ -38,6 +38,8 @@ Do not run unrelated tools just to fill a checklist.
 | ERC, DRC, parity, footprints, pin/pad, metadata | `scripts/kit verify PROJECT` (use `--gate` for a scoped check) |
 | Component/library records | `scripts/kit components validate PROJECT`, `scripts/kit libraries check PROJECT` |
 | Carrier/socket design | `scripts/kit carrier check PROJECT` for complete pin inventory, plus native pin/pad and schematic review |
+| Supply states, connectors and HW/FW declarations | `scripts/kit contracts check PROJECT`; add a current `--snapshot` for native pin/net checks |
+| Electrical inputs and static budgets | `scripts/kit assumptions check PROJECT`, `scripts/kit power-budget calculate PROJECT` |
 | Firmware work | `scripts/kit firmware PROJECT --target TARGET` when the target/toolchain applies |
 | Thermal work | `scripts/kit thermal analyze PROJECT` only with documented loss estimates |
 | Manufacturing | `scripts/kit export PROJECT --revision REV` for drafts; existing GO authorization/checklist remains mandatory |
@@ -54,6 +56,22 @@ existing tool lacks a needed capability; avoid duplicate implementations.
 - Make small, auditable changes and re-run `scripts/kit verify`.
 - Never substitute dummy 3D models or invented datasheets for real vendor data.
 - Label every calculation as an estimate; estimates do not replace measurement.
+
+## Power and interface changes
+
+- Follow `docs/engineering/design-contracts.md`. Update operating states,
+  connector contracts, pinmap and BSP binding declarations together when pins,
+  polarity, inversion, supply sources or default/fault behaviour change.
+- Use the shared assumptions register; distinguish guaranteed, typical,
+  assumed and measured inputs with source/revision/conditions. Never turn a
+  typical curve or a calculation into a guaranteed limit or a measurement.
+- Budget common paths with total current and branch paths with branch current;
+  state the physical voltage endpoint. Check explicit normal/stall/no-load
+  scenarios and document model limits and prototype measurements still needed.
+- Check USB-only, combined supplies, reset, bootloader, missing module, brownout
+  and battery reconnect. Safety outputs require explicit defaults/rearm.
+- A consistent declaration is not proof of arbitrary firmware behaviour.
+  Review/test the actual BSP and hardware; retain native checks and release gates.
 
 ## Carrier and DevKit rules
 

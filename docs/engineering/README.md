@@ -38,3 +38,7 @@ For socketed modules and DevKits use [carrier-guidelines.md](carrier-guidelines.
 exact board identity, every socket pad, GPIO reservations, boot behaviour,
 power-domain isolation and physical orientation. The ESP32 carrier scaffold
 adds a matching inventory contract and optional firmware path.
+
+For supply states, connector/HW-FW contracts and source-labelled numerical
+budgets use [design-contracts.md](design-contracts.md). Declaration consistency
+and static estimates complement native checks; they do not approve hardware.
