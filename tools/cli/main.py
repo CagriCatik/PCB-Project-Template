@@ -498,7 +498,7 @@ def run_command(args):
         lines = ["Mounting sheet (%s, 1:1): outline %.2f x %.2f mm" % (r["page"], *r["outline_mm"])]
         lines += ["  %-6s x %8.3f  y %8.3f  hole %.2f mm" % (h["reference"], h["dx"], h["dy"], h["diameter"])
                   for h in r["holes"]]
-        lines += ["Output: %s" % folder, "Print at 100 %% and measure both 100 mm bars before a fit check."]
+        lines += ["Output: %s" % folder, "Print at 100 % and measure both 100 mm bars before a fit check."]
         _emit(args, r, lines)
         return 0
     if c == "power":
