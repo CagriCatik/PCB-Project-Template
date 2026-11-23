@@ -17,8 +17,8 @@ the general heuristics written here. A heuristic never overrides a datasheet.
 | 3. Datasheet review | Extract every constraint the part imposes | [datasheet-review.md](datasheet-review.md) | Record in `components/approved-parts/*.json` |
 | 4. Schematic | Capture function and interfaces readably | [schematic-guidelines.md](schematic-guidelines.md) | `scripts/kit verify` (ERC, library, pin/pad, metadata gates) |
 | 5. Board setup | Choose a profile, confirm stack-up and rules with the fabricator | [manufacturing-guidelines.md](manufacturing-guidelines.md) | `scripts/kit templates profiles` |
-| 6. Placement | Place by mechanics, function and current paths before routing | [placement-guidelines.md](placement-guidelines.md) | `scripts/kit thermal analyze` (estimate) |
-| 7. Routing | Route by return paths and real constraints | [routing-guidelines.md](routing-guidelines.md) | DRC, parity, unconnected items |
+| 6. Placement | Place by mechanics, function and current paths before routing | [placement-guidelines.md](placement-guidelines.md) | `scripts/kit thermal analyze`, `scripts/kit power paths` (estimates) |
+| 7. Routing | Route by return paths and real constraints | [routing-guidelines.md](routing-guidelines.md), [power-paths.md](power-paths.md) | DRC, parity, unconnected items; `scripts/kit board diff`, `scripts/kit power paths` (estimate) |
 | 8. Verification | Run the gates, review every finding and exclusion | `docs/verification-plan.md` | `scripts/kit verify --release` |
 | 9. Manufacturing | Export, review, approve, release | [manufacturing-guidelines.md](manufacturing-guidelines.md) | `scripts/kit export`, `scripts/kit releases` |
 | 10. Bring-up | Power up safely, measure, compare with requirements | `docs/bringup.md` | — |

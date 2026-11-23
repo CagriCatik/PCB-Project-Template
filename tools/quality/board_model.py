@@ -1,7 +1,9 @@
 """Read-only inventory of a .kicad_pcb for review checks (no pcbnew, no writes).
 
-Coordinates are KiCad file coordinates in mm (y down). Pad and hole positions are absolute: the pad
-offset is rotated by the footprint orientation (KiCad stores bottom-side footprints already mirrored).
+Coordinates are KiCad file coordinates in mm (y down). Pad, hole and footprint graphic positions are
+absolute: local offsets are rotated by the footprint orientation (KiCad stores bottom-side footprints
+already mirrored). Zones inside footprints (e.g. antenna keep-outs) are stored absolute by KiCad and are
+listed separately in `footprint_zones`, so `zones` stays the board-level set.
 The outline bounding box uses the Edge.Cuts centre lines, so it is independent of the line width.
 """
 from pathlib import Path
@@ -53,6 +55,20 @@ def _drill(pad):
     return min(nums) if nums else 0.0
 
 
+def _zone(node, owner=None):
+    poly = sexpr.child(node, "polygon")
+    outline = [(float(p[1]), float(p[2])) for p in sexpr.children(sexpr.child(poly, "pts") or [], "xy")] \
+        if poly else []
+    connect = sexpr.child(node, "connect_pads") or []
+    z = {"name": str(sexpr.value(node, "name", "")), "net": _net(node), "layers": _layers(node),
+         "priority": int(float(sexpr.value(node, "priority", 0))),
+         "rule_area": sexpr.child(node, "keepout") is not None,
+         "clearance": float(sexpr.value(connect, "clearance", 0) or 0), "outline": outline}
+    if owner:
+        z["footprint"] = owner
+    return z
+
+
 def load(path):
     path = Path(path)
     try:
@@ -76,7 +92,7 @@ def load(path):
     layers = sexpr.child(tree, "layers") or []
     copper = [str(l[1]) for l in layers[1:] if isinstance(l, list) and len(l) > 1 and str(l[1]).endswith(".Cu")]
 
-    tracks, vias, footprints, zones = [], [], {}, []
+    tracks, vias, footprints, zones, footprint_zones = [], [], {}, [], []
     for node in tree[1:]:
         if not isinstance(node, list) or not node:
             continue
@@ -96,6 +112,16 @@ def load(path):
             fa = _angle(node)
             attr = sexpr.child(node, "attr")
             attrs = {str(v) for v in attr[1:]} if attr else set()
+            graphics = {}
+            for g in node[1:]:
+                if isinstance(g, list) and g and str(g[0]).startswith("fp_"):
+                    pts, closed = _shape_polyline(g)
+                    if pts:
+                        layer = str(sexpr.value(g, "layer", ""))
+                        absolute = [(fx + rotate(px, py, fa)[0], fy + rotate(px, py, fa)[1]) for px, py in pts]
+                        graphics.setdefault(layer, []).append(absolute + (absolute[:1] if closed else []))
+            for z in sexpr.children(node, "zone"):
+                footprint_zones.append(_zone(z, ref))
             pads = []
             for pad in sexpr.children(node, "pad"):
                 lx, ly = _xy(pad)
@@ -108,19 +134,14 @@ def load(path):
                                "side": "bottom" if sexpr.value(node, "layer") == "B.Cu" else "top",
                                "attrs": attrs, "dnp": "dnp" in attrs,
                                "exclude_from_bom": "exclude_from_bom" in attrs,
-                               "exclude_from_pos": "exclude_from_pos_files" in attrs, "pads": pads}
+                               "exclude_from_pos": "exclude_from_pos_files" in attrs, "pads": pads,
+                               "graphics": graphics}
         elif kind == "zone":
-            poly = sexpr.child(node, "polygon")
-            outline = [(float(p[1]), float(p[2])) for p in sexpr.children(sexpr.child(poly, "pts") or [], "xy")] \
-                if poly else []
-            connect = sexpr.child(node, "connect_pads") or []
-            zones.append({"name": str(sexpr.value(node, "name", "")), "net": _net(node), "layers": _layers(node),
-                          "priority": int(float(sexpr.value(node, "priority", 0))),
-                          "rule_area": sexpr.child(node, "keepout") is not None,
-                          "clearance": float(sexpr.value(connect, "clearance", 0) or 0), "outline": outline})
+            zones.append(_zone(node))
     return {"path": str(path), "outline_loops": loops, "outline_bbox": bbox, "copper_layers": copper,
             "aux_origin": (float(aux[1]), float(aux[2])) if aux else (0.0, 0.0),
-            "tracks": tracks, "vias": vias, "footprints": footprints, "zones": zones}
+            "tracks": tracks, "vias": vias, "footprints": footprints, "zones": zones,
+            "footprint_zones": footprint_zones}
 
 
 def holes(board, slots=False):

@@ -5,7 +5,7 @@ from pathlib import Path
 from tools.core.common import KitError, sha256
 
 STATUSES = {'guaranteed', 'typical', 'assumed', 'measured'}
-UNITS = {'V', 'A', 'ohm', 'ratio'}
+UNITS = {'V', 'A', 'ohm', 'ratio', 'mm'}
 
 
 def number(value, label):

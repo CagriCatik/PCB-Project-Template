@@ -257,3 +257,21 @@ five deliberate mutations (tolerance, sliver rule, datum, DNP exclusion, pad rot
 detected. Full suite: 261 tests, 42 skips, 1 environment error (PySide6 not installed);
 KiCad 10.0.7 native cases ran. Not covered: Gerber copper content and blind/buried vias; oblong slots are counted and reported as
 "not compared" (warning), not matched.
+
+## Board review tools, second set (2026-11-23)
+
+- `kit fab preview`: Gerber/Excellon images; macro arithmetic without eval; G85 slots drawn; unsupported
+  features stop with an error. On a routed four-layer DRAFT package all 13 PNGs were byte-identical to
+  the original RoverCore script.
+- `kit models fit`: scratch-board renders through KiCad's bundled Python and kicad-cli, failed runs marked.
+- `kit mounting print`: 1:1 sheet and hole table from the board text (holes, footprint keep-outs, fab or
+  courtyard bodies, chain dimensions, distances, check bars). Board model gained footprint graphics and
+  footprint-level zones, checked against pcbnew (234 footprint layers within 0.001 mm).
+- `kit power paths`: DC network solve on pcbnew-extracted copper; currents and plating from
+  assumptions.json (new unit `mm`). On the same board three cases reproduced the original script's sink
+  potentials to 0.01 mV, including a four-layer ground case with 2.46 million cells.
+
+Regression suite `qa/tests/test_board_tools.py`: closed-form strip resistance (within 2 %), parser,
+mounting and input-provenance cases plus one native case (extraction and model fit on the divider).
+Seven deliberate mutations are each detected. Full suite: see the commit message of this change.
+Not covered: temperature rise, Gerber step-and-repeat/transforms, negative image polarity.

@@ -160,6 +160,9 @@ voltage settings and component choices are deliberately not template defaults.
   clearance to metal surfaces, not just hole centres.
 +- **Evidence:** board-derived dimensioned drawing, 1:1 print with two-axis control
   dimensions and a physical fit check. DRC does not establish chassis suitability.
+- **Automated:** `scripts/kit mounting print PROJECT [--washer MM --head MM --body REF]` writes a
+  1:1 sheet (SVG, PDF with rsvg-convert) read from the board: outline, holes, keep-outs, chain dimensions,
+  hole distances and two 100 mm check bars. The physical fit remains a manual step.
 
 ### 17. Visible sockets mistaken for a populated assembly
 +- **Problem:** a model gate passes while the DevKit, OLED or IMU body is absent.
@@ -167,6 +170,9 @@ voltage settings and component choices are deliberately not template defaults.
   real models, drawing-derived geometry, estimated envelopes and bare pads.
 +- **Evidence:** isolated and assembled views plus independent STEP inclusion
   review. A CAD listing/file existence is not a successful body download/render.
+- **Automated:** `scripts/kit models fit PROJECT REF MODEL [--offset ...] [--rotate ...]` renders the
+  footprint with the model on a scratch board (top/front/left/iso); the project board is not written.
+  The images still need a person to compare them with the model drawing.
 
 ### 18. Cleanup and import scripts damage routed copper
 +- **Problem:** area deletion removes unrelated nets; a sync resets manual layout;
@@ -203,6 +209,9 @@ voltage settings and component choices are deliberately not template defaults.
   layout requirement. See [routing-guidelines.md](routing-guidelines.md).
 +- **Evidence:** comparable DC model cases and separately planned temperature,
   transient and physical prototype measurements.
+- **Automated:** `scripts/kit power paths PROJECT` solves the DC distribution in the routed copper of a
+  net from stated currents and plating ([power-paths.md](power-paths.md)): sink drops, via/barrel
+  currents, A/mm hotspots and maps. DC only, no temperature rise.
 
 ### 22. Publishing mistaken for hardware approval
 +- **Prevention:** README/Pages views share the current source revision. A push is

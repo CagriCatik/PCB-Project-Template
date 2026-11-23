@@ -58,7 +58,7 @@ Schema 1 contains an `assumptions` array. Every record has these fields:
 }
 ```
 
-Supported units: `V`, `A`, `ohm`, `ratio`. Numerical references are case-sensitive
+Supported units: `V`, `A`, `ohm`, `ratio`, `mm` (lengths such as hole-wall plating for `kit power paths`). Numerical references are case-sensitive
 ids; inline numbers are not substituted for references in budgets/contracts.
 Every source, revision and conditions field must be explicit. Assumptions may
 cite an engineering rationale; do not disguise it as a manufacturer source.

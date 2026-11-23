@@ -16,7 +16,7 @@ from pathlib import Path
 import sys
 
 from tools import __version__
-from tools.core.common import KitError
+from tools.core.common import KitError, write_json
 
 LEGACY_FIRMWARE = {"generic": "generic-pcb", "stm32": "stm32-embedded", "arduino": "arduino-shield", "esp32": "esp32-carrier"}
 
@@ -163,15 +163,41 @@ def build_parser():
                    "every region are reported as slivers (default 0.1)")
     c.add_argument("--project", help="project directory for the evidence run (default: folder of AFTER)")
 
-    c = cmd("fab", "read-only geometry check of an exported package against the board")
-    c.add_argument("action", choices=["check"])
+    c = cmd("fab", "read-only check (values vs board) or preview images of an exported package")
+    c.add_argument("action", choices=["check", "preview"])
     c.add_argument("project")
     c.add_argument("package", help="export directory (contains assembly/ and fabrication/)")
+    c.add_argument("--scale", type=float, default=10.0, help="preview: pixels per mm (default 10)")
     c.add_argument("--origin", choices=["page", "aux"], default="page",
                    help="origin of positions.csv (kit exports use the page origin)")
     c.add_argument("--min-via-drill", type=float, metavar="MM", help="fabricator limit (none assumed)")
     c.add_argument("--min-npth", type=float, metavar="MM", help="fabricator limit (none assumed)")
     c.add_argument("--min-component-hole", type=float, metavar="MM", help="fabricator recommendation (warning)")
+
+    c = cmd("models", "3D model fit images of one footprint (scratch board; the project board is not written)")
+    c.add_argument("action", choices=["fit"])
+    c.add_argument("project")
+    c.add_argument("reference")
+    c.add_argument("model", help="STEP/WRL file to place on the footprint")
+    c.add_argument("--offset", nargs=3, type=float, default=[0, 0, 0], metavar=("X", "Y", "Z"), help="mm")
+    c.add_argument("--rotate", nargs=3, type=float, default=[0, 0, 0], metavar=("RX", "RY", "RZ"), help="degrees")
+
+    c = cmd("mounting", "1:1 mounting print and hole table from the board (review sheet, not a drawing release)")
+    c.add_argument("action", choices=["print"])
+    c.add_argument("project")
+    c.add_argument("--holes", help="comma-separated references (default: H<n> or *MountingHole* footprints)")
+    c.add_argument("--washer", type=float, metavar="MM", help="washer/standoff diameter to draw")
+    c.add_argument("--head", type=float, metavar="MM", help="screw head diameter to draw")
+    c.add_argument("--body", action="append", default=[], metavar="REF", help="draw fab/courtyard outline (repeatable)")
+    c.add_argument("--title", default="")
+
+    c = cmd("power", "DC current distribution in the copper of one net (ESTIMATE)")
+    c.add_argument("action", choices=["paths"])
+    c.add_argument("project")
+    c.add_argument("--case", action="append", help="case id from current-paths.json (default: all)")
+    c.add_argument("--grid", type=float, default=0.1, help="cell size in mm (default 0.1)")
+    c.add_argument("--region", nargs=4, type=float, metavar=("X1", "Y1", "X2", "Y2"),
+                   help="model only this box, mm relative to the outline top-left corner")
 
     c = cmd("firmware", "optional firmware build/test")
     c.add_argument("project")
@@ -435,6 +461,58 @@ def run_command(args):
         lines.append("Evidence: %s" % r["directory"])
         _emit(args, r, lines)
         return 20 if r["status"] == "UNEXPECTED_CHANGES" else 0
+    if c == "fab" and args.action == "preview":
+        import tempfile
+        from tools.quality import gerber_preview
+
+        parent = Path(args.project).resolve() / "qa/generated/fab-preview"
+        parent.mkdir(parents=True, exist_ok=True)
+        folder = Path(tempfile.mkdtemp(prefix="run-", dir=parent))
+        r = gerber_preview.render(args.package, folder, args.scale)
+        r["directory"] = str(folder)
+        write_json(folder / "result.json", r)
+        _emit(args, r, ["Gerber preview: %d images (%s), %d hits, %d slots" % (
+            len(r["images"]), "SVG+PNG" if r["png"] else "SVG only; install rsvg-convert for PNG",
+            r["drill"]["hits"], r["drill"]["slots"]), "Output: %s" % folder,
+            "Compare with the fabricator's CAM preview; these images are review evidence only."])
+        return 0
+    if c == "models":
+        from tools.quality import model_fit
+
+        r = model_fit.run_fit(args.project, args.reference, args.model, args.offset, args.rotate)
+        _emit(args, r, ["Model fit %s (%s): %s" % (args.reference, r["footprint"], r["status"]),
+                        "Images: %s" % r["directory"], "Visual review: PENDING (compare with the model drawing)"])
+        return 0
+    if c == "mounting":
+        import tempfile
+        from tools.core.common import project_files
+        from tools.quality import mounting
+
+        parent = Path(args.project).resolve() / "qa/generated/mounting-print"
+        parent.mkdir(parents=True, exist_ok=True)
+        folder = Path(tempfile.mkdtemp(prefix="run-", dir=parent))
+        holes = [h.strip() for h in args.holes.split(",")] if args.holes else None
+        r = mounting.sheet(project_files(args.project)[2], folder, holes, args.washer, args.head, args.body, args.title)
+        r["directory"] = str(folder)
+        write_json(folder / "result.json", r)
+        lines = ["Mounting sheet (%s, 1:1): outline %.2f x %.2f mm" % (r["page"], *r["outline_mm"])]
+        lines += ["  %-6s x %8.3f  y %8.3f  hole %.2f mm" % (h["reference"], h["dx"], h["dy"], h["diameter"])
+                  for h in r["holes"]]
+        lines += ["Output: %s" % folder, "Print at 100 %% and measure both 100 mm bars before a fit check."]
+        _emit(args, r, lines)
+        return 0
+    if c == "power":
+        from tools.quality import power_paths
+
+        r = power_paths.analyze(args.project, args.case, args.grid, args.region)
+        lines = ["Power paths (ESTIMATE, DC, 20 degC): %s" % r["status"]]
+        for res in r["results"]:
+            lines.append("  %s (%s, %d cells, loss %.3f W)" % (res["id"], res["net"], res["cells"], res["copper_loss_w"]))
+            lines += ["    %-24s %+7.2f A  %+9.3f mV" % (s["label"], s["current_a"], s["potential_mv"])
+                      if s["potential_mv"] is not None else "    %-24s NOT CONNECTED" % s["label"] for s in res["sinks"]]
+        lines.append("Evidence and maps: %s" % r["directory"])
+        _emit(args, r, lines)
+        return 0 if r["status"] == "ESTIMATE" else 20
     if c == "fab":
         from tools.core.common import project_files
         from tools.quality import fab_check

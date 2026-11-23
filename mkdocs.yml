@@ -85,6 +85,7 @@ nav:
       - Mechanik vor Routing: engineering/mechanical-baseline.md
       - 3D-Modelle und Baugruppen: engineering/3d-models.md
       - Routing und Strompfade: engineering/routing-guidelines.md
+      - DC-Strompfade (Schätzung): engineering/power-paths.md
   - Qualität & Fertigung:
       - Verifikation & Gates: VERIFICATION.md
       - Fertigung & Exporte: MANUFACTURING.md

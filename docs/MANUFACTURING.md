@@ -96,6 +96,13 @@ page; none are assumed. Run it on every DRAFT before review and keep the evidenc
 (`qa/generated/fab-check/`). It does not inspect Gerber copper and does not replace the
 fabricator's CAM preview.
 
+## Package preview
+
+`scripts/kit fab preview PROJECT PACKAGE` draws every copper, mask, silkscreen and paste layer, a
+drill map and top/bottom composites from the exported files themselves, so the review shows what the
+fabricator receives. The parser supports what KiCad 10.0.7 writes and stops on anything else.
+Compare with the fabricator's own CAM preview before ordering.
+
 ## GO release
 
 A GO release is created only if every condition holds; otherwise nothing is
