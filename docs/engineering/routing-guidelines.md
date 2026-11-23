@@ -100,3 +100,24 @@ Each rule is marked:
 2. Every DRC exclusion has a written reason in the review record.
 3. Re-check the critical loops and reference planes visually; DRC does not
    understand return paths.
+
+## Estimates from actual copper
+
+Record per-layer copper thickness, via barrel plating, temperatures, loads and
+boundary conditions. A fabricator's average plating is not a guaranteed minimum.
+Review narrow zone necks, pad exits, unequal parallel-via currents and thermal
+relief spokes on both supply and return paths. A total nominal width or a via
+count does not establish current sharing or temperature rise.
+
+Check grid/region sensitivity of a numerical DC estimate; singular local peaks
+at corners/via rings may not converge and are not current-capacity limits.
+Before/after comparisons need identical conditions. Omitted copper is only a
+conservative simplification when the connections and boundary conditions support
+that argument. DC voltage drop is not a thermal/transient qualification.
+Datasheet thermal copper area may be a test condition rather than a mandatory
+layout minimum; review the stated conditions before turning it into a rule.
+
+When using an autorouter, protect critical loops, assigned pours and continuous
+reference planes explicitly. Its unrouted count is not native KiCad DRC. Review
+detours, layer changes and supply widths after import, then refill and inspect
+zones. The kit does not provide a native-copper difference or DC current solver.

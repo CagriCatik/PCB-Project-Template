@@ -207,3 +207,34 @@ verification requires unavailable KiCad 10.0.7). No new failures. Tests use
 synthetic declarations/numerical cases, not invented real circuits or part
 specifications. No live native connectivity, target-firmware behaviour or
 physical measurements are claimed.
+
+## Routed-carrier lessons — 2026-11-23
+
+Generalized the RoverCore experience without copying its circuits, coordinates,
+manufacturer rules or numerical limits into the template:
+
+- mechanical baseline before routing, real mounting footprints, mating/tool
+  envelopes, datum-based drawings, 1:1 fit check and bounded mechanical rework;
+- 3D provenance, licensed library/community and labelled drawing-derived models,
+  socket-versus-module inventory, resolved paths in render copies and separate
+  STEP-assembly coverage review;
+- safe sync/bootstrap separation, connectivity-owned copper edits, recovery and
+  before/after review, autorouter return-plane and zone-island inspection;
+- per-layer copper/plating assumptions and honest DC/thermal model limitations;
+- explicit separate PTH/NPTH Excellon export and output-name consistency findings;
+- DNP-aware BOM grouping and per-reference DNP comparison with the schematic.
+
+New mechanical/3D guidelines are copied with the existing engineering docs into
+new projects. Root/generated AGENTS reference them. These guidelines are manual
+review procedures, not new automatic geometry, model-license, copper-diff or
+Excellon hole-geometry validators. `models_3d` remains a file-availability gate.
+The exporter records drill-policy findings in its manifest; GO remains blocked
+on incomplete exports. KiCad help capability discovery is unchanged.
+
+Validation: manufacturing command suite reports 18 tests, 8 native skips;
+hardening suite 24 tests, 4 skips; full suite reports 251 tests, 87 skips and
+2 environment errors (PySide6 missing; thermal verifier requires KiCad 10.0.7
+but installed CLI is 9.0.2). No failures. An independent clean archive of base
+23bb5a7 reports the same 2 errors and 87 skips across 249 tests. The two new
+regressions pass. Strict MkDocs build passes. Native 10.0.7 exports and actual
+model/physical fit checks remain NOT_TESTED here; no native design files changed.

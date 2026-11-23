@@ -92,3 +92,11 @@ Native tests use `qa/fixtures/divider`, a connector and two resistors built only
 from KiCad's official libraries by `qa/fixtures/build_fixtures.py` (schematic
 symbols copied verbatim; board built with pcbnew). It passes ERC, DRC and
 parity with zero findings and exists only to exercise tooling.
+
+## 3D evidence boundary
+
+`models_3d` checks visible assignment paths and file availability. PASS does not
+mean that each socket includes its plugged module, that a model matches the
+purchased part or that it appears in the exported STEP. Review provenance,
+licensing, geometry and assembly coverage using
+[3d-models.md](engineering/3d-models.md).

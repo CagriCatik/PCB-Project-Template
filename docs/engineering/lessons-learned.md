@@ -145,3 +145,63 @@ manual review · impact.
 - **Principle:** pin the tool version; make deviations visible.
 - **Automated:** exact-version check; `KICAD_KIT_ALLOW_UNTESTED=1` marks reports UNTESTED and blocks GO releases.
 - **Impact:** reproducible manufacturing data.
+
+## Routed-carrier experience (RoverCore)
+
+The following entries generalize reported RoverCore development iterations;
+none claims independent prototype measurement. Board-specific dimensions,
+voltage settings and component choices are deliberately not template defaults.
+
+### 16. Mounting holes added after routing
++- **Problem:** holes occupy spare space rather than useful chassis supports.
++- **Prevention:** establish [mechanics](mechanical-baseline.md) before placement;
+  allow a bounded reroute if the mounting concept changes. Unknown chassis
+  dimensions remain provisional. Include washers, tools, cable mates and antenna
+  clearance to metal surfaces, not just hole centres.
++- **Evidence:** board-derived dimensioned drawing, 1:1 print with two-axis control
+  dimensions and a physical fit check. DRC does not establish chassis suitability.
+
+### 17. Visible sockets mistaken for a populated assembly
++- **Problem:** a model gate passes while the DevKit, OLED or IMU body is absent.
++- **Prevention:** [3D inventory](3d-models.md) separates socket and plugged module,
+  real models, drawing-derived geometry, estimated envelopes and bare pads.
++- **Evidence:** isolated and assembled views plus independent STEP inclusion
+  review. A CAD listing/file existence is not a successful body download/render.
+
+### 18. Cleanup and import scripts damage routed copper
++- **Problem:** area deletion removes unrelated nets; a sync resets manual layout;
+  blanket via cleanup removes real ground/power connections.
++- **Prevention:** separate sync/bootstrap, recoverable copies, connectivity-owned
+  edits and native before/after object comparison. Refill before DRC and inspect
+  power-pour islands/neck widths. Do not treat via counts as proof of restoration.
++- **Evidence:** intended change regions, copper/return review and native checks.
+  A crash after saving requires reopening and validation, not hiding the exit code.
+
+### 19. DNP parts merged with populated parts in the BOM
++- **Problem:** matching part values are grouped despite different assembly state.
++- **Implemented:** export groups include `${DNP}`; consistency checks compare each
+  row member's DNP state with the schematic. Regression covers correct reference
+  sets with an incorrect DNP grouping; native export still requires KiCad 10.0.7.
+
+### 20. Combined drill files obscure plating intent
++- **Implemented:** explicit separate PTH/NPTH CLI export and filename-policy check.
+  Empty sets may be absent. Obsolete combined files must not accompany the sets.
++- **Manual:** compare drill geometry, diameters and slots to the board and the
+  fabricator preview. Parser precision must come from format/units; never loosen
+  tolerance to hide premature rounding. Filename checks are not geometry checks.
+
+### 21. DC estimates mistaken for thermal guarantees
++- **Prevention:** retain layer thickness/plating provenance, boundary conditions
+  and grid sensitivity. Shared vias carry unequal current; thermal spokes and
+  zone necks may dominate. Test-condition copper area is not automatically a
+  layout requirement. See [routing-guidelines.md](routing-guidelines.md).
++- **Evidence:** comparable DC model cases and separately planned temperature,
+  transient and physical prototype measurements.
+
+### 22. Publishing mistaken for hardware approval
++- **Prevention:** README/Pages views share the current source revision. A push is
+  source publication; DRAFT/NO-GO stays independent of Git status. Existing
+  source-hash/release-status mechanisms identify obsolete fabrication packages.
++- **Firmware:** host state-machine tests do not validate target polling gaps,
+  watchdog wiring, ADC calibration or real actuator behaviour. Start firmware
+  independently of the mechanical fit check; document each evidence boundary.

@@ -46,8 +46,8 @@ flowchart TD
 | Path | Producer (KiCad 10.0.7 unless noted) |
 | --- | --- |
 | `fabrication/gerbers/` | `pcb export gerbers` (all layers + `*-job.gbrjob`) |
-| `fabrication/drill/` | `pcb export drill --format excellon --excellon-units mm --generate-map --map-format pdf` |
-| `assembly/bom.csv` | `sch export bom` with fields Refs, Value, Footprint, Qty, DNP, Manufacturer, MPN, Datasheet, grouped by Value/Footprint/Manufacturer/MPN |
+| `fabrication/drill/` | `pcb export drill --format excellon --excellon-units mm --excellon-separate-th --generate-map --map-format pdf` |
+| `assembly/bom.csv` | `sch export bom` with fields Refs, Value, Footprint, Qty, DNP, Manufacturer, MPN, Datasheet, grouped by Value/Footprint/Manufacturer/MPN/DNP |
 | `assembly/positions.csv` | `pcb export pos --format csv --units mm --side both --exclude-dnp` |
 | `assembly/assembly-top.pdf`, `assembly-bottom.pdf` | `pcb export pdf` of F.Fab/B.Fab + Edge.Cuts (bottom mirrored) |
 | `assembly/ibom.html` | InteractiveHtmlBom CLI with KiCad's Python (`SKIPPED` if not installed) |
@@ -79,8 +79,8 @@ Exports from unchanged sources are compared by normalized digest:
   (`%TF.CreationDate`, `G04 ... date`, `"CreationDate"`, `; DRILL file ... date`,
   `(date ...)`, PDF `/CreationDate` and `/ModDate`) are removed before hashing.
 - STEP files: OpenCascade renumbers entities between runs, so their digest is an
-  entity-type census. This detects geometry/structure changes in practice but
-  is weaker than a byte comparison.
+  entity-type census. This is a coarse structural signal only: changed geometry can keep the same
+  entity counts. It does not prove geometric equivalence.
 
 Two consecutive exports of the fixture compared identical across all 38
 artifacts. Raw SHA-256 values are kept as well, for archiving.
@@ -106,3 +106,30 @@ The approval file and every evidence file are copied into the release.
 bindings and file presence; it cannot check signature authenticity or the truth
 of a measurement. A clean ERC/DRC result is not evidence of thermal safety,
 electrical correctness or fabrication readiness.
+
+## Routed-project export lessons
+
+- Through-hole drill sets are explicitly separated with `--excellon-separate-th`.
+  `drill_file_consistency` rejects a combined `<board>.drl`, missing outputs or
+  missing separate set names. Empty sets may be omitted by KiCad. This is a
+  filename/output-policy check, **not** a hole-by-hole or slot geometry parser.
+- Review plated/non-plated hits, diameters, slots, units and origin against the
+  board and the fabricator preview. Do not infer plating from a comment alone.
+  Never upload an obsolete combined file alongside the separate files.
+- A coordinate comparator must read units/format and zero suppression correctly,
+  retain precision and derive quantization tolerance from the format, not hide
+  self-inflicted rounding with a loose tolerance. Test with a one-unit displaced
+  hole and duplicate/missing hits. No such full CAM validator is claimed here.
+- BOM grouping includes `${DNP}`. `designator_consistency` additionally compares
+  each BOM reference's DNP state with the schematic: matching reference sets
+  alone cannot detect a populated resistor grouped with DNP resistors.
+- A matching designator set does not validate placement coordinates, side,
+  rotation, THT assembly eligibility or component sourcing. Review those against
+  the board and assembler convention. Distinguish unknown MPN from unknown stock.
+- Review exported Gerbers/drills in an independent viewer where possible; a
+  self-written renderer is limited evidence and must say what it cannot parse.
+  Regenerate source-bound README/Pages imagery after design changes. Publishing
+  commits or documentation is not fabrication authorization.
+
+The CLI options are documented by [KiCad](https://docs.kicad.org/master/en/cli/cli.html);
+this kit still requires the installed 10.0.7 CLI's discovered help/options.

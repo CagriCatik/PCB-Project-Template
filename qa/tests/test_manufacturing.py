@@ -28,6 +28,39 @@ def approval_file(board, revision="R1", commit="a" * 40):
 
 
 class ApprovalTests(TempDirTest):
+    def test_separate_drill_policy_rejects_combined_file(self):
+        stage = self.tmp / "export"
+        folder = stage / "fabrication/drill"
+        folder.mkdir(parents=True)
+        self.assertTrue(release.drill_file_consistency(stage, "board"))
+        (folder / "board-PTH.drl").write_text("test-only")
+        self.assertEqual(release.drill_file_consistency(stage, "board"), [])
+        (folder / "board-NPTH.drl").write_text("test-only")
+        self.assertEqual(release.drill_file_consistency(stage, "board"), [])
+        (folder / "board.drl").write_text("obsolete combined output")
+        self.assertTrue(release.drill_file_consistency(stage, "board"))
+        plan = {item[0]: item[2] for item in release.export_plan(stage, Path("board.kicad_sch"), Path("board.kicad_pcb"))}
+        self.assertIn("--excellon-separate-th", plan["drill"])
+        self.assertIn("${DNP}", plan["bom"][plan["bom"].index("--group-by") + 1].split(","))
+
+    def test_mixed_dnp_bom_row_is_rejected_even_when_references_match(self):
+        stage = self.tmp / "export"
+        asm = stage / "assembly"
+        asm.mkdir(parents=True)
+        (asm / "positions.csv").write_text("Ref\nR1\n")
+        symbols = [{"reference": ref, "dnp": dnp, "power": False, "in_bom": True, "on_board": True}
+                   for ref, dnp in (("R1", False), ("R2", True))]
+        footprints = [{"reference": "R1", "attributes": []}, {"reference": "R2", "attributes": ["dnp"]}]
+        with mock.patch("tools.kicad.design.schematic_symbols", return_value={"symbols": symbols}), \
+                mock.patch("tools.kicad.design.board_footprints", return_value=footprints):
+            (asm / "bom.csv").write_text('Refs,DNP\n"R1,R2",DNP\n')
+            findings = release.designator_consistency(stage, (None, None, None))
+            self.assertEqual(findings, [{"problem": "BOM DNP state differs from schematic", "reference": "R1"}])
+            (asm / "bom.csv").write_text("Refs,DNP\nR1,\nR2,DNP\n")
+            self.assertEqual(release.designator_consistency(stage, (None, None, None)), [])
+            (asm / "bom.csv").write_text("Refs\nR1\nR2\n")
+            self.assertTrue(release.designator_consistency(stage, (None, None, None)))
+
     def test_approval_must_bind_revision_commit_and_every_gate(self):
         board = self.fixture_copy()
         path = approval_file(board)
@@ -69,7 +102,7 @@ class NativeExportTests(TempDirTest):
         self.assertEqual(first.name, "rev-A1-DRAFT")
         self.assertEqual(m1["decision"], "NO-GO")
         self.assertTrue(m1["exports_complete"], m1["outputs"])
-        for path in ("fabrication/drill/divider.drl", "assembly/bom.csv", "assembly/positions.csv",
+        for path in ("fabrication/drill/divider-PTH.drl", "assembly/bom.csv", "assembly/positions.csv",
                      "assembly/assembly-top.pdf", "assembly/assembly-bottom.pdf", "mechanical/board.step",
                      "documentation/schematic.pdf", "documentation/netlist.net", "verification/verification.json"):
             self.assertGreater((first / path).stat().st_size, 0, path)

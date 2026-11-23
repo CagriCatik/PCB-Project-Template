@@ -54,7 +54,7 @@ existing tool lacks a needed capability; avoid duplicate implementations.
 - Confirm KiCad {{KICAD_VERSION}}; refuse scripted writes while `~*.lck` lock files exist.
 - Use the real KiCad CLI/APIs; never fabricate reports or claim IPC is available when it is not.
 - Make small, auditable changes and re-run `scripts/kit verify`.
-- Never substitute dummy 3D models or invented datasheets for real vendor data.
+- Never mislabel model provenance or substitute invented datasheets for vendor data.
 - Label every calculation as an estimate; estimates do not replace measurement.
 
 ## Power and interface changes
@@ -98,6 +98,32 @@ existing tool lacks a needed capability; avoid duplicate implementations.
   Record actual inspection and any unresolved layout issues explicitly.
 - CLI exports are renders, not GUI screenshots. If screenshots are requested,
   capture the actual KiCad window as additional evidence; do not substitute.
+
+
+## Mechanics, 3D and routed-board changes
+
+- Follow `docs/engineering/mechanical-baseline.md`: establish outline, actual
+  mounting footprints and screw/tool/mating-plug envelopes before routing.
+  Missing chassis dimensions remain provisional; allow a bounded mechanical
+  rework rather than forcing holes into whatever space routing left over.
+- Follow `docs/engineering/3d-models.md`. Licensed library/community models and
+  drawing-derived models are allowed when dimensions and provenance are checked.
+  Never label them manufacturer models. Keep estimated envelopes distinguishable;
+  a socket body is not a plugged module and render coverage is not STEP coverage.
+- A CAD listing is not a downloaded model. Continue independent accessible parts
+  when one download is blocked; name the actual blocker instead of declaring all
+  models unavailable. Record licenses; do not publish restricted vendor assets.
+- Separate schematic sync from placement/bootstrap. Normal sync preserves manual
+  placement, side, rotation, locks, tracks, zones and mechanical drawings. Trial
+  work uses recoverable copies; scripts abort without saving on invalid inputs.
+- After routing changes compare native copper objects, not only connection counts;
+  limit deletion to owned connections, refill zones and review power/return paths.
+  Never blanket-delete apparently unused vias. Do not mask a KiCad crash with a
+  passing wrapper exit code: reopen the saved file and validate independently.
+- Read hole/outline geometry from the board for prints and renders; do not repeat
+  coordinates in scripts. Keep a datum and verify any translation assumption.
+- Complete the requested bounded work. Re-run checks after changes or findings;
+  do not create endless documentation/review loops when the result is unchanged.
 
 ## Verification and release
 

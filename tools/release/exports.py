@@ -113,9 +113,9 @@ def export_plan(stage, sch, pcb):
          [fab / "gerbers"]),
         ("drill", ("pcb", "export", "drill"),
          ["--format", "excellon", "--excellon-units", "mm", "--generate-map", "--map-format", "pdf",
-          "--output", str(fab / "drill") + "/", pcb], [fab / "drill"]),
+          "--excellon-separate-th", "--output", str(fab / "drill") + "/", pcb], [fab / "drill"]),
         ("bom", ("sch", "export", "bom"),
-         ["--fields", BOM_FIELDS, "--labels", BOM_LABELS, "--group-by", "Value,Footprint,Manufacturer,MPN",
+         ["--fields", BOM_FIELDS, "--labels", BOM_LABELS, "--group-by", "Value,Footprint,Manufacturer,MPN,${DNP}",
           "--output", asm / "bom.csv", sch], [asm / "bom.csv"]),
         ("positions", ("pcb", "export", "pos"),
          ["--format", "csv", "--units", "mm", "--side", "both", "--exclude-dnp", "--output",
@@ -197,6 +197,8 @@ def export_project(root, revision, approval=None, cli=None, authorize=False, ibo
             outputs["interactive_html_bom"] = ib["status"]
         consistency = designator_consistency(stage, files)
         outputs["designator_consistency"] = "COMPLETE" if not consistency else "FAILED"
+        drill_findings = drill_file_consistency(stage, pcb.stem)
+        outputs["drill_file_consistency"] = "COMPLETE" if not drill_findings else "FAILED"
         complete = all(v == "COMPLETE" for k, v in outputs.items() if k != "interactive_html_bom")
         unchanged = before == source_hashes(root)
         if release and (not complete or not unchanged or git_state(root) != state):
@@ -223,6 +225,7 @@ def export_project(root, revision, approval=None, cli=None, authorize=False, ibo
             "advisory_warnings": verification["warnings"],
             "outputs": outputs,
             "designator_findings": consistency,
+            "drill_findings": drill_findings,
             "exports_complete": complete,
             "configuration": _configuration(root),
             "known_limitations": KNOWN_LIMITATIONS + ["Advisory gate not passing: " + g
@@ -246,6 +249,8 @@ KNOWN_LIMITATIONS = [
     "Exports are generated with the project's own plot settings and the CLI options listed in 'commands'; "
     "fabricator-specific requirements (layer naming, panelization, stack-up notes) are not assumed.",
     "STEP reproducibility is compared by entity census, not byte identity.",
+    "3D file availability does not establish populated-assembly coverage, alignment or STEP inclusion.",
+    "Drill file consistency checks separate output names, not hole geometry; review holes and slots against the board.",
     "Interactive HTML BOM is optional; its absence does not block a release.",
 ]
 
@@ -270,6 +275,24 @@ def expand_refs(text, delimiter=","):
     return refs
 
 
+def drill_file_consistency(stage, board_name):
+    """Reject missing drill output or a combined through-hole file.
+
+    KiCad may omit empty PTH/NPTH sets and may emit extra blind/buried sets.
+    This is an output-policy check, not an Excellon/CAM geometry validator.
+    """
+    folder = stage / "fabrication/drill"
+    names = {p.name for p in folder.glob("*.drl")}
+    findings = []
+    if not names:
+        findings.append({"problem": "no Excellon drill files exported"})
+    if board_name + ".drl" in names:
+        findings.append({"problem": "combined through-hole drill file is not allowed"})
+    if not names.intersection({board_name + "-PTH.drl", board_name + "-NPTH.drl"}):
+        findings.append({"problem": "no separately named PTH or NPTH drill set"})
+    return findings
+
+
 def designator_consistency(stage, files):
     """Designators in BOM, placement file, schematic and board must agree."""
     from tools.kicad import design
@@ -281,7 +304,18 @@ def designator_consistency(stage, files):
     if not bom_path.is_file() or not pos_path.is_file():
         return [{"problem": "BOM or position file missing; consistency not checked"}]
     with bom_path.open(newline="") as fp:
-        bom = [r for row in csv.DictReader(fp) for r in expand_refs(row.get("Refs", ""))]
+        bom_rows = list(csv.DictReader(fp))
+    bom = [r for row in bom_rows for r in expand_refs(row.get("Refs", ""))]
+    by_ref = {s["reference"]: s for s in model["symbols"] if not s["power"]}
+    for row in bom_rows:
+        value = str(row.get("DNP", "")).strip().lower()
+        if "DNP" not in row or value not in ("", "0", "false", "no", "dnp", "1", "true", "yes"):
+            findings.append({"problem": "BOM DNP column missing or unrecognized", "references": row.get("Refs", "")})
+            continue
+        dnp = value in ("dnp", "1", "true", "yes")
+        for ref in expand_refs(row.get("Refs", "")):
+            if ref in by_ref and by_ref[ref]["dnp"] != dnp:
+                findings.append({"problem": "BOM DNP state differs from schematic", "reference": ref})
     with pos_path.open(newline="") as fp:
         pos = [row.get("Ref", "") for row in csv.DictReader(fp)]
     expected_bom = {s["reference"] for s in model["symbols"] if s["in_bom"] and not s["power"]}

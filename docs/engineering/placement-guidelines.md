@@ -6,6 +6,10 @@ recommendations and real electrical constraints take precedence over every
 heuristic below.** No universal distance limit is given here on purpose: the
 right distance comes from the specific parts, currents and frequencies.
 
+See [mechanical-baseline.md](mechanical-baseline.md) for mounting, mating-plug
+and 1:1 fit-review evidence before routing, and [3d-models.md](3d-models.md)
+for model provenance and complete assembly views.
+
 ## Order of work
 
 1. **Mechanically constrained parts first:** board outline, mounting holes,

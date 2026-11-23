@@ -42,3 +42,10 @@ adds a matching inventory contract and optional firmware path.
 For supply states, connector/HW-FW contracts and source-labelled numerical
 budgets use [design-contracts.md](design-contracts.md). Declaration consistency
 and static estimates complement native checks; they do not approve hardware.
+
+## Experience from routed carrier projects
+
+Before placement, establish the [mechanical baseline](mechanical-baseline.md).
+Review [3D provenance and populated-assembly coverage](3d-models.md) independently
+of file-availability checks. These rules generalize the RoverCore experience;
+its hole locations, voltage thresholds and current limits are not defaults.

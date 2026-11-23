@@ -205,7 +205,7 @@ class ReleaseIntegrityTests(TempDirTest):
     def stage(self, project, bom_refs, pos_refs):
         stage = self.tmp / ("stage-%d" % len(list(self.tmp.iterdir())))
         (stage / "assembly").mkdir(parents=True)
-        (stage / "assembly/bom.csv").write_text('"Refs","Value"\n' + "".join('"%s","x"\n' % r for r in bom_refs))
+        (stage / "assembly/bom.csv").write_text('"Refs","Value","DNP"\n' + "".join('"%s","x",""\n' % r for r in bom_refs))
         (stage / "assembly/positions.csv").write_text("Ref,Val\n" + "".join('"%s","x"\n' % r for r in pos_refs))
         files = [project / ("divider." + e) for e in ("kicad_pro", "kicad_sch", "kicad_pcb")]
         return exports.designator_consistency(stage, files)

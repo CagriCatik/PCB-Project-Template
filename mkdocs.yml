@@ -80,6 +80,11 @@ nav:
       - Desktop-Manager (GUI): DESKTOP_MANAGER.md
       - Plugin-Verwaltung: PLUGIN_MANAGEMENT.md
       - KiCad IPC & API: KICAD_IPC.md
+  - Entwurfsrichtlinien:
+      - Überblick: engineering/README.md
+      - Mechanik vor Routing: engineering/mechanical-baseline.md
+      - 3D-Modelle und Baugruppen: engineering/3d-models.md
+      - Routing und Strompfade: engineering/routing-guidelines.md
   - Qualität & Fertigung:
       - Verifikation & Gates: VERIFICATION.md
       - Fertigung & Exporte: MANUFACTURING.md

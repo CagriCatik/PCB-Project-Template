@@ -57,7 +57,7 @@ existing tool lacks a needed capability; avoid duplicate implementations.
   IPC is available when the socket cannot be contacted.
 - Make small, auditable changes; re-run validation and log command/version,
   exit code, artifact hashes and differences.
-- Do not create dummy 3D models in place of actual vendor STEP/STL models.
+- Do not present placeholder or drawing-derived geometry as an actual vendor model.
 - Always mark calculations as estimates; thermal, electrical and mechanical
   estimates do not replace measurement/prototype testing.
 
@@ -101,6 +101,32 @@ existing tool lacks a needed capability; avoid duplicate implementations.
 - Never call CLI renders GUI screenshots or mark an unviewed page reviewed.
 - `tools/schematic/` owns read-only evidence and hints; it may import only
   `core/` and `kicad/`. It never reserializes or regenerates native files.
+
+
+## Mechanics, 3D and routed-board changes
+
+- Follow `docs/engineering/mechanical-baseline.md`: establish outline, actual
+  mounting footprints and screw/tool/mating-plug envelopes before routing.
+  Missing chassis dimensions remain provisional; allow a bounded mechanical
+  rework rather than forcing holes into whatever space routing left over.
+- Follow `docs/engineering/3d-models.md`. Licensed library/community models and
+  drawing-derived models are allowed when dimensions and provenance are checked.
+  Never label them manufacturer models. Keep estimated envelopes distinguishable;
+  a socket body is not a plugged module and render coverage is not STEP coverage.
+- A CAD listing is not a downloaded model. Continue independent accessible parts
+  when one download is blocked; name the actual blocker instead of declaring all
+  models unavailable. Record licenses; do not publish restricted vendor assets.
+- Separate schematic sync from placement/bootstrap. Normal sync preserves manual
+  placement, side, rotation, locks, tracks, zones and mechanical drawings. Trial
+  work uses recoverable copies; scripts abort without saving on invalid inputs.
+- After routing changes compare native copper objects, not only connection counts;
+  limit deletion to owned connections, refill zones and review power/return paths.
+  Never blanket-delete apparently unused vias. Do not mask a KiCad crash with a
+  passing wrapper exit code: reopen the saved file and validate independently.
+- Read hole/outline geometry from the board for prints and renders; do not repeat
+  coordinates in scripts. Keep a datum and verify any translation assumption.
+- Complete the requested bounded work. Re-run checks after changes or findings;
+  do not create endless documentation/review loops when the result is unchanged.
 
 ## Verification gates
 
@@ -175,7 +201,7 @@ its own `AGENTS.md`). The rules below apply when working on this kit.
 - Never write to real user state in tests; use `qa/tests/kit_test_support.py`.
 - Do not modify `kicad_common.json` or other KiCad settings while KiCad runs.
 - Do not claim a plugin works until `scripts/kit plugins verify NAME` invoked it.
-- Do not fabricate circuits, datasheets or 3D models; the `qa/fixtures/divider`
+- Do not fabricate circuits, datasheets or manufacturer provenance; the `qa/fixtures/divider`
   fixture is a tooling fixture built only from KiCad's official libraries
   (regenerate with `python3 qa/fixtures/build_fixtures.py`).
 - Run `python3 test_template.py` (native KiCad tests included when KiCad 10.0.7

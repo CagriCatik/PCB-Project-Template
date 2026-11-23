@@ -126,6 +126,7 @@ def gate_component_metadata(model, fields):
 
 
 def gate_models_3d(footprints, variables):
+    """Check assigned visible files only, not geometry, module bodies or STEP coverage."""
     findings, checked = [], 0
     for fp in footprints:
         if "board_only" in fp["attributes"] or ("exclude_from_bom" in fp["attributes"] and not fp["models"]):

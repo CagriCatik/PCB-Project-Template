@@ -29,7 +29,7 @@ are the authority, and they must be checked *before* layout, not after.
 ## Outputs
 
 `scripts/kit export "<project>" --revision <REV>` produces, from the same
-verified sources: Gerbers with job file, Excellon drill files with drill map,
+verified sources: Gerbers with job file, separate PTH/NPTH Excellon drill files with drill maps,
 BOM (with Manufacturer/MPN columns), placement file (CSV, mm, both sides, DNP
 excluded), top/bottom assembly drawings, STEP, schematic PDF, netlist,
 optional Interactive HTML BOM, the verification reports and `manifest.json`
@@ -81,3 +81,12 @@ the technical content to confirm:
 - [ ] Assembly drawings and placement file reviewed (rotation and side conventions with the assembler)
 - [ ] Fabricator engineering questions answered and recorded
 - [ ] Approval file signed for this exact revision and Git commit (`scripts/kit export ... --approval ... --authorize`)
+
+## Export checks versus physical readiness
+
+See [the export policy](../MANUFACTURING.md#routed-project-export-lessons) for
+DNP-aware BOM grouping, separated drill sets and the exact limits of automated
+checks. Inspect graphic lines as well as text strokes on the silkscreen: a
+passing text-size rule does not establish all library graphics meet the chosen
+fabricator's limits. If reference labels must be hidden, retain them on legible
+assembly drawings; never hide functional/polarity marks merely to clear DRC.
