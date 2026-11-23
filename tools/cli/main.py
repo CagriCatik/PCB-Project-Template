@@ -153,6 +153,26 @@ def build_parser():
     c.add_argument("--grid", type=float, help="cell size in mm")
     c.add_argument("--output", help="output directory (default: <project>/qa/generated/thermal/<run>)")
 
+    c = cmd("board", "read-only board review: copper/placement diff between two board files")
+    c.add_argument("action", choices=["diff"])
+    c.add_argument("before", help="earlier .kicad_pcb")
+    c.add_argument("after", help="later .kicad_pcb")
+    c.add_argument("--region", action="append", nargs=4, type=float, metavar=("X1", "Y1", "X2", "Y2"),
+                   help="intended change region, mm relative to the outline top-left corner (repeatable)")
+    c.add_argument("--sliver-mm", type=float, default=0.1, help="added tracks shorter than this outside "
+                   "every region are reported as slivers (default 0.1)")
+    c.add_argument("--project", help="project directory for the evidence run (default: folder of AFTER)")
+
+    c = cmd("fab", "read-only geometry check of an exported package against the board")
+    c.add_argument("action", choices=["check"])
+    c.add_argument("project")
+    c.add_argument("package", help="export directory (contains assembly/ and fabrication/)")
+    c.add_argument("--origin", choices=["page", "aux"], default="page",
+                   help="origin of positions.csv (kit exports use the page origin)")
+    c.add_argument("--min-via-drill", type=float, metavar="MM", help="fabricator limit (none assumed)")
+    c.add_argument("--min-npth", type=float, metavar="MM", help="fabricator limit (none assumed)")
+    c.add_argument("--min-component-hole", type=float, metavar="MM", help="fabricator recommendation (warning)")
+
     c = cmd("firmware", "optional firmware build/test")
     c.add_argument("project")
     c.add_argument("--target", choices=["host", "stm32", "arduino", "esp32"], default="host")
@@ -399,6 +419,42 @@ def run_command(args):
             summary["symbol"]["libraries"], summary["footprint"]["libraries"], len(broken))] +
               ["  broken: %s (%s)" % (b["name"], b["uri"]) for b in broken] + ["  ! " + x for x in summary["problems"]])
         return 0 if not broken and not summary["problems"] else 20
+    if c == "board":
+        from tools.quality import board_diff
+
+        project = args.project or str(Path(args.after).resolve().parent)
+        r = board_diff.run(project, args.before, args.after, args.region or (), args.sliver_mm)
+        lines = ["Board diff: %s" % r["status"],
+                 "  outline %s -> %s" % (r["outline_size"]["before"], r["outline_size"]["after"]),
+                 "  copper removed %d, added %d" % (r["copper"]["removed"], r["copper"]["added"])]
+        lines += ["  footprint %s: %s" % (f["reference"], f["change"]) for f in r["footprints"]]
+        lines += ["  zone %s (%s): %s" % (z["name"] or "-", z["net"] or "-", z["change"]) for z in r["zones"]]
+        lines += ["  UNEXPECTED %s %s %s" % (u["change"], u.get("net") or u.get("reference") or u.get("name", ""),
+                                             u["points"][:2]) for u in r["unexpected"]]
+        lines += ["  SLIVER %.4f mm %s at %s" % (v["length_mm"], v["net"], v["points"]) for v in r["slivers"]]
+        lines.append("Evidence: %s" % r["directory"])
+        _emit(args, r, lines)
+        return 20 if r["status"] == "UNEXPECTED_CHANGES" else 0
+    if c == "fab":
+        from tools.core.common import project_files
+        from tools.quality import fab_check
+
+        pcb = project_files(args.project)[2]
+        limits = {"min_via_drill_mm": args.min_via_drill, "min_npth_mm": args.min_npth,
+                  "min_component_hole_mm": args.min_component_hole}
+        r = fab_check.run(args.project, pcb, args.package, args.origin, limits)
+        lines = ["Fabrication package check: %s" % r["status"],
+                 "  positions: %d parts, max difference %.4f mm (%s)" % (
+                     r["positions"]["parts"], r["positions"]["max_position_difference_mm"], r["positions"]["origin"])]
+        for name, st in r["drill"].get("sets", {}).items():
+            lines.append("  %s: %d hits, board %d, %s" % (name, st["hits"], st["board_holes"],
+                                                          "equal" if st["equal"] else "DIFFERENT"))
+        lines += ["  ERROR %s: %s %s" % (e["area"], e["problem"], e.get("reference") or e.get("file") or "")
+                  for e in r["errors"]]
+        lines += ["  warning: " + w for w in r["warnings"]]
+        lines.append("Evidence: %s" % r["directory"])
+        _emit(args, r, lines)
+        return 0 if r["status"] == "PASS" else 20
     if c == "thermal":
         if args.action == "compare":
             from tools.thermal.compare import compare, compare_lines

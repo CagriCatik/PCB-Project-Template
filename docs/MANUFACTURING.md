@@ -85,6 +85,17 @@ Exports from unchanged sources are compared by normalized digest:
 Two consecutive exports of the fixture compared identical across all 38
 artifacts. Raw SHA-256 values are kept as well, for archiving.
 
+## Package geometry check
+
+`scripts/kit fab check PROJECT PACKAGE` reads an existing export and the board file and compares
+values, not only names: side, rotation and position of every placed part; every drill hit against
+every board hole (pads and vias) per plating, with the tolerance taken from the decimal places the
+files use; the Gerber job layer count. Fabricator limits (`--min-via-drill`, `--min-npth`,
+`--min-component-hole`) are checked only when you state them from your fabricator's capability
+page; none are assumed. Run it on every DRAFT before review and keep the evidence run
+(`qa/generated/fab-check/`). It does not inspect Gerber copper and does not replace the
+fabricator's CAM preview.
+
 ## GO release
 
 A GO release is created only if every condition holds; otherwise nothing is

@@ -238,3 +238,22 @@ but installed CLI is 9.0.2). No failures. An independent clean archive of base
 23bb5a7 reports the same 2 errors and 87 skips across 249 tests. The two new
 regressions pass. Strict MkDocs build passes. Native 10.0.7 exports and actual
 model/physical fit checks remain NOT_TESTED here; no native design files changed.
+
+## Board review checks (2026-11-23)
+
+Generalised from RoverCore review scripts (pcbnew-based) into read-only kit commands that parse
+the board text (`tools/quality/board_model.py`, no pcbnew, no writes):
+
+- `kit board diff`: object diff of copper, footprints, zones and outline with intended change
+  regions and sliver detection (lesson 18);
+- `kit fab check`: export values against the board - positions, per-plating drill hits with
+  file-resolution tolerance, job layer count, optional stated fabricator limits (lesson 20).
+
+Cross-check on a routed four-layer board (741 pads, 308 vias, 1582 tracks): board model equal to
+pcbnew (pad positions within 1 nm, attributes, counts); `board diff` and `fab check` reproduced the
+results of the original pcbnew scripts on two rework commits and one DRAFT package. Regression
+suite `qa/tests/test_board_review.py`: 12 synthetic cases and 1 native KiCad 10.0.7 export case;
+five deliberate mutations (tolerance, sliver rule, datum, DNP exclusion, pad rotation) are each
+detected. Full suite: 261 tests, 42 skips, 1 environment error (PySide6 not installed);
+KiCad 10.0.7 native cases ran. Not covered: Gerber copper content and blind/buried vias; oblong slots are counted and reported as
+"not compared" (warning), not matched.

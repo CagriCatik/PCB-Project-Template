@@ -176,6 +176,9 @@ voltage settings and component choices are deliberately not template defaults.
   power-pour islands/neck widths. Do not treat via counts as proof of restoration.
 +- **Evidence:** intended change regions, copper/return review and native checks.
   A crash after saving requires reopening and validation, not hiding the exit code.
+- **Automated:** `scripts/kit board diff BEFORE AFTER --region ...` lists every added/removed track,
+  arc and via, moved footprints and changed zones, flags changes outside the intended regions and
+  short import slivers. It does not judge electrical correctness; refill and DRC still follow.
 
 ### 19. DNP parts merged with populated parts in the BOM
 +- **Problem:** matching part values are grouped despite different assembly state.
@@ -189,6 +192,9 @@ voltage settings and component choices are deliberately not template defaults.
 +- **Manual:** compare drill geometry, diameters and slots to the board and the
   fabricator preview. Parser precision must come from format/units; never loosen
   tolerance to hide premature rounding. Filename checks are not geometry checks.
+- **Automated:** `scripts/kit fab check PROJECT PACKAGE` compares every drill hit with every
+  board hole per plating (tolerance = half the last decimal place of the files), plus positions
+  and the job layer count. It does not inspect Gerber copper or replace the fabricator preview.
 
 ### 21. DC estimates mistaken for thermal guarantees
 +- **Prevention:** retain layer thickness/plating provenance, boundary conditions

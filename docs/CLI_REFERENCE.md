@@ -40,6 +40,8 @@ current directory. Every command supports `--help`.
 | `scripts/kit export PROJECT --revision REV --approval FILE --authorize` | GO release (all release conditions must hold). |
 | `scripts/kit releases PROJECT` | Status of every existing export: CURRENT, STALE (sources changed), MODIFIED (files changed), INCOMPLETE. Exit 21 unless all CURRENT. |
 | `scripts/kit compare-exports MANIFEST_A MANIFEST_B` | Reproducibility check of two exports. |
+| `scripts/kit fab check PROJECT PACKAGE [--origin page\|aux] [--min-via-drill MM] [--min-npth MM] [--min-component-hole MM]` | Read-only value check of an export against the board: positions (side, rotation, X/Y), every drill hit against every board hole per plating (tolerance from the file resolution, no rounding), Gerber job layer count; fabricator limits only when given. Exit 20 on errors. |
+| `scripts/kit board diff BEFORE AFTER [--region X1 Y1 X2 Y2 ...] [--sliver-mm MM] [--project DIR]` | Read-only object diff of copper (tracks, arcs, vias), footprints, zones and outline; outline-relative coordinates. With regions, changes outside are UNEXPECTED (exit 20) and short added tracks outside are listed as slivers. |
 | `scripts/kit components list\|validate PROJECT` | Component records. |
 | `scripts/kit components add PROJECT --manufacturer M --mpn P [--symbol S --footprint F --datasheet-url U --revision R]` | New `candidate` record; never overwrites. |
 | `scripts/kit firmware PROJECT --target host\|stm32\|arduino` | Firmware build/tests. |
