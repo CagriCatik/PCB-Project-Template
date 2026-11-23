@@ -21,7 +21,7 @@ import tempfile
 
 from tools.core.common import VERSION, KitError, check_locks, git_state, now, project_files, sha256, source_hashes, write_json
 from tools.kicad.cli import KiCadCLI
-from tools.quality.verification import verify
+from tools.quality.verification import load_config, verify
 
 GATES = (
     "requirements",
@@ -73,11 +73,25 @@ _TIMESTAMPS = [
 _STEP_ENTITY = re.compile(rb"^#\d+\s*=\s*([A-Z0-9_]+)\s*\(", re.M)
 
 
+def _glb_structure(data):
+    """JSON chunk of a binary glTF without asset.extras (file name, export time)."""
+    import struct
+
+    if data[:4] != b"glTF" or len(data) < 20:
+        return data
+    length = struct.unpack("<I", data[12:16])[0]
+    doc = json.loads(data[20:20 + length])
+    doc.get("asset", {}).pop("extras", None)
+    return json.dumps(doc, sort_keys=True).encode()
+
+
 def normalized_digest(path):
     """Content hash with known export timestamps removed.
 
     STEP writers (OpenCascade) also renumber entities between runs, so STEP
-    files get a structural fingerprint: the multiset of entity types.
+    files get a structural fingerprint: the multiset of entity types. GLB
+    buffers differ between runs as well (tessellation order); GLB files are
+    compared by their glTF structure (nodes, meshes, accessor counts and bounds).
     """
     data = Path(path).read_bytes()
     if Path(path).suffix.lower() in (".step", ".stp"):
@@ -86,6 +100,9 @@ def normalized_digest(path):
             counts[name] = counts.get(name, 0) + 1
         data = b"\n".join(b"%s=%d" % (k, v) for k, v in sorted(counts.items()))
         method = "step-entity-census"
+    elif Path(path).suffix.lower() == ".glb":
+        data = _glb_structure(data)
+        method = "glb-structure"
     else:
         for pattern in _TIMESTAMPS:
             data = pattern.sub(b"<timestamp>", data)
@@ -105,9 +122,38 @@ def _artifacts(stage):
 
 
 # -- export plan --------------------------------------------------------------
-def export_plan(stage, sch, pcb):
-    """(name, cli path, args, expected outputs) for every native export."""
+def view_components(pcb, patterns):
+    """(included, omitted) references for the shareable view models.
+
+    A footprint is omitted when any visible model path matches a restricted pattern.
+    """
+    import fnmatch
+    from tools.kicad import design
+
+    included, omitted = [], []
+    for fp in design.board_footprints(pcb):
+        paths = [m["path"] for m in fp["models"] if not m["hidden"]]
+        if not paths:
+            continue
+        restricted = any(fnmatch.fnmatchcase(p, pat) for p in paths for pat in patterns)
+        (omitted if restricted else included).append(fp["reference"])
+    return included, omitted
+
+
+def _view_args(included):
+    """Component selection for the view models: all, a reference list, or none."""
+    if included is None:
+        return []
+    return ["--component-filter", ",".join(included)] if included else ["--no-components"]
+
+
+def export_plan(stage, sch, pcb, view_refs=None):
+    """(name, cli path, args, expected outputs) for every native export.
+
+    ``view_refs``: components for the shareable view models (None = all with a model).
+    """
     fab, asm, mech, doc = stage / "fabrication", stage / "assembly", stage / "mechanical", stage / "documentation"
+    view = ["--force", "--no-dnp", "--subst-models"] + _view_args(view_refs)
     return [
         ("gerbers", ("pcb", "export", "gerbers"), ["--output", str(fab / "gerbers") + "/", pcb],
          [fab / "gerbers"]),
@@ -128,6 +174,11 @@ def export_plan(stage, sch, pcb):
           asm / "assembly-bottom.pdf", pcb], [asm / "assembly-bottom.pdf"]),
         ("step", ("pcb", "export", "step"),
          ["--force", "--no-dnp", "--output", mech / "board.step", pcb], [mech / "board.step"]),
+        ("view_glb", ("pcb", "export", "glb"),
+         view + ["--include-silkscreen", "--include-soldermask", "--output", mech / "board-view.glb", pcb],
+         [mech / "board-view.glb"]),
+        ("view_stl", ("pcb", "export", "stl"), view + ["--output", mech / "board-view.stl", pcb],
+         [mech / "board-view.stl"]),
         ("schematic_pdf", ("sch", "export", "pdf"), ["--output", doc / "schematic.pdf", sch],
          [doc / "schematic.pdf"]),
         ("netlist", ("sch", "export", "netlist"),
@@ -185,8 +236,10 @@ def export_project(root, revision, approval=None, cli=None, authorize=False, ibo
         for sub in ("fabrication/gerbers", "fabrication/drill", "assembly", "mechanical", "documentation"):
             (stage / sub).mkdir(parents=True)
         sch, pcb = files[1], files[2]
+        restricted = load_config(root)["restricted_3d_models"]
+        view_refs, view_omitted = view_components(pcb, restricted) if restricted else (None, [])
         records, outputs = {}, {}
-        for name, path, args, expected in export_plan(stage, sch, pcb):
+        for name, path, args, expected in export_plan(stage, sch, pcb, view_refs):
             records[name] = cli.command(path, args)
             outputs[name] = "COMPLETE" if records[name]["exit_code"] == 0 and _complete(expected) else "FAILED"
         if ibom:
@@ -226,6 +279,10 @@ def export_project(root, revision, approval=None, cli=None, authorize=False, ibo
             "outputs": outputs,
             "designator_findings": consistency,
             "drill_findings": drill_findings,
+            "view_models": {"files": ["mechanical/board-view.glb", "mechanical/board-view.stl"],
+                            "restricted_patterns": restricted, "omitted_components": view_omitted,
+                            "content": "board, silkscreen and solder mask (GLB), component models except "
+                                       "omitted ones; no copper; DNP parts excluded"},
             "exports_complete": complete,
             "configuration": _configuration(root),
             "known_limitations": KNOWN_LIMITATIONS + ["Advisory gate not passing: " + g
@@ -252,12 +309,12 @@ KNOWN_LIMITATIONS = [
     "3D file availability does not establish populated-assembly coverage, alignment or STEP inclusion.",
     "Drill file consistency checks separate output names, not hole geometry; review holes and slots against the board.",
     "Interactive HTML BOM is optional; its absence does not block a release.",
+    "board-view.glb/.stl are viewing models for sharing: components whose 3D model matches "
+    "restricted_3d_models are left out, copper is not included; use board.step for mechanical work.",
 ]
 
 
 def _configuration(root):
-    from tools.quality.verification import load_config
-
     meta = root / "meta/project.json"
     return {"verification": load_config(root),
             "project": json.loads(meta.read_text()) if meta.is_file() else None}

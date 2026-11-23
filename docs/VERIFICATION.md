@@ -25,7 +25,9 @@ after the run must match, and editor lock files (`~*.lck`) abort with exit 14.
 Severities live in `<project>/qa/verification.json` (`required`, `advisory`,
 `disabled`). The quality gate is `FAIL` if a required gate is not `PASS`;
 advisory failures are listed as warnings. `--release` (and every GO export)
-forces all `release_gates` to required. Older KiCad 9 variables such as
+forces all `release_gates` to required. The same file holds `restricted_3d_models`
+(path patterns of 3D models that may not be redistributed; used by `kit export` for the view
+models, see `docs/MANUFACTURING.md`). Older KiCad 9 variables such as
 `${KICAD9_3DMODEL_DIR}` are deliberately not aliased: `kicad-cli` 10.0.7 does not
 resolve them either, so they are reported.
 

@@ -52,6 +52,7 @@ flowchart TD
 | `assembly/assembly-top.pdf`, `assembly-bottom.pdf` | `pcb export pdf` of F.Fab/B.Fab + Edge.Cuts (bottom mirrored) |
 | `assembly/ibom.html` | InteractiveHtmlBom CLI with KiCad's Python (`SKIPPED` if not installed) |
 | `mechanical/board.step` | `pcb export step --no-dnp` |
+| `mechanical/board-view.glb`, `board-view.stl` | `pcb export glb` (with silkscreen and solder mask) and `pcb export stl`, `--no-dnp --subst-models`, no copper. Viewing models meant for sharing (browser viewers, GitHub's STL viewer): components whose model path matches `restricted_3d_models` in `qa/verification.json` (fnmatch patterns, e.g. `"*/3d-models/vendor/*"` for vendor models that may not be redistributed) are left out and listed in the manifest under `view_models`. Use `board.step` for mechanical work. |
 | `documentation/schematic.pdf`, `netlist.net` | `sch export pdf`, `sch export netlist --format kicadsexpr` |
 | `verification/` | The verification run used for this export |
 | `manifest.json` | Revision, decision, Git state, KiCad version and `kicad_version_status`, gate results, every command record, source hashes, artifact SHA-256 and normalized digests, configuration (gate severities, template/profile from `meta/project.json`), designator findings, known limitations |
@@ -81,9 +82,12 @@ Exports from unchanged sources are compared by normalized digest:
 - STEP files: OpenCascade renumbers entities between runs, so their digest is an
   entity-type census. This is a coarse structural signal only: changed geometry can keep the same
   entity counts. It does not prove geometric equivalence.
+- GLB files: the binary buffer differs between runs (tessellation order), so the digest covers the
+  glTF JSON structure (nodes, meshes, accessor counts and bounds) without `asset.extras` (file name,
+  export time). STL output was byte-identical between runs and is hashed as is.
 
-Two consecutive exports of the fixture compared identical across all 38
-artifacts. Raw SHA-256 values are kept as well, for archiving.
+Two consecutive exports of the fixture compared identical across all 42
+artifacts (2026-11-23, including the view models). Raw SHA-256 values are kept as well, for archiving.
 
 ## Package geometry check
 

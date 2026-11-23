@@ -58,6 +58,9 @@ DEFAULT_CONFIG = {
         "erc", "drc", "schematic_parity", "library_references", "portability",
         "footprint_assignment", "pin_pad_mapping", "component_metadata", "models_3d", "bom",
     ],
+    # 3D model paths (fnmatch patterns on the path as written in the footprint) that may not be
+    # redistributed; `kit export` leaves these components out of the shareable GLB/STL view models.
+    "restricted_3d_models": [],
 }
 
 
@@ -70,9 +73,12 @@ def load_config(root):
         except ValueError as exc:
             raise KitError("qa/verification.json is not valid JSON: %s" % exc)
         config["gates"].update(data.get("gates", {}))
-        for key in ("metadata_fields", "manufacturer_field", "mpn_field", "release_gates"):
+        for key in ("metadata_fields", "manufacturer_field", "mpn_field", "release_gates", "restricted_3d_models"):
             if key in data:
                 config[key] = data[key]
+    patterns = config["restricted_3d_models"]
+    if not isinstance(patterns, list) or not all(isinstance(p, str) and p.strip() for p in patterns):
+        raise KitError("qa/verification.json: restricted_3d_models must be a list of path patterns")
     for gate, severity in config["gates"].items():
         if gate not in GATES or severity not in SEVERITIES:
             raise KitError("qa/verification.json: invalid gate %r=%r" % (gate, severity))

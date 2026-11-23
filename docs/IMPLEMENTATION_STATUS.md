@@ -275,3 +275,16 @@ Regression suite `qa/tests/test_board_tools.py`: closed-form strip resistance (w
 mounting and input-provenance cases plus one native case (extraction and model fit on the divider).
 Seven deliberate mutations are each detected. Full suite: see the commit message of this change.
 Not covered: temperature rise, Gerber step-and-repeat/transforms, negative image polarity.
+
+## Shareable 3D view models (2026-11-23)
+
+- `kit export` adds `mechanical/board-view.glb` (board, silkscreen, solder mask, component models)
+  and `board-view.stl`, both without DNP parts and without copper, for browser and GitHub viewers.
+- `restricted_3d_models` in `qa/verification.json` (fnmatch patterns on the model path as written)
+  leaves out components whose model may not be redistributed; the manifest lists them under
+  `view_models`. `board.step` keeps every model and stays the file for mechanical work.
+- GLB digests compare the glTF structure (buffers differ between runs); two fixture exports were
+  identical in all 42 artifacts. Tested: component selection, config validation, GLB digest, native
+  export of both files.
+- Not done: no copper in the view models (a RoverCore trial with tracks, pads and zones grew the GLB
+  from 6.7 MB to 25.6 MB); a restricted model is left out, not replaced by a placeholder body.

@@ -43,6 +43,67 @@ class ApprovalTests(TempDirTest):
         self.assertIn("--excellon-separate-th", plan["drill"])
         self.assertIn("${DNP}", plan["bom"][plan["bom"].index("--group-by") + 1].split(","))
 
+    def test_view_models_leave_out_restricted_components(self):
+        footprints = [
+            {"reference": "J1", "models": [{"path": "${KIPRJMOD}/models/vendor/plug.step", "hidden": False}]},
+            {"reference": "R1", "models": [{"path": "${KICAD10_3DMODEL_DIR}/R.3dshapes/R.step", "hidden": False}]},
+            {"reference": "U1", "models": [{"path": "${KIPRJMOD}/models/vendor/ic.step", "hidden": True},
+                                           {"path": "${KIPRJMOD}/models/own/ic.step", "hidden": False}]},
+            {"reference": "H1", "models": []},
+        ]
+        with mock.patch("tools.kicad.design.board_footprints", return_value=footprints):
+            self.assertEqual(release.view_components("b.kicad_pcb", ["*/vendor/*"]), (["R1", "U1"], ["J1"]))
+            self.assertEqual(release.view_components("b.kicad_pcb", []), (["J1", "R1", "U1"], []))
+        stage = self.tmp / "export"
+        plans = {refs: {i[0]: i[2] for i in release.export_plan(stage, Path("b.kicad_sch"), Path("b.kicad_pcb"), refs)}
+                 for refs in (None, ("R1", "U1"), ())}
+        self.assertNotIn("--component-filter", plans[None]["view_glb"])
+        self.assertNotIn("--no-components", plans[None]["view_stl"])
+        glb = plans[("R1", "U1")]["view_glb"]
+        self.assertEqual(glb[glb.index("--component-filter") + 1], "R1,U1")
+        self.assertIn("--no-components", plans[()]["view_stl"])
+        for plan in plans.values():
+            self.assertIn("--no-dnp", plan["view_glb"])
+            self.assertNotIn("--include-tracks", plan["view_glb"])
+            self.assertNotIn("--component-filter", plan["step"])
+
+    def test_restricted_model_patterns_must_be_strings(self):
+        from tools.quality.verification import load_config
+
+        root = self.tmp / "p"
+        (root / "qa").mkdir(parents=True)
+        self.assertEqual(load_config(root)["restricted_3d_models"], [])
+        (root / "qa/verification.json").write_text('{"restricted_3d_models": ["*/vendor/*"]}')
+        self.assertEqual(load_config(root)["restricted_3d_models"], ["*/vendor/*"])
+        for bad in ('"*/vendor/*"', '[""]', "[1]"):
+            (root / "qa/verification.json").write_text('{"restricted_3d_models": %s}' % bad)
+            with self.assertRaises(KitError):
+                load_config(root)
+
+    def test_glb_digest_ignores_export_time_and_buffer_order(self):
+        import struct
+
+        def glb(doc, buffer):
+            js = json.dumps(doc).encode()
+            js += b" " * (-len(js) % 4)
+            body = struct.pack("<I4s", len(js), b"JSON") + js + struct.pack("<I4s", len(buffer), b"BIN\0") + buffer
+            return b"glTF" + struct.pack("<II", 2, 12 + len(body)) + body
+
+        doc = {"asset": {"version": "2.0", "extras": {"generated_at": "T1", "pcb_name": "a"}},
+               "nodes": [{"name": "R1", "mesh": 0}], "meshes": [{"name": "R"}]}
+        later = json.loads(json.dumps(doc))
+        later["asset"]["extras"] = {"generated_at": "T2", "pcb_name": "b"}
+        other = json.loads(json.dumps(doc))
+        other["nodes"].append({"name": "R2", "mesh": 0})
+        paths = []
+        for k, (d, buf) in enumerate(((doc, b"\0\1\2\3"), (later, b"\3\2\1\0"), (other, b"\0\1\2\3"))):
+            paths.append(self.tmp / ("m%d.glb" % k))
+            paths[-1].write_bytes(glb(d, buf))
+        digests = [release.normalized_digest(p) for p in paths]
+        self.assertEqual(digests[0]["method"], "glb-structure")
+        self.assertEqual(digests[0], digests[1])
+        self.assertNotEqual(digests[0], digests[2])
+
     def test_mixed_dnp_bom_row_is_rejected_even_when_references_match(self):
         stage = self.tmp / "export"
         asm = stage / "assembly"
@@ -104,6 +165,7 @@ class NativeExportTests(TempDirTest):
         self.assertTrue(m1["exports_complete"], m1["outputs"])
         for path in ("fabrication/drill/divider-PTH.drl", "assembly/bom.csv", "assembly/positions.csv",
                      "assembly/assembly-top.pdf", "assembly/assembly-bottom.pdf", "mechanical/board.step",
+                     "mechanical/board-view.glb", "mechanical/board-view.stl",
                      "documentation/schematic.pdf", "documentation/netlist.net", "verification/verification.json"):
             self.assertGreater((first / path).stat().st_size, 0, path)
         gerbers = {p.name for p in (first / "fabrication/gerbers").iterdir()}
